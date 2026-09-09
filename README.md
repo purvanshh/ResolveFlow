@@ -25,8 +25,11 @@ Raw / interim / processed data are gitignored.
 ## Phase 1 — Data profile
 
 ```bash
-python scripts/profile_data.py
+python scripts/download_dataset.py   # if twcs.csv is missing
+python scripts/profile_data.py --write-interim
 ```
+
+Selected brand for later phases: **AmazonHelp** (see `report/methodology.md`).
 
 ## Tests
 
