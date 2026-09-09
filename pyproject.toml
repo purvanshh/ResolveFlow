@@ -12,11 +12,19 @@ dependencies = [
     "pandas",
     "numpy",
     "pyyaml",
+    "pyarrow",
+    "scikit-learn",
 ]
 
 [project.optional-dependencies]
 dev = [
     "pytest",
+]
+discovery = [
+    "sentence-transformers",
+]
+labeling = [
+    "streamlit",
 ]
 
 [tool.setuptools.packages.find]

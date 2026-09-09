@@ -31,6 +31,20 @@ python scripts/profile_data.py --write-interim
 
 Selected brand for later phases: **AmazonHelp** (see `report/methodology.md`).
 
+## Phase 2 — Taxonomy + golden set
+
+```bash
+pip install -e ".[dev,discovery,labeling]"
+python scripts/discover_intents.py
+streamlit run scripts/label_golden_set.py   # optional review UI
+python scripts/check_taxonomy.py
+python scripts/freeze_golden_set.py
+python scripts/check_leakage.py --build-dev
+python scripts/golden_set_stats.py
+```
+
+See `configs/intents.yaml`, `data/golden/`, and `report/taxonomy.md`.
+
 ## Tests
 
 ```bash
