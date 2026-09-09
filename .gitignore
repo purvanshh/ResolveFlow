@@ -1,0 +1,17 @@
+data/raw/*
+!data/raw/.gitkeep
+data/interim/*
+!data/interim/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+.env
+__pycache__/
+.pytest_cache/
+*.pyc
+*.egg-info/
+.venv/
+venv/
+dist/
+build/
+.DS_Store
+*.zip
