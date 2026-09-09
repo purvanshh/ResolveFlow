@@ -27,6 +27,9 @@ discovery = [
 labeling = [
     "streamlit",
 ]
+llm = [
+    "openai",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]
