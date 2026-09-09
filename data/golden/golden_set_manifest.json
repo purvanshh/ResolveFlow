@@ -1,0 +1,13 @@
+{
+  "status": "FROZEN",
+  "sha256": "e974255a5ab6e06516e11c7c9e74b61b53c81d2c10a5386a7d549e951bb4ef36",
+  "num_examples": 200,
+  "created_at": "2026-09-09T18:19:17.013055+00:00",
+  "random_seed": 42,
+  "sampling_method": "stratified keyword pools + hard/short/long-thread oversample + rare-intent top-up; English-preferring filter; solo annotation per ANNOTATION_GUIDE with rule-assisted draft + manual overrides",
+  "dataset_version": "twcs.csv+AmazonHelp",
+  "checksum": "e974255a5ab6e06516e11c7c9e74b61b53c81d2c10a5386a7d549e951bb4ef36",
+  "examples": 200,
+  "brand": "AmazonHelp",
+  "annotator": "solo_author"
+}

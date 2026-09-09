@@ -15,3 +15,6 @@ dist/
 build/
 .DS_Store
 *.zip
+artifacts/*
+!artifacts/.gitkeep
+data/golden/.label_progress.json
