@@ -22,7 +22,7 @@ baseline:
 
 retrieval:
   embedding_model: sentence-transformers/all-MiniLM-L6-v2
-  top_k: 5
+  top_k: 3
   similarity_threshold: 0.45
   max_cases: 20000
   preprocessing_version: v1
@@ -30,6 +30,30 @@ retrieval:
   index_path: data/processed/retrieval.index.npz
   metadata_path: data/processed/retrieval_metadata.json
   cases_id_map_path: data/processed/retrieval_case_ids.json
+
+agent:
+  classifier_model: gpt-4o-mini
+  responder_model: gpt-4o-mini
+  classifier_mode: llm
+  responder_mode: llm
+  top_k: 3
+  similarity_threshold: 0.45
+  retrieval_mode: auto
+  skip_generation_on_high_risk: true
+
+escalation:
+  min_intent_confidence: 0.55
+  require_evidence: true
+  risk_threshold: 3
+  high_risk_intents:
+    - payment_billing
+    - refund_request
+    - refund_status
+    - account_access
+    - package_missing_or_misdelivered
+
+safety:
+  max_reply_characters: 280
 
 evaluation:
   seed: 42
