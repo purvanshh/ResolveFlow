@@ -1,0 +1,223 @@
+brand: AmazonHelp
+
+multi_intent_policy: |
+  Assign exactly one primary intent: the customer's main actionable support
+  problem in the labelled message (using conversation context when needed).
+  Optionally note secondary intents in annotation_notes. Do not multi-label
+  the primary intent field.
+
+intents:
+  - id: intent_01
+    name: delivery_delay
+    description: >
+      Customer reports a late or delayed shipment relative to a promised
+      delivery/shipping date (including Prime next-day failures). The package
+      is still expected to arrive; the complaint is timing.
+    include:
+      - "My Prime next-day order still hasn't shipped."
+      - "Expected delivery was yesterday and now it says Friday."
+      - "Why is my package delayed again?"
+    exclude:
+      - "Marked delivered but I don't have it."
+      - "I want to cancel this late order."
+      - "Where is my refund for the late order?"
+    confusing_with:
+      - package_missing_or_misdelivered
+      - prime_membership
+    escalation_default: auto_handle
+
+  - id: intent_02
+    name: package_missing_or_misdelivered
+    description: >
+      Customer says a package was not received as claimed, was left incorrectly,
+      delivered to the wrong place, stolen, or tracking shows delivered without
+      possession. Focus is missing/misdelivered goods, not mere lateness.
+    include:
+      - "It says delivered but nothing arrived."
+      - "Courier left it at the wrong house."
+      - "Package marked delivered and I was home all day — nothing here."
+    exclude:
+      - "Delivery date moved to Friday."
+      - "I received it but the item is broken."
+    confusing_with:
+      - delivery_delay
+      - order_quality_issue
+    escalation_default: escalate
+
+  - id: intent_03
+    name: order_quality_issue
+    description: >
+      Customer received an order but reports damage, defect, wrong item,
+      counterfeit, incomplete contents, or similar quality/fulfillment errors.
+    include:
+      - "My item arrived broken."
+      - "Wrong product was shipped."
+      - "Box was empty / missing parts."
+    exclude:
+      - "Never received the package."
+      - "I just want a refund (with no quality/damage detail)."
+    confusing_with:
+      - refund_request
+      - return_request
+      - package_missing_or_misdelivered
+    escalation_default: escalate
+
+  - id: intent_04
+    name: cancellation_request
+    description: >
+      Customer wants an order cancelled (before or after dispatch), or confirms
+      they refuse an upcoming delivery as cancellation.
+    include:
+      - "Please cancel order 123."
+      - "I don't want this order — cancel it."
+      - "Stop the shipment and cancel."
+    exclude:
+      - "I already cancelled — where is my refund?"
+      - "I want to return an item I already received."
+    confusing_with:
+      - return_request
+      - refund_request
+    escalation_default: auto_handle
+
+  - id: intent_05
+    name: return_request
+    description: >
+      Customer wants to initiate a return / pickup / return label for an item
+      already received (or believes they need a return process).
+    include:
+      - "How do I return this?"
+      - "Schedule a pickup for my return."
+      - "I need a return label."
+    exclude:
+      - "Cancel before it arrives."
+      - "Where is my refund after I returned it?"
+    confusing_with:
+      - cancellation_request
+      - refund_request
+      - refund_status
+    escalation_default: auto_handle
+
+  - id: intent_06
+    name: refund_request
+    description: >
+      Customer asks to initiate a refund / get money back. A refund process is
+      not established in the message/context as already underway.
+    include:
+      - "I want a refund."
+      - "Please refund this order."
+      - "Can I get my money back?"
+    exclude:
+      - "My refund hasn't arrived yet."
+      - "How do I return the item? (no refund ask)"
+    confusing_with:
+      - refund_status
+      - return_request
+      - payment_billing
+    escalation_default: escalate
+
+  - id: intent_07
+    name: refund_status
+    description: >
+      Customer indicates a refund was already requested/approved/processed and
+      asks about timing, amount, or why it has not arrived.
+    include:
+      - "Where is my refund?"
+      - "Refund was approved but not in my account."
+      - "It's been 7 days since you said you'd refund me."
+    exclude:
+      - "Can I get a refund? (no prior refund)"
+      - "Charge appeared twice on my card (no refund mention)"
+    confusing_with:
+      - refund_request
+      - payment_billing
+    escalation_default: escalate
+
+  - id: intent_08
+    name: payment_billing
+    description: >
+      Issues about charges, payments, Amazon Pay, gift cards, promo codes,
+      duplicate charges, failed payments, or unrecognized transactions —
+      distinct from asking to start/track a refund for a returned order.
+    include:
+      - "I was charged twice."
+      - "Payment failed at checkout."
+      - "Unrecognized charge from Amazon."
+      - "Amazon Pay balance problem."
+    exclude:
+      - "Please refund my returned order."
+      - "Refund pending for a week."
+    confusing_with:
+      - refund_request
+      - refund_status
+      - account_access
+    escalation_default: escalate
+
+  - id: intent_09
+    name: prime_membership
+    description: >
+      Questions or problems about Prime subscription itself: signup, renewal,
+      benefits eligibility, cancellation of Prime, billing for membership —
+      not ordinary package delays that merely mention Prime as shipping speed.
+    include:
+      - "Why was I charged for Prime again?"
+      - "Prime benefits aren't applying."
+      - "How do I cancel Amazon Prime?"
+    exclude:
+      - "Prime next-day delivery is late."
+    confusing_with:
+      - payment_billing
+      - delivery_delay
+    escalation_default: auto_handle
+
+  - id: intent_10
+    name: account_access
+    description: >
+      Cannot log in, account locked/closed/hacked, password/email change,
+      verification barriers blocking account use.
+    include:
+      - "I can't log into my account."
+      - "My account was locked."
+      - "Someone else is using my Amazon account."
+    exclude:
+      - "App keeps crashing after login."
+      - "Order issue while logged in."
+    confusing_with:
+      - technical_issue
+      - payment_billing
+    escalation_default: escalate
+
+  - id: intent_11
+    name: technical_issue
+    description: >
+      Website/app/device feature is broken, errors, crashes, pages unavailable,
+      checkout/UI bugs — not account credential problems.
+    include:
+      - "The app keeps crashing."
+      - "Site says currently unavailable."
+      - "Checkout button doesn't work."
+    exclude:
+      - "Forgot password / locked out."
+      - "Courier logistics issues (not site/app bugs)."
+    confusing_with:
+      - account_access
+    escalation_default: auto_handle
+
+  - id: intent_12
+    name: other_unclear
+    description: >
+      Insufficient evidence for a single defined intent: acknowledgements,
+      yes/no without recoverable context, URL-only, pure gratitude, unrelated
+      chatter, non-actionable noise, or multiple intents equally plausible with
+      no clear primary. Prefer this over guessing.
+    include:
+      - "Still waiting."
+      - "Thanks."
+      - "Ok"
+      - "[URL]"
+      - "Messages where context does not disambiguate the problem"
+    exclude:
+      - "Any message that clearly matches another intent even if short"
+    confusing_with:
+      - delivery_delay
+      - refund_status
+    escalation_default: escalate
