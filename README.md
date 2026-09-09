@@ -59,6 +59,20 @@ python scripts/retrieve.py --text "I was charged twice for the same transaction"
 Artifacts: `artifacts/metrics/baselines.json`, `artifacts/metrics/retrieval.json`.
 Reports: `report/retrieval.md`, `report/retrieval_analysis.md`.
 
+## Phase 4 — Agent
+
+```bash
+# Offline (TF-IDF + grounded templates; no API key)
+python scripts/run_agent.py --offline --text "I was charged twice for the same transaction"
+python scripts/evaluate_agent.py --mode offline
+python scripts/evaluate_safety.py --mode offline
+
+# With OpenAI
+# export OPENAI_API_KEY=...
+# python scripts/run_agent.py --text "..." 
+# python scripts/evaluate_agent.py --mode openai
+```
+
 ## Tests
 
 ```bash
