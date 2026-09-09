@@ -1,0 +1,17 @@
+tweet_id,author_id,inbound,created_at,text,response_tweet_id,in_response_to_tweet_id
+10,AcmeHelp,False,Tue Oct 31 22:10:47 +0000 2017,"@1001 Sorry about the billing issue. Can you DM us?",11,12
+11,1001,True,Tue Oct 31 22:11:45 +0000 2017,"@AcmeHelp sure — sending now.",,10
+12,1001,True,Tue Oct 31 22:08:27 +0000 2017,"@AcmeHelp my payment failed twice today",10,13
+13,AcmeHelp,False,Tue Oct 31 21:54:49 +0000 2017,"@1001 Happy to help. What error do you see?",12,14
+14,1001,True,Tue Oct 31 21:49:35 +0000 2017,"@AcmeHelp Payment declined on checkout",13,
+20,OtherBrand,False,Wed Nov 01 10:00:00 +0000 2017,"@2002 Thanks for reaching out!",21,22
+21,2002,True,Wed Nov 01 10:01:00 +0000 2017,"@OtherBrand still broken",,20
+22,2002,True,Wed Nov 01 09:59:00 +0000 2017,"@OtherBrand app keeps crashing",20,
+30,1003,True,Wed Nov 01 12:00:00 +0000 2017,"@AcmeHelp empty follow-up",,
+31,AcmeHelp,False,Wed Nov 01 12:05:00 +0000 2017,"",,30
+40,dupuser,True,Wed Nov 01 13:00:00 +0000 2017,"duplicate id check",,
+40,dupuser,True,Wed Nov 01 13:00:00 +0000 2017,"duplicate id check",,
+50,1005,True,not-a-real-date,"@AcmeHelp weird timestamp",,
+60,AcmeHelp,False,Wed Nov 01 15:00:00 +0000 2017,"@1006 We can help with shipping.",61,62
+61,1006,True,Wed Nov 01 15:01:00 +0000 2017,"@AcmeHelp where is my package?",60,62
+62,1006,True,Wed Nov 01 14:55:00 +0000 2017,"@AcmeHelp shipping delay on order 99",60,
