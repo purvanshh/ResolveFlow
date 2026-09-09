@@ -45,6 +45,20 @@ python scripts/golden_set_stats.py
 
 See `configs/intents.yaml`, `data/golden/`, and `report/taxonomy.md`.
 
+## Phase 3 — Baselines + retrieval
+
+```bash
+python scripts/build_cases.py
+python scripts/train_baselines.py
+python scripts/build_index.py
+python scripts/evaluate_baselines.py
+python scripts/evaluate_retrieval.py
+python scripts/retrieve.py --text "I was charged twice for the same transaction"
+```
+
+Artifacts: `artifacts/metrics/baselines.json`, `artifacts/metrics/retrieval.json`.
+Reports: `report/retrieval.md`, `report/retrieval_analysis.md`.
+
 ## Tests
 
 ```bash

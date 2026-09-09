@@ -15,6 +15,12 @@ dist/
 build/
 .DS_Store
 *.zip
+artifacts/metrics/*
+!artifacts/metrics/.gitkeep
 artifacts/*
 !artifacts/.gitkeep
+!artifacts/metrics/
+!artifacts/metrics/.gitkeep
 data/golden/.label_progress.json
+data/processed/*
+!data/processed/.gitkeep
