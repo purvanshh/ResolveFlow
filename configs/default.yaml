@@ -1,0 +1,36 @@
+brand:
+  name: AmazonHelp
+
+data:
+  raw_path: data/raw/twcs.csv
+  development_messages: data/interim/development_messages.parquet
+  golden_path: data/golden/golden_set.csv
+  historical_cases: data/processed/historical_cases.parquet
+  labeled_dev: data/processed/labeled_development.parquet
+
+baseline:
+  trivial_reply: "Thanks for reaching out. Our support team will review your request."
+  tfidf:
+    max_features: 30000
+    ngram_range: [1, 2]
+    min_df: 2
+    C: 2.0
+    max_iter: 1000
+  train_val_split: 0.85
+  confidence_thresholds: [0.40, 0.50, 0.60, 0.70, 0.80, 0.90]
+  model_path: data/processed/tfidf_baseline.joblib
+
+retrieval:
+  embedding_model: sentence-transformers/all-MiniLM-L6-v2
+  top_k: 5
+  similarity_threshold: 0.45
+  max_cases: 20000
+  preprocessing_version: v1
+  embeddings_path: data/processed/embeddings.npy
+  index_path: data/processed/retrieval.index.npz
+  metadata_path: data/processed/retrieval_metadata.json
+  cases_id_map_path: data/processed/retrieval_case_ids.json
+
+evaluation:
+  seed: 42
+  artifacts_dir: artifacts/metrics
