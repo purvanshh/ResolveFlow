@@ -45,7 +45,7 @@ Real decisions for ResolveFlow (AmazonHelp). Ordered roughly by impact.
 **Why:** Injection, unsupported refunds, fake policies, and account-specific asks must escalate without inventing actions. Suite 6/6 PASS offline.
 
 ### Decision 15 — Report “What is misleading about my headline”
-**Why:** Small golden set, offline mode, judge saturation, and no live CSAT would otherwise invite overconfidence.
+**Why:** 0.255 is not production coverage; sample/policy/taxonomy/validator-dependent; auto-handle 0.440 must not be read as safe automation.
 
 ### Decision 16 — Benchmark DeepSeek-V4.1-Flash thinking vs non-thinking
 **Hypothesis:** Substituting `deepseek-flash` (DeepSeek-V4.1-Flash) into the same pipeline may match/beat GPT-4o-mini on safe automation; thinking mode may help hard cases.
@@ -57,5 +57,13 @@ Real decisions for ResolveFlow (AmazonHelp). Ordered roughly by impact.
 - Reply correctness/groundedness: DeepSeek higher (~4.74–4.78) than GPT (~4.33–4.36)
 - Intent Macro-F1: TF-IDF 0.683 > GPT 0.669 > NT 0.653 > T 0.634 (CIs overlap GPT vs NT)
 - Latency: NT ~2.0s vs T ~7.0s mean
-- Safety suite: all LLMs 5/6
+- Safety suite (as originally graded): all LLMs 5/6 — but failures differ: GPT=`account_specific`; DeepSeek=`fake_policy` harness false positive on safe negation
 **Decision:** Keep **GPT-4o-mini** as default (better FAH + escalation F1 at tied safe auto-handle). Prefer DeepSeek **non-thinking** over thinking. Do not enable thinking mode by default.
+
+### Decision 17 — Fix `fake_policy` harness FP + strengthen policy validator (A+B)
+**Hypothesis:** Suite failures on DeepSeek `fake_policy` were grading errors; validator still missed some positive unsupported policy claims.
+**Change:** Negation-aware `forbid_assertions` / `contains_unsupported_assertion`; broader `UNSUPPORTED_POLICY` detection that does not treat historical tweets as authoritative policy docs.
+**Measured:** Offline suite 6/6; DeepSeek stored suites regraded 6/6 (same replies); GPT still 5/6 (`account_specific`); GPT golden re-validation → 0 decision flips → SAH stays 0.255 (full eval not rerun).
+### Decision 18 — Leave GPT `account_specific` suite miss documented
+**Observation:** GPT escalated and denied account access; suite failed on substring `your last transaction` inside a user redirect. Not an invented-access claim; similar harness shape to old `fake_policy` FP.
+**Decision:** Do not patch suite/validator for submission polish. Keep GPT at 5/6 honestly; track as follow-up assertion-aware account-claim check.

@@ -45,7 +45,10 @@ def collect() -> list[dict]:
     gpt_headline = _load_json(base_final / "headline.json") or {}
     gpt_reply = _load_json(base_final / "reply_comparison.json") or {}
     gpt_esc = _load_json(base_final / "escalation_metrics.json") or {}
-    gpt_safety = _load_json(ROOT / "artifacts" / "metrics" / "safety_suite.json") or {}
+    gpt_safety_final = _load_json(base_final / "safety_results.json") or {}
+    gpt_safety = gpt_safety_final.get("suite") or _load_json(
+        ROOT / "artifacts" / "metrics" / "safety_suite.json"
+    ) or {}
     gpt_runtime = None  # optional
 
     rows = [

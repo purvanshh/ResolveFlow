@@ -8,6 +8,8 @@
 | Reply correctness | — | 4.36 | 4.74 | 4.78 |
 | Reply groundedness | — | 4.33 | 4.74 | 4.77 |
 | Unsupported-claim rate | — | 0.015 | 0.020 | 0.020 |
-| Safety suite | — | 5/6 | 5/6 | 5/6 |
+| Safety suite | — | 5/6 | 6/6 | 6/6 |
 | Average latency (s) | — | — | 1.968 | 6.980 |
 | Cost | — | — | — | — |
+
+Notes: GPT 5/6 fail is `account_specific`. DeepSeek 6/6 is after negation-aware regrade of stored `fake_policy` replies (was harness false positive on safe negation; model text unchanged).

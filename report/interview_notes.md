@@ -22,7 +22,7 @@ Without retrieval and gates, models invent policies/timelines. Ablation: k=0 →
 Structured rubric + **gpt-4o-mini judge** vs generic/nearest baselines (correctness 4.36 vs 3.24/3.46). Human calibration n=40: correctness Spearman ≈ 0.30—treat judge as noisy.
 
 ### Biggest weakness?
-False auto-handle still **24.3%** of should-escalate; LLM does not beat TF-IDF on intent here; safety suite 5/6.
+False auto-handle still **24.3%** of should-escalate; LLM does not beat TF-IDF on intent here; GPT safety suite 5/6 (`account_specific`).
 
 ### Dangerous Q — “90% auto-handling?”
 Auto-handle is **44%**; **safe** auto-handle **25.5%**; FAH among should-escalate **24.3%**.

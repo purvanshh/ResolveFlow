@@ -9,6 +9,9 @@ Classify intent → retrieve historical cases → draft a grounded reply → saf
 Frozen golden set **n=200** (checksum `e974255a…bb4ef36`).  
 **Fingerprint:** `gpt-4o-mini` classifier + responder + MiniLM retrieval (k=3) + risk-aware escalation + `gpt-4o-mini` judge.
 
+**Safe Auto-Handling Rate** = fraction of golden examples that were auto-handled **and** had correct intent **and** no safety/unsupported-claim flags **and** gold also auto_handle (**51/200 = 0.255**).  
+**Auto-handle rate (0.440)** is only “policy did not escalate”—not the same as safe automation.
+
 | Metric | Value |
 | --- | ---: |
 | **Safe Auto-Handling Rate (headline)** | **0.255** |
@@ -41,8 +44,10 @@ Controlled substitution on the same frozen golden set (n=200), retrieval (k=3), 
 | Reply correctness | — | 4.36 | **4.74** | **4.78** |
 | Reply groundedness | — | 4.33 | **4.74** | **4.77** |
 | Unsupported-claim rate | — | **0.015** | 0.020 | 0.020 |
-| Safety suite | — | 5/6 | 5/6 | 5/6 |
+| Safety suite | — | 5/6 (`account_specific`) | **6/6**† | **6/6**† |
 | Mean latency (s) | — | — | **1.97** | 6.98 |
+
+† DeepSeek’s earlier 5/6 on `fake_policy` was a **harness false positive** (raw substring `always guaranteed` vs safe negation). Re-graded with negation-aware checks on the same replies → 6/6. GPT remains 5/6 on `account_specific`. Default model is unchanged.
 
 **Selection:** keep **GPT-4o-mini** as the primary ResolveFlow model. Safe auto-handle is tied (0.255), but GPT has lower false auto-handle and higher escalation F1. DeepSeek non-thinking wins judged reply quality; thinking mode does **not** improve safe automation and is ~3.5× slower with worse FAH.
 
@@ -77,23 +82,31 @@ pip install -e ".[dev,discovery,labeling,llm]"
 # OPENAI_API_KEY=sk-...
 # RESOLVEFLOW_LLM_MODEL=gpt-4o-mini
 
-# Tests
+# Works from a fresh clone (committed golden + artifacts/final)
 pytest
-
-# Agent (uses .env → gpt-4o-mini)
-python scripts/run_agent.py --text "My package is late and tracking hasn't moved"
-
-# Offline fallback (no API)
-python scripts/run_agent.py --offline --text "My package is late and tracking hasn't moved"
-
-# Retrieve neighbors
-python scripts/retrieve.py --text "My package is late and tracking hasn't moved"
-
-# Leakage + taxonomy
 python scripts/check_golden_set.py
 python scripts/check_leakage.py --final
 python scripts/check_taxonomy.py
+cat artifacts/final/headline.json   # Safe Auto-Handling Rate = 0.255
+
+# Offline agent / retrieve / safety suite need local data/processed/*
+# (gitignored). Build once from twcs.csv — see Data below — then:
+python scripts/run_agent.py --offline --text "My package is late and tracking hasn't moved"
+python scripts/retrieve.py --text "My package is late and tracking hasn't moved"
+python scripts/evaluate_safety.py --mode offline
+
+# Live agent (uses .env → gpt-4o-mini; also needs data/processed)
+python scripts/run_agent.py --text "My package is late and tracking hasn't moved"
 ```
+
+### What a fresh clone can verify without rebuilding data
+
+| Check | Needs |
+| --- | --- |
+| `pytest`, golden/leakage/taxonomy | Committed repo only |
+| Headline / comparison tables | `artifacts/final/` (committed) |
+| Offline agent, retrieve, offline safety suite | Local `data/processed/*` (+ MiniLM download) |
+| Full OpenAI eval / GPT safety suite | API key + `data/processed/*` |
 
 ## Evaluation
 
@@ -128,14 +141,14 @@ Artifacts: `artifacts/final/` (metrics, comparisons, manifest), `artifacts/figur
 
 ## Failure Analysis
 
-Top issues: false auto-handle, refund request/status confusion, delivery vs missing-package confusion, thin/ambiguous tweets, occasional unsupported claims (~1.5%). Details: [`report/failure_analysis.md`](report/failure_analysis.md).
+Top issues: false auto-handle, refund request/status confusion, delivery vs missing-package confusion, thin/ambiguous tweets, occasional unsupported claims (~1.5%). Open safety-suite miss: GPT **`account_specific`** (escalated correctly; suite substring hit on user-directed “last transaction” wording). DeepSeek `fake_policy` was a harness false positive (safe negation), not unsafe model behavior. Details: [`report/failure_analysis.md`](report/failure_analysis.md).
 
 ## Limitations
 
 - Golden n=200; stratified Twitter sample; one brand (AmazonHelp).
 - LLM intent Macro-F1 does **not** beat TF-IDF on this set (CI overlaps).
 - LLM-as-judge calibrated lightly (n=40 solo); correctness Spearman ≈ 0.30.
-- Safety suite not perfect (5/6); no live CSAT or account APIs.
+- Safety suite: GPT 5/6 (`account_specific`); DeepSeek 6/6 after harness regrade of `fake_policy` false positive; offline 6/6. No live CSAT or account APIs.
 - Retrieval ablations: k=0 blocks auto-handle; k=1/3/5 similar automation.
 
 ## Docs
