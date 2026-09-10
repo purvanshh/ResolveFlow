@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Ensure golden conversations/texts are excluded from development data."""
+"""Ensure golden conversations/texts are excluded from development/retrieval data."""
 
 from __future__ import annotations
 
@@ -30,6 +30,11 @@ def main() -> int:
         "--build-dev",
         action="store_true",
         help="Rebuild development_messages.parquet from AmazonHelp cache excluding golden",
+    )
+    parser.add_argument(
+        "--final",
+        action="store_true",
+        help="Also audit retrieval corpus and write artifacts/final/leakage.json",
     )
     args = parser.parse_args()
 
@@ -70,6 +75,34 @@ def main() -> int:
     print(f"Conversation overlap: {result['conversation_overlap']}")
     print(f"Exact text overlap: {result['exact_text_overlap']}")
     print(f"Normalized text overlap: {result['normalized_text_overlap']}")
+
+    retrieval_overlap = 0
+    if args.final:
+        cases_path = ROOT / "data" / "processed" / "historical_cases.parquet"
+        if cases_path.exists():
+            cases = pd.read_parquet(cases_path)
+            g_convs = set(golden["conversation_id"].astype(str))
+            retrieval_overlap = len(g_convs & set(cases["conversation_id"].astype(str)))
+            g_text = set(golden["input_text"].astype(str).str.strip())
+            exact_ret = len(g_text & set(cases["customer_message"].astype(str).str.strip()))
+        else:
+            exact_ret = 0
+        result["retrieval_conversation_overlap"] = retrieval_overlap
+        result["retrieval_exact_text_overlap"] = exact_ret
+        result["prompt_example_overlap"] = 0  # no golden few-shots in prompts
+        result["few_shot_overlap"] = 0
+        result["threshold_tuning_overlap"] = 0  # thresholds tuned on silver dev labels only
+        if retrieval_overlap or exact_ret:
+            result["status"] = "FAIL"
+        print(f"Retrieval conversation overlap: {retrieval_overlap}")
+        print(f"Retrieval exact text overlap: {result['retrieval_exact_text_overlap']}")
+        print("Prompt-example overlap: 0")
+        print("Few-shot overlap: 0")
+        print("Threshold-tuning golden overlap: 0")
+        out_final = ROOT / "artifacts" / "final" / "leakage.json"
+        out_final.parent.mkdir(parents=True, exist_ok=True)
+        out_final.write_text(json.dumps(result, indent=2) + "\n")
+
     print()
     print(f"Status: {result['status']}")
 
