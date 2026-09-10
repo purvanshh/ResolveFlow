@@ -42,15 +42,28 @@ class OpenAIProvider(LLMProvider):
             hint = "\nRespond with a JSON object matching keys: " + ", ".join(
                 schema_hint.keys()
             )
-        resp = client.chat.completions.create(
-            model=self.model,
-            temperature=temperature,
-            response_format={"type": "json_object"},
-            messages=[
-                {"role": "system", "content": system + hint},
-                {"role": "user", "content": user},
-            ],
-        )
+        import time
+
+        last_err: Exception | None = None
+        resp = None
+        messages = [
+            {"role": "system", "content": system + hint},
+            {"role": "user", "content": user},
+        ]
+        for attempt in range(6):
+            try:
+                resp = client.chat.completions.create(
+                    model=self.model,
+                    temperature=temperature,
+                    response_format={"type": "json_object"},
+                    messages=messages,
+                )
+                break
+            except Exception as exc:  # noqa: BLE001 — retry transient API/network errors
+                last_err = exc
+                time.sleep(min(2**attempt, 30))
+        if resp is None:
+            raise RuntimeError(f"OpenAI request failed after retries: {last_err}") from last_err
         content = resp.choices[0].message.content or "{}"
         usage = getattr(resp, "usage", None)
         data = _parse_json(content)
@@ -83,6 +96,9 @@ def get_provider(mode: str = "auto", *, model: str | None = None, intents: list[
     mode: auto | openai | mock
     auto uses OpenAI when OPENAI_API_KEY is set, else mock.
     """
+    from resolveflow.config import load_dotenv
+
+    load_dotenv()
     mode = (mode or "auto").lower()
     if mode == "mock":
         return MockProvider(intents=intents)

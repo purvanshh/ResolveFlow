@@ -38,15 +38,19 @@ def build_agent(
     # Default offline path when no API key: TF-IDF + grounded templates
     import os
 
+    from resolveflow.config import load_dotenv
+
+    load_dotenv()
     has_key = bool(os.getenv("OPENAI_API_KEY"))
+    model = os.getenv("RESOLVEFLOW_LLM_MODEL") or agent_cfg.get("classifier_model") or "gpt-4o-mini"
     if provider_mode in {"offline", "tfidf"} or (provider_mode == "auto" and not has_key):
         classifier_mode = classifier_mode or "tfidf"
         responder_mode = responder_mode or "grounded_template"
         provider = get_provider("mock", intents=intent_names(tax))
     else:
         provider = get_provider(
-            provider_mode,
-            model=agent_cfg.get("classifier_model"),
+            "openai" if provider_mode == "auto" else provider_mode,
+            model=model,
             intents=intent_names(tax),
         )
         classifier_mode = classifier_mode or agent_cfg.get("classifier_mode") or "llm"
