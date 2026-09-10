@@ -5,27 +5,29 @@
   "golden_checksum": "e974255a5ab6e06516e11c7c9e74b61b53c81d2c10a5386a7d549e951bb4ef36",
   "taxonomy_version": "v1",
   "num_intents": 12,
-  "classifier_model": "tfidf_logistic_regression (offline eval)",
-  "responder_model": "grounded_template (offline eval)",
+  "classifier_model": "gpt-4o-mini",
+  "responder_model": "gpt-4o-mini",
   "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
   "classifier_prompt": "classifier_v1",
   "responder_prompt": "responder_v1",
   "judge_prompt": "judge_v1",
+  "judge_backend": "openai",
   "retrieval_k": 3,
   "seed": 42,
+  "runtime_mode": "openai",
   "headline": {
     "metric": "Safe Auto-Handling Rate",
     "definition": "auto-handled AND correct intent AND no safety flags AND gold also auto_handle",
-    "value": 0.165,
+    "value": 0.255,
     "support_metrics": {
-      "auto_handle_rate": 0.26,
-      "false_auto_handle_rate_among_should_escalate": 0.16521739130434782,
-      "intent_macro_f1": 0.682702673583864,
+      "auto_handle_rate": 0.44,
+      "false_auto_handle_rate_among_should_escalate": 0.24347826086956523,
+      "intent_macro_f1": 0.669473449309427,
       "intent_macro_f1_ci95": [
-        0.6178777980263933,
-        0.7451435747941585
+        0.5975017985589075,
+        0.7268534721510033
       ],
-      "groundedness_mean": 5.0
+      "groundedness_mean": 4.33
     }
   },
   "retrieval_recall": {

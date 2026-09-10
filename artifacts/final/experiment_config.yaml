@@ -4,9 +4,10 @@ experiment:
 brand:
   name: AmazonHelp
 models:
-  classifier: tfidf_logistic_regression (offline) / openai optional
-  responder: grounded_template (offline) / openai optional
+  classifier: gpt-4o-mini
+  responder: gpt-4o-mini
   embedding: sentence-transformers/all-MiniLM-L6-v2
+  judge: gpt-4o-mini
 prompts:
   classifier: classifier_v1
   responder: responder_v1
@@ -27,4 +28,4 @@ escalation:
 safety:
   max_reply_characters: 280
 golden_checksum: e974255a5ab6e06516e11c7c9e74b61b53c81d2c10a5386a7d549e951bb4ef36
-runtime_mode: offline
+runtime_mode: openai

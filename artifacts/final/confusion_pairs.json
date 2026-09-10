@@ -1,8 +1,8 @@
 [
   {
-    "gold": "technical_issue",
+    "gold": "delivery_delay",
     "pred": "other_unclear",
-    "n": 9
+    "n": 5
   },
   {
     "gold": "refund_status",
@@ -10,33 +10,33 @@
     "n": 5
   },
   {
-    "gold": "other_unclear",
+    "gold": "technical_issue",
+    "pred": "other_unclear",
+    "n": 5
+  },
+  {
+    "gold": "package_missing_or_misdelivered",
     "pred": "delivery_delay",
-    "n": 3
+    "n": 4
   },
   {
-    "gold": "package_missing_or_misdelivered",
-    "pred": "return_request",
-    "n": 3
-  },
-  {
-    "gold": "package_missing_or_misdelivered",
-    "pred": "refund_request",
-    "n": 3
-  },
-  {
-    "gold": "delivery_delay",
-    "pred": "package_missing_or_misdelivered",
-    "n": 2
+    "gold": "refund_request",
+    "pred": "refund_status",
+    "n": 4
   },
   {
     "gold": "order_quality_issue",
-    "pred": "refund_request",
-    "n": 2
+    "pred": "other_unclear",
+    "n": 3
   },
   {
     "gold": "package_missing_or_misdelivered",
+    "pred": "order_quality_issue",
+    "n": 3
+  },
+  {
+    "gold": "prime_membership",
     "pred": "delivery_delay",
-    "n": 2
+    "n": 3
   }
 ]

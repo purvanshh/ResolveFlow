@@ -2,23 +2,26 @@
 
 ## 1. Executive Summary
 
-ResolveFlow is a grounded customer-support agent prototype for **AmazonHelp** tweets. It classifies intent (12-class brand taxonomy), retrieves historical cases, drafts a conservative reply, runs safety checks, and applies a risk-aware escalation policy.
+ResolveFlow is a grounded customer-support agent prototype for **AmazonHelp** tweets. It classifies intent (12-class brand taxonomy), retrieves historical cases, drafts a reply with **gpt-4o-mini**, runs safety checks, and applies a risk-aware escalation policy.
 
-**Headline metric: Safe Auto-Handling Rate = 0.165**  
-(auto-handled ∧ correct intent ∧ no safety flags ∧ gold also auto-handle; n=200 frozen golden set)
+**Headline metric: Safe Auto-Handling Rate = 0.255**  
+(auto-handled ∧ correct intent ∧ no safety flags ∧ gold also auto_handle; n=200 frozen golden set)
 
-Supporting numbers (offline eval: TF-IDF classifier + grounded template responder + MiniLM retrieval):
+Supporting numbers (`gpt-4o-mini` classifier + responder + MiniLM retrieval + `gpt-4o-mini` judge):
 
 | Metric | Value |
 | --- | ---: |
-| Intent Macro-F1 | 0.683 (95% bootstrap CI [0.618, 0.745]) |
-| Auto-handle rate | 0.260 |
-| False auto-handle rate (among should-escalate) | 0.165 |
-| Escalation F1 | 0.730 |
+| Intent Macro-F1 (LLM) | 0.669 (95% bootstrap CI [0.598, 0.727]) |
+| Intent Macro-F1 (TF-IDF baseline) | **0.683** |
+| Auto-handle rate | 0.440 |
+| False auto-handle rate (among should-escalate) | 0.243 |
+| Escalation F1 | 0.767 |
 | Retrieval Recall@3 | 0.565 |
-| Safety suite | 6/6 PASS; unsupported-claim rate 0.0 |
+| Reply correctness / groundedness | 4.36 / 4.33 |
+| Unsupported-claim rate | 0.015 |
+| Safety suite | 5/6 PASS |
 
-The intent head matches TF-IDF (same classifier offline). The agent’s contribution is safer automation than confidence-only escalation (FAH 0.165 vs 0.383) with zero fabricated policy/action claims on the golden set.
+**Honest takeaway:** on this golden set the classical TF-IDF head still slightly leads LLM intent Macro-F1 (CIs overlap). ResolveFlow’s value is stronger replies vs generic/nearest baselines, higher safe auto-handling than the offline template agent, and a calibrated escalation story—not a claim that GPT uniquely wins classification.
 
 ---
 
@@ -30,7 +33,7 @@ Good is **useful automation that refuses unsupported claims and escalates when a
 
 ## 3. Scope
 
-**Built:** intent classification, historical retrieval, grounded reply drafting, escalation policy, safety gates, baselines, frozen golden evaluation, LLM/heuristic judge + human calibration scaffold, failure analysis.
+**Built:** intent classification, historical retrieval, grounded reply drafting, escalation policy, safety gates, baselines, frozen golden evaluation, LLM judge + human calibration scaffold, failure analysis.
 
 **Not built:** live account access, refunds/CRM actions, production deployment, multi-brand support, real-time Twitter integration.
 
@@ -40,10 +43,10 @@ Good is **useful automation that refuses unsupported claims and escalates when a
 
 - Dataset: Customer Support on Twitter (`twcs.csv`); brand **AmazonHelp**.
 - Taxonomy: 12 intents (`configs/intents.yaml`), including `other_unclear` for abstention.
-- Golden set: **200** frozen examples; checksum `e974255a…bb4ef36`; solo + rule-assisted annotation (not bulk LLM labels).
+- Golden set: **200** frozen examples; checksum `e974255a…bb4ef36`.
 - Splits: conversation-level; golden excluded from development messages and retrieval corpus.
 - Final leakage audit: conversation / exact / normalized / retrieval overlap = **0** (`STATUS: PASS`).
-- Final eval mode: **offline** (no API key). OpenAI classifier/responder paths exist but are not the reported fingerprint.
+- Final eval mode: **openai** (`RESOLVEFLOW_LLM_MODEL=gpt-4o-mini`).
 
 ---
 
@@ -52,11 +55,11 @@ Good is **useful automation that refuses unsupported claims and escalates when a
 ```text
 Customer message
    ↓
-Intent (TF-IDF offline / LLM optional)
+Intent (gpt-4o-mini)
    ↓
 Retrieve historical cases (MiniLM, k=3)
    ↓
-Draft grounded response (template / LLM)
+Draft response (gpt-4o-mini)
    ↓
 Safety validation
    ↓
@@ -71,9 +74,9 @@ Auto-handle  /  Human escalate
 
 - Frozen golden set + automated intent/escalation metrics + bootstrap CI.
 - Baselines: majority, TF-IDF+LR, always-escalate, confidence threshold, nearest historical reply, generic reply.
-- Reply judge (`judge_v1`): structured 1–5 rubric; cached; heuristic offline (OpenAI path available).
+- Reply judge (`judge_v1`) via **gpt-4o-mini**, cached under `artifacts/final/judge_cache.json`.
 - Human calibration: 40 examples, solo annotator; Streamlit UI `scripts/rate_replies.py`.
-- Ablations: retrieval k∈{0,1,3,5}; no-retrieval blocks auto-handle; escalation policy comparison.
+- Ablations: retrieval k∈{0,1,3,5}; escalation policy comparison.
 - Safety suite: unsupported refunds, injection, fake policy, account-specific, ambiguous, false action.
 
 ---
@@ -85,16 +88,16 @@ Auto-handle  /  Human escalate
 | Model | Accuracy | Macro F1 | Weighted F1 |
 | --- | ---: | ---: | ---: |
 | Majority | 0.075 | 0.012 | 0.010 |
-| TF-IDF + LR | 0.695 | 0.683 | 0.676 |
-| ResolveFlow (offline) | 0.695 | 0.683 | 0.676 |
+| TF-IDF + LR | 0.695 | **0.683** | 0.676 |
+| ResolveFlow (gpt-4o-mini) | 0.655 | 0.669 | 0.660 |
 
 ### Difficulty (accuracy / macro-F1 over intents present)
 
 | Difficulty | n | Accuracy | Macro F1 |
 | --- | ---: | ---: | ---: |
-| Easy | 58 | 0.879 | 0.750 |
-| Medium | 128 | 0.641 | 0.535 |
-| Hard | 14 | 0.429 | 0.254 |
+| Easy | 58 | 0.672 | 0.491 |
+| Medium | 128 | 0.648 | 0.603 |
+| Hard | 14 | 0.643 | 0.557 |
 
 ### Escalation (FAH = false auto / should-escalate)
 
@@ -102,24 +105,33 @@ Auto-handle  /  Human escalate
 | --- | ---: | ---: | ---: |
 | Always escalate | 0.000 | 0.000 | 0.730 |
 | Confidence thr 0.7 | 0.375 | 0.383 | 0.592 |
-| Proposed risk-aware | 0.260 | 0.165 | 0.730 |
+| Proposed risk-aware | 0.440 | 0.243 | **0.767** |
 
-### Replies (heuristic judge means)
+### Replies (gpt-4o-mini judge means)
 
 | System | Correctness | Groundedness | Helpfulness | Hallucination safety |
 | --- | ---: | ---: | ---: | ---: |
-| Generic | 3.70 | 5.00 | 4.00 | 5.00 |
-| Nearest case | 3.68 | 4.96 | 3.59 | 4.96 |
-| ResolveFlow offline | 3.70 | 5.00 | 4.00 | 5.00 |
+| Generic | 3.24 | 2.38 | 2.29 | 4.63 |
+| Nearest case | 3.46 | 3.42 | 3.16 | 4.29 |
+| ResolveFlow | **4.36** | **4.33** | **4.04** | **4.94** |
+
+### Retrieval k ablation
+
+| k | Auto-handle | FAH (among auto) | Unsupported claim |
+| --- | ---: | ---: | ---: |
+| 0 | 0.000 | 0.000 | 0.022 |
+| 1 | 0.445 | 0.326 | 0.005 |
+| 3 | 0.440 | 0.318 | 0.015 |
+| 5 | 0.450 | 0.333 | 0.010 |
 
 ### Main table
 
 | System | Intent Macro-F1 | Escalation F1 | Auto-Handle | FAH | Reply Correctness | Groundedness |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Majority | 0.012 | 0.730 | 0.000 | 0.000 | 3.69 | 5.00 |
+| Majority | 0.012 | 0.730 | 0.000 | 0.000 | 3.24 | 2.38 |
 | TF-IDF + LR | 0.683 | 0.592 | 0.375 | 0.383 | — | — |
-| Nearest Case | — | — | — | — | 3.68 | 4.96 |
-| ResolveFlow | 0.683 | 0.730 | 0.260 | 0.165 | 3.69 | 5.00 |
+| Nearest Case | — | — | — | — | 3.46 | 3.42 |
+| ResolveFlow | 0.669 | 0.767 | 0.440 | 0.243 | 4.36 | 4.33 |
 
 Artifacts: `artifacts/final/`.
 
@@ -127,30 +139,31 @@ Artifacts: `artifacts/final/`.
 
 ## 8. Failure Analysis
 
-Top modes by frequency × severity (see `report/failure_analysis.md`):
+Top modes (see `report/failure_analysis.md` and refreshed rankings):
 
-1. **False auto-handle** (19) — policy allows automation on gold-escalate cases.
-2. **Intent errors (other)** (26) — lexical confusion beyond named pairs.
-3. **Ambiguous / unclear** (19) — thin tweets; abstention vs forced class.
-4. **refund_status → refund_request** (5) — taxonomy boundary.
-5. **delivery_delay ↔ missing package** (3+) — topic-level retrieval/classifier confusion.
+1. **False auto-handle** — still ~24% of should-escalate cases.
+2. **Intent confusion** — refund status/request; delivery vs missing package.
+3. **Ambiguous / thin tweets** — abstention vs forced class.
+4. **Unsupported claims** — ~1.5% of drafts (no longer zero with free-form LLM replies).
+5. **Safety suite miss** — `account_specific` case escalated but failed the suite’s expected behavior check (5/6 PASS).
 
 ---
 
 ## 9. What Is Misleading About My Headline Number?
 
-**Safe Auto-Handling Rate = 16.5%** is operationally meaningful but easy to over-read.
+**Safe Auto-Handling Rate = 25.5%** is operationally meaningful but easy to over-read.
 
-1. **Golden set size (200)** — small; CI on Macro-F1 spans ~0.62–0.75.
+1. **Golden set size (200)** — CI on Macro-F1 spans ~0.60–0.73.
 2. **Stratified sampling** — not natural production traffic mix.
 3. **One brand (AmazonHelp)** — policies and language differ elsewhere.
 4. **Twitter CS corpus** — not modern in-app chat or authenticated sessions.
-5. **Offline evaluation** — reported agent uses TF-IDF + templates, not hosted GPT; OpenAI path unmeasured here.
-6. **Judge bias** — heuristic `judge_v1` saturates groundedness/hallucination on templates; length–score corr ≈ 0.12.
-7. **Human calibration (n=40, solo)** — agreement looks high partly because variance is low and ratings are rubric-aligned; Spearman is uninformative when scores are nearly constant; no second rater.
-8. **Threshold/policy choices** — tuned with development/silver signals; golden is final report only, but design still influenced by non-golden data.
+5. **LLM ≠ TF-IDF win** — headline is *not* “GPT beats classical ML on intent.”
+6. **Judge bias / weak calibration** — correctness Spearman ≈ 0.30 vs solo human sample; within-1 overall is high but exact agreement is modest.
+7. **Human calibration (n=40, solo)** — no second rater; Streamlit UI exists for independent ratings.
+8. **Threshold/policy choices** — influenced by development/silver signals.
 9. **No live feedback** — no CSAT, AHT, repeat contact, or true containment.
 10. **No account access** — system cannot verify orders/payments; escalation is often the correct ceiling.
+11. **Safety suite not perfect** — 1/6 failure under OpenAI replies.
 
 Treat the headline as a **conservative containment estimate under this rubric**, not production containment.
 
@@ -158,14 +171,14 @@ Treat the headline as a **conservative containment estimate under this rubric**,
 
 ## 10. One More Week
 
-1. **Hybrid retrieval + rerank** — fix topic-similar / resolution-different neighbors (refund request vs status; late vs missing).
+1. **Hybrid retrieval + rerank** — fix topic-similar / resolution-different neighbors.
 2. **Calibrate escalation on labeled validation** — constrain FAH ≤ target while maximizing safe auto-handle.
-3. **Expand golden + second annotator** — especially hard/refund boundary cases; independent reply ratings via Streamlit.
-4. **Run OpenAI classifier/responder** with frozen prompts and compare ablations under the same judge.
+3. **Expand golden + second annotator** — independent Streamlit ratings; tighten refund boundaries.
+4. **Strengthen account-specific safety gate** — fix the failing suite case without killing helpful drafts.
 5. **Structured policy layer** — explicit allow/deny actions instead of history-only grounding.
 
 ---
 
 ## 11. Conclusion
 
-ResolveFlow shows that for AmazonHelp tweets, a classical intent head already beats majority by a large margin, retrieval provides grounding evidence, and a risk-aware gate cuts false auto-handling versus confidence-only automation—while still only safely auto-handling ~17% of golden cases under a strict definition. Trust comes from leakage controls, baselines, safety tests, and honest limits—not from a single judge score.
+ResolveFlow with **gpt-4o-mini** shows useful automation for AmazonHelp tweets: stronger judged replies than generic/nearest baselines, better escalation F1 than confidence-only policies, and a measurable safe auto-handle rate of **25.5%**. It does **not** overturn TF-IDF on intent Macro-F1 on this frozen set. Trust comes from leakage controls, baselines, ablations, and honest limits—not from a single judge score.

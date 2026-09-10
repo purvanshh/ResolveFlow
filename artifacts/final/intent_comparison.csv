@@ -1,4 +1,4 @@
 Model,Accuracy,Macro F1,Weighted F1
 Majority,0.075,0.012,0.010
 TF-IDF + LR,0.695,0.683,0.676
-ResolveFlow agent (offline classifier),0.695,0.683,0.676
+ResolveFlow agent (gpt-4o-mini),0.655,0.669,0.660

@@ -1,24 +1,33 @@
 {
   "generic": {
-    "correctness": 3.695,
-    "groundedness": 5.0,
-    "helpfulness": 4.0,
-    "hallucination_safety": 5.0,
-    "overall": 4.0
+    "correctness": 3.24,
+    "groundedness": 2.38,
+    "helpfulness": 2.29,
+    "hallucination_safety": 4.63,
+    "overall": 3.135
   },
   "nearest_case": {
-    "correctness": 3.68,
-    "groundedness": 4.96,
-    "helpfulness": 3.59,
-    "hallucination_safety": 4.96,
-    "overall": 4.165
+    "correctness": 3.455,
+    "groundedness": 3.425,
+    "helpfulness": 3.155,
+    "hallucination_safety": 4.29,
+    "overall": 3.37
+  },
+  "llm_retrieval": {
+    "correctness": 4.355,
+    "groundedness": 4.33,
+    "helpfulness": 4.04,
+    "hallucination_safety": 4.935,
+    "overall": 4.22
   },
   "llm_retrieval_offline": {
-    "correctness": 3.695,
-    "groundedness": 5.0,
-    "helpfulness": 4.0,
-    "hallucination_safety": 5.0,
-    "overall": 4.505
+    "correctness": 4.355,
+    "groundedness": 4.33,
+    "helpfulness": 4.04,
+    "hallucination_safety": 4.935,
+    "overall": 4.22
   },
-  "note": "Scores from heuristic judge_v1 (no OpenAI key). Human calibration below."
+  "judge": "openai",
+  "judge_model": "gpt-4o-mini",
+  "note": "Scores from OpenAI gpt-4o-mini."
 }

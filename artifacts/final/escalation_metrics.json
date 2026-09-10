@@ -1,13 +1,13 @@
 {
   "proposed": {
-    "escalate_precision": 0.6486486486486487,
-    "escalate_recall": 0.8347826086956521,
-    "escalate_f1": 0.7300380228136882,
-    "auto_handle_rate": 0.26,
-    "false_auto_handle_rate": 0.36538461538461536,
+    "escalate_precision": 0.7767857142857143,
+    "escalate_recall": 0.7565217391304347,
+    "escalate_f1": 0.7665198237885462,
+    "auto_handle_rate": 0.44,
+    "false_auto_handle_rate": 0.3181818181818182,
     "pred_distribution": {
-      "escalate": 148,
-      "auto_handle": 52
+      "escalate": 112,
+      "auto_handle": 88
     },
     "true_distribution": {
       "escalate": 115,
@@ -46,7 +46,7 @@
   "false_auto_handle_definition": {
     "among_auto_handled": "false_auto / n_auto (legacy in escalation_metrics)",
     "among_should_escalate": "false_auto / n_should_escalate (Phase 5 safety metric)",
-    "proposed_among_should_escalate": 0.16521739130434782,
+    "proposed_among_should_escalate": 0.24347826086956523,
     "confidence_threshold_among_should_escalate": 0.3826086956521739,
     "always_among_should_escalate": 0.0
   }

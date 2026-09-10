@@ -16,28 +16,16 @@ Strong classical baseline (Macro-F1 0.683). Interpretable and reproducible offli
 Ground replies in historical AmazonHelp resolutions; provide evidence for the judge and safety story. Recall@1/3/5 = 0.310 / 0.565 / 0.670.
 
 ### Why not just an LLM?
-Without retrieval and gates, models invent policies/timelines. Ablation: k=0 → auto-handle rate 0 (policy requires evidence). Retrieval doesn’t raise intent F1 here; it enables grounded drafting and automation gates.
-
-### Why escalation?
-No account APIs. High-risk intents and weak evidence must go to humans. Confidence-only FAH 0.383 vs proposed 0.165 (among should-escalate).
+Without retrieval and gates, models invent policies/timelines. Ablation: k=0 → auto-handle rate 0. On this golden set, **TF-IDF Macro-F1 (0.683) still edges gpt-4o-mini (0.669)**—so retrieval + escalation matter more than “just use GPT for intents.”
 
 ### How do you know replies are good?
-Structured rubric (correctness, groundedness, helpfulness, completeness, tone, hallucination safety, escalation). Heuristic judge cached; 40 solo human ratings; Streamlit UI for independent rating. Compare generic + nearest-case baselines. **Do not** cite a single LLM score as proof.
+Structured rubric + **gpt-4o-mini judge** vs generic/nearest baselines (correctness 4.36 vs 3.24/3.46). Human calibration n=40: correctness Spearman ≈ 0.30—treat judge as noisy.
 
 ### Biggest weakness?
-False auto-handle still 16.5% of should-escalate cases; offline agent doesn’t show LLM intent gains; judge/human agreement variance is too low to claim strong calibration.
-
-### What is misleading about the headline?
-n=200, stratified Twitter sample, one brand, offline templates≠GPT, no CSAT, judge saturation, solo calibrator — see report §9.
-
-### What next?
-Hybrid retrieval + FAH-constrained policy tuning + OpenAI eval under frozen prompts + second annotator.
+False auto-handle still **24.3%** of should-escalate; LLM does not beat TF-IDF on intent here; safety suite 5/6.
 
 ### Dangerous Q — “90% auto-handling?”
-We don’t claim that. Auto-handle is **26%**; **safe** auto-handle **16.5%**; FAH among should-escalate **16.5%**. Automation without FAH is not trustworthy.
-
-### Dangerous Q — “Did retrieval memorize the test set?”
-Golden conversations excluded from the corpus; leakage checks for IDs and text are zero.
+Auto-handle is **44%**; **safe** auto-handle **25.5%**; FAH among should-escalate **24.3%**.
 
 ### Dangerous Q — “Why believe the judge?”
-We don’t fully. Heuristic judge + solo human calibration; dimensions with constant 5s yield Spearman 0. Treat as noisy diagnostic until independent Streamlit ratings exist.
+gpt-4o-mini judge with solo human calibration; modest correctness correlation (~0.30). Prefer Streamlit independent ratings before trusting reply scores alone.

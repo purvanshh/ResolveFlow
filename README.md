@@ -6,26 +6,31 @@ Classify intent → retrieve historical cases → draft a grounded reply → saf
 
 ## Results
 
-Frozen golden set **n=200** (checksum `e974255a…bb4ef36`). Offline fingerprint (TF-IDF + MiniLM retrieval + grounded templates):
+Frozen golden set **n=200** (checksum `e974255a…bb4ef36`).  
+**Fingerprint:** `gpt-4o-mini` classifier + responder + MiniLM retrieval (k=3) + risk-aware escalation + `gpt-4o-mini` judge.
 
 | Metric | Value |
 | --- | ---: |
-| **Safe Auto-Handling Rate (headline)** | **0.165** |
-| Intent Macro-F1 | 0.683 (95% CI [0.618, 0.745]) |
-| TF-IDF Macro-F1 (baseline) | 0.683 |
+| **Safe Auto-Handling Rate (headline)** | **0.255** |
+| Intent Macro-F1 (ResolveFlow / LLM) | 0.669 (95% CI [0.598, 0.727]) |
+| TF-IDF Macro-F1 (baseline) | **0.683** |
 | Majority Macro-F1 | 0.012 |
-| Auto-handle rate | 0.260 |
-| False auto-handle (among should-escalate) | 0.165 |
-| Escalation F1 | 0.730 |
+| Auto-handle rate | 0.440 |
+| False auto-handle (among should-escalate) | 0.243 |
+| Escalation F1 | 0.767 |
 | Recall@1 / @3 / @5 | 0.310 / 0.565 / 0.670 |
-| Safety suite | PASS (6/6); unsupported-claim rate 0.0 |
+| Reply correctness / groundedness (LLM judge) | 4.36 / 4.33 |
+| Unsupported-claim rate (drafts) | 0.015 |
+| Safety suite | 5/6 PASS (1 fail: `account_specific`) |
+
+On this golden set, **TF-IDF still edges the LLM on intent Macro-F1**; ResolveFlow’s gains show up in **reply quality vs generic/nearest baselines** and a higher **safe auto-handle rate** than the offline template agent (0.255 vs 0.165), with escalation F1 0.767.
 
 Full story: [`report/report.md`](report/report.md). Limits of the headline: report §9.
 
 ## Architecture
 
 ```text
-Customer → Intent → Retrieve (k=3) → Draft → Safety → Escalation → Auto / Human
+Customer → Intent (gpt-4o-mini) → Retrieve (k=3) → Draft (gpt-4o-mini) → Safety → Escalation → Auto / Human
 ```
 
 Code: `src/resolveflow/agent/`, retrieval in `src/resolveflow/retrieval/`, eval in `evaluation/`.
@@ -35,12 +40,19 @@ Code: `src/resolveflow/agent/`, retrieval in `src/resolveflow/retrieval/`, eval 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install -e ".[dev,discovery,labeling]"
+pip install -e ".[dev,discovery,labeling,llm]"
+
+# Put your key in .env (gitignored)
+# OPENAI_API_KEY=sk-...
+# RESOLVEFLOW_LLM_MODEL=gpt-4o-mini
 
 # Tests
 pytest
 
-# Agent (offline, no API key)
+# Agent (uses .env → gpt-4o-mini)
+python scripts/run_agent.py --text "My package is late and tracking hasn't moved"
+
+# Offline fallback (no API)
 python scripts/run_agent.py --offline --text "My package is late and tracking hasn't moved"
 
 # Retrieve neighbors
@@ -52,40 +64,48 @@ python scripts/check_leakage.py --final
 python scripts/check_taxonomy.py
 ```
 
-Optional OpenAI path: set `OPENAI_API_KEY` and omit `--offline`.
-
 ## Evaluation
 
-**First run** (rebuilds final artifacts; uses cached judge when present):
+**First OpenAI run** (API cost; writes `artifacts/final/`):
 
 ```bash
-python -m evaluation.run_all --config configs/default.yaml --mode offline
+python scripts/evaluate_agent.py --mode openai
+python scripts/evaluate_safety.py --mode openai
+python -m evaluation.run_all --config configs/default.yaml --mode openai
 ```
 
-**Cached reproduction:** re-run the same command; agent predictions and `artifacts/final/judge_cache.json` are reused unless `--force-agent`.
+**Cached reproduction:** re-run `evaluation.run_all --mode openai` to reuse `artifacts/evaluation/agent_predictions.jsonl` and `artifacts/final/judge_cache.json` unless you pass `--force-agent`.
 
 Related:
 
 ```bash
 python scripts/evaluate_baselines.py
 python scripts/evaluate_retrieval.py
-python scripts/evaluate_agent.py --mode offline
-python scripts/evaluate_safety.py --mode offline
 streamlit run scripts/rate_replies.py   # human reply ratings
 ```
 
 Artifacts: `artifacts/final/` (metrics, comparisons, manifest), `artifacts/figures/escalation_tradeoff.png`.
 
+### Main comparison
+
+| System | Intent Macro-F1 | Escalation F1 | Auto-Handle | FAH | Reply Correctness | Groundedness |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Majority | 0.012 | 0.730 | 0.000 | 0.000 | 3.24 | 2.38 |
+| TF-IDF + LR | 0.683 | 0.592 | 0.375 | 0.383 | — | — |
+| Nearest Case | — | — | — | — | 3.46 | 3.42 |
+| ResolveFlow (gpt-4o-mini) | 0.669 | 0.767 | 0.440 | 0.243 | 4.36 | 4.33 |
+
 ## Failure Analysis
 
-Top issues: false auto-handle, refund request/status confusion, delivery vs missing-package confusion, thin/ambiguous tweets. Details: [`report/failure_analysis.md`](report/failure_analysis.md).
+Top issues: false auto-handle, refund request/status confusion, delivery vs missing-package confusion, thin/ambiguous tweets, occasional unsupported claims (~1.5%). Details: [`report/failure_analysis.md`](report/failure_analysis.md).
 
 ## Limitations
 
-- Offline reported agent ≠ hosted LLM agent.
-- Golden n=200; stratified Twitter sample; one brand.
-- Heuristic judge + solo human calibration (n=40); low score variance.
-- No live CSAT, CRM actions, or account verification.
+- Golden n=200; stratified Twitter sample; one brand (AmazonHelp).
+- LLM intent Macro-F1 does **not** beat TF-IDF on this set (CI overlaps).
+- LLM-as-judge calibrated lightly (n=40 solo); correctness Spearman ≈ 0.30.
+- Safety suite not perfect (5/6); no live CSAT or account APIs.
+- Retrieval ablations: k=0 blocks auto-handle; k=1/3/5 similar automation.
 
 ## Docs
 
@@ -103,7 +123,6 @@ Top issues: false auto-handle, refund request/status confusion, delivery vs miss
 Place `twcs.csv` under `data/raw/` (gitignored). Processed embeddings/cases are local artifacts—not committed.
 
 ```bash
-# Optional download helpers may exist under scripts/
 python scripts/profile_data.py --write-interim
 python scripts/build_cases.py
 python scripts/build_index.py

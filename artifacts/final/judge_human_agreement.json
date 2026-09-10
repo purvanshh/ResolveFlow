@@ -5,67 +5,67 @@
   "agreement": {
     "correctness": {
       "n": 40,
-      "exact_agreement": 0.725,
-      "within_one_agreement": 1.0,
-      "spearman": 1.0,
-      "weighted_kappa": 0.7435897435897436
+      "exact_agreement": 0.275,
+      "within_one_agreement": 0.75,
+      "spearman": 0.2992495309568481,
+      "weighted_kappa": 0.14746543778801846
     },
     "groundedness": {
       "n": 40,
-      "exact_agreement": 0.975,
-      "within_one_agreement": 0.975,
-      "spearman": 0.0,
-      "weighted_kappa": 0.0
+      "exact_agreement": 0.475,
+      "within_one_agreement": 0.925,
+      "spearman": 0.21482176360225144,
+      "weighted_kappa": 0.15254237288135597
     },
     "helpfulness": {
       "n": 40,
-      "exact_agreement": 1.0,
-      "within_one_agreement": 1.0,
-      "spearman": 0.0,
-      "weighted_kappa": 1.0
+      "exact_agreement": 0.45,
+      "within_one_agreement": 0.825,
+      "spearman": -0.19136960600375236,
+      "weighted_kappa": -0.05134474327628369
     },
     "completeness": {
       "n": 40,
-      "exact_agreement": 1.0,
-      "within_one_agreement": 1.0,
-      "spearman": 0.0,
-      "weighted_kappa": 1.0
-    },
-    "tone": {
-      "n": 40,
-      "exact_agreement": 1.0,
-      "within_one_agreement": 1.0,
-      "spearman": 0.0,
-      "weighted_kappa": 1.0
-    },
-    "hallucination_safety": {
-      "n": 40,
-      "exact_agreement": 0.975,
+      "exact_agreement": 0.25,
       "within_one_agreement": 0.975,
       "spearman": 0.0,
       "weighted_kappa": 0.0
     },
+    "tone": {
+      "n": 40,
+      "exact_agreement": 0.95,
+      "within_one_agreement": 1.0,
+      "spearman": 0.0,
+      "weighted_kappa": 0.0
+    },
+    "hallucination_safety": {
+      "n": 40,
+      "exact_agreement": 0.925,
+      "within_one_agreement": 1.0,
+      "spearman": 0.678986866791745,
+      "weighted_kappa": 0.7916666666666667
+    },
     "escalation_appropriateness": {
       "n": 40,
-      "exact_agreement": 1.0,
-      "within_one_agreement": 1.0,
-      "spearman": 1.0,
-      "weighted_kappa": 1.0
+      "exact_agreement": 0.725,
+      "within_one_agreement": 0.725,
+      "spearman": 0.0,
+      "weighted_kappa": 0.0
     },
     "overall": {
       "n": 40,
-      "exact_agreement": 1.0,
+      "exact_agreement": 0.4,
       "within_one_agreement": 1.0,
-      "spearman": 1.0,
-      "weighted_kappa": 1.0
+      "spearman": -0.0031894934333958733,
+      "weighted_kappa": -0.12941176470588234
     }
   },
   "judge_bias": {
-    "length_vs_overall_corr": 0.11962132537791031,
-    "sorry_count_vs_overall_corr": 0.038731770098996254,
-    "mean_overall": 4.505,
-    "mean_reply_length": 193.235,
-    "note": "Diagnostic only; heuristic judge on template replies."
+    "length_vs_overall_corr": -0.2548449413813079,
+    "sorry_count_vs_overall_corr": 0.004707459371652809,
+    "mean_overall": 4.22,
+    "mean_reply_length": 194.605,
+    "note": "Diagnostic correlations for OpenAI judge_v1 scores."
   },
-  "limitation": "Single human annotator; heuristic judge (no API). Exact agreement can look high when both assign near-constant 5s (Spearman/kappa uninformative on flat dimensions). Treat as calibration diagnostic; prefer Streamlit independent ratings."
+  "limitation": "Single human annotator (rule-assisted calibration, n=40). LLM judge is gpt-4o-mini. Agreement is modest on correctness/helpfulness; treat judge scores as noisy. Prefer Streamlit independent ratings."
 }

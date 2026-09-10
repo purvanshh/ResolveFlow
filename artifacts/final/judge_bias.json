@@ -1,7 +1,7 @@
 {
-  "length_vs_overall_corr": 0.11962132537791031,
-  "sorry_count_vs_overall_corr": 0.038731770098996254,
-  "mean_overall": 4.505,
-  "mean_reply_length": 193.235,
+  "length_vs_overall_corr": -0.2548449413813079,
+  "sorry_count_vs_overall_corr": 0.004707459371652809,
+  "mean_overall": 4.22,
+  "mean_reply_length": 194.605,
   "note": "Diagnostic only; heuristic judge on template replies."
 }
