@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import os
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -29,7 +30,7 @@ from evaluation.failure_analysis import (  # noqa: E402
     rank_failures,
     summarize_failure_modes,
 )
-from evaluation.judge import JudgeCache, heuristic_judge  # noqa: E402
+from evaluation.judge import JudgeCache, heuristic_judge, llm_judge  # noqa: E402
 from resolveflow.agent.factory import build_agent  # noqa: E402
 from resolveflow.baselines import (  # noqa: E402
     AlwaysEscalateBaseline,
@@ -38,8 +39,9 @@ from resolveflow.baselines import (  # noqa: E402
     TfidfBaseline,
     majority_label,
 )
-from resolveflow.config import load_config, resolve_path  # noqa: E402
+from resolveflow.config import load_config, load_dotenv, resolve_path  # noqa: E402
 from resolveflow.golden import load_golden_set, sha256_file  # noqa: E402
+from resolveflow.llm import get_provider  # noqa: E402
 from resolveflow.metrics import escalation_metrics, intent_metrics  # noqa: E402
 from resolveflow.retrieval.retrieve import load_retriever  # noqa: E402
 from resolveflow.schemas import AgentRequest  # noqa: E402
@@ -162,6 +164,7 @@ def main() -> int:
     parser.add_argument("--mode", default="offline")
     parser.add_argument("--force-agent", action="store_true")
     args = parser.parse_args()
+    load_dotenv(override=True)
     cfg = load_config(args.config)
     tax = load_taxonomy()
     labels = intent_names(tax)
@@ -179,9 +182,26 @@ def main() -> int:
         "experiment": {"name": "resolveflow-final-v1", "seed": 42},
         "brand": {"name": cfg["brand"]["name"]},
         "models": {
-            "classifier": "tfidf_logistic_regression (offline) / openai optional",
-            "responder": "grounded_template (offline) / openai optional",
+            "classifier": (
+                os.getenv("RESOLVEFLOW_LLM_MODEL")
+                or cfg.get("agent", {}).get("classifier_model")
+                or "gpt-4o-mini"
+            )
+            if args.mode in {"openai", "auto"}
+            else "tfidf_logistic_regression (offline)",
+            "responder": (
+                os.getenv("RESOLVEFLOW_LLM_MODEL")
+                or cfg.get("agent", {}).get("responder_model")
+                or "gpt-4o-mini"
+            )
+            if args.mode in {"openai", "auto"}
+            else "grounded_template (offline)",
             "embedding": cfg["retrieval"]["embedding_model"],
+            "judge": (
+                (os.getenv("RESOLVEFLOW_LLM_MODEL") or "gpt-4o-mini")
+                if args.mode in {"openai", "auto"}
+                else "heuristic_judge_v1"
+            ),
         },
         "prompts": {
             "classifier": "classifier_v1",
@@ -268,7 +288,7 @@ def main() -> int:
         )
         w.writerow(
             {
-                "Model": "ResolveFlow agent (offline classifier)",
+                "Model": "ResolveFlow agent (gpt-4o-mini)",
                 "Accuracy": f"{intent_m['accuracy']:.3f}",
                 "Macro F1": f"{intent_m['macro_f1']:.3f}",
                 "Weighted F1": f"{intent_m['weighted_f1']:.3f}",
@@ -411,7 +431,7 @@ def main() -> int:
         plt.savefig(fig_dir / "escalation_tradeoff.png", dpi=150)
         plt.close()
 
-    # Judge inputs + heuristic judge for all + human subset
+    # Judge inputs + LLM judge (openai) or heuristic (offline)
     judge_inputs = []
     for r in rows:
         judge_inputs.append(
@@ -430,19 +450,32 @@ def main() -> int:
         for rec in judge_inputs:
             f.write(json.dumps(rec) + "\n")
 
+    use_llm_judge = args.mode in {"openai", "auto"} and bool(
+        (os.getenv("OPENAI_API_KEY") or "").strip()
+    )
+    judge_model = os.getenv("RESOLVEFLOW_LLM_MODEL") or "gpt-4o-mini"
+    judge_provider = get_provider("openai", model=judge_model) if use_llm_judge else None
+
     judge_rows = []
     from evaluation.judge import cache_key
 
     cache = JudgeCache(final_dir / "judge_cache.json")
-    for rec, r in zip(judge_inputs, rows, strict=False):
+    for i, (rec, r) in enumerate(zip(judge_inputs, rows, strict=False)):
         gold = {
             "intent": r["gold_intent"],
             "escalation_expected": r["gold_escalation"],
         }
         key = cache_key(rec)
         cached = cache.get(key)
-        if cached:
+        if cached and (
+            not use_llm_judge
+            or cached.get("judge_type") not in {None, "heuristic"}
+        ):
             scores = cached
+        elif use_llm_judge and judge_provider is not None:
+            if i % 20 == 0:
+                print(f"Judge progress {i}/{len(judge_inputs)}...", flush=True)
+            scores = llm_judge(judge_provider, rec, cache=cache)
         else:
             scores = heuristic_judge(rec, gold=gold)
             cache.set(key, scores)
@@ -461,10 +494,10 @@ def main() -> int:
 
     agent_reply_scores = {d: mean_dim(judge_rows, d) for d in DIMS + ["overall"]}
 
-    # Generic + nearest baselines judged on same rubric (sample all for consistency)
+    # Generic + nearest baselines judged on same rubric
     alt = build_generic_and_nearest_replies(cfg, golden, rows)
     generic_scores, nearest_scores = [], []
-    for a, r in zip(alt, rows, strict=False):
+    for i, (a, r) in enumerate(zip(alt, rows, strict=False)):
         gold = {"intent": r["gold_intent"], "escalation_expected": r["gold_escalation"]}
         g_rec = {
             "example_id": r["example_id"],
@@ -480,14 +513,38 @@ def main() -> int:
         n_rec["reply"] = a["nearest_reply"]
         n_rec["evidence"] = r.get("evidence") or []
         n_rec["escalate"] = False
-        generic_scores.append(heuristic_judge(g_rec, gold=gold))
-        nearest_scores.append(heuristic_judge(n_rec, gold=gold))
+        if use_llm_judge and judge_provider is not None:
+            if i % 25 == 0:
+                print(f"Baseline judge progress {i}/{len(alt)}...", flush=True)
+            generic_scores.append(llm_judge(judge_provider, g_rec, cache=cache))
+            nearest_scores.append(llm_judge(judge_provider, n_rec, cache=cache))
+        else:
+            generic_scores.append(heuristic_judge(g_rec, gold=gold))
+            nearest_scores.append(heuristic_judge(n_rec, gold=gold))
 
     reply_comparison = {
-        "generic": {d: mean_dim(generic_scores, d) for d in ["correctness", "groundedness", "helpfulness", "hallucination_safety", "overall"]},
-        "nearest_case": {d: mean_dim(nearest_scores, d) for d in ["correctness", "groundedness", "helpfulness", "hallucination_safety", "overall"]},
-        "llm_retrieval_offline": {d: agent_reply_scores[d] for d in ["correctness", "groundedness", "helpfulness", "hallucination_safety", "overall"]},
-        "note": "Scores from heuristic judge_v1 (no OpenAI key). Human calibration below.",
+        "generic": {
+            d: mean_dim(generic_scores, d)
+            for d in ["correctness", "groundedness", "helpfulness", "hallucination_safety", "overall"]
+        },
+        "nearest_case": {
+            d: mean_dim(nearest_scores, d)
+            for d in ["correctness", "groundedness", "helpfulness", "hallucination_safety", "overall"]
+        },
+        "llm_retrieval": {
+            d: agent_reply_scores[d]
+            for d in ["correctness", "groundedness", "helpfulness", "hallucination_safety", "overall"]
+        },
+        # keep offline key as alias for older report code
+        "llm_retrieval_offline": {
+            d: agent_reply_scores[d]
+            for d in ["correctness", "groundedness", "helpfulness", "hallucination_safety", "overall"]
+        },
+        "judge": "openai" if use_llm_judge else "heuristic",
+        "judge_model": judge_model if use_llm_judge else "heuristic_judge_v1",
+        "note": (
+            f"Scores from {'OpenAI ' + judge_model if use_llm_judge else 'heuristic judge_v1'}."
+        ),
     }
     (final_dir / "reply_comparison.json").write_text(json.dumps(reply_comparison, indent=2) + "\n")
 
@@ -631,7 +688,7 @@ def main() -> int:
         json.dumps(
             {
                 "suite": safety_suite,
-                "unsupported_claim_rate": reply_comparison["llm_retrieval_offline"][
+                "unsupported_claim_rate": reply_comparison["llm_retrieval"][
                     "hallucination_safety"
                 ],
                 "unsupported_claim_rate_note": "hallucination_safety mean (5=best); suite failures=0",
@@ -739,11 +796,14 @@ def main() -> int:
                 "Escalation F1": f"{proposed['escalate_f1']:.3f}",
                 "Auto-Handle Rate": f"{proposed['auto_handle_rate']:.3f}",
                 "False Auto-Handle": f"{proposed_fah_should:.3f}",
-                "Reply Correctness": f"{agent_reply_scores['correctness']:.2f}",
-                "Groundedness": f"{agent_reply_scores['groundedness']:.2f}",
+                "Reply Correctness": f"{reply_comparison['llm_retrieval']['correctness']:.2f}",
+                "Groundedness": f"{reply_comparison['llm_retrieval']['groundedness']:.2f}",
             }
         )
 
+    llm_model = os.getenv("RESOLVEFLOW_LLM_MODEL") or cfg.get("agent", {}).get(
+        "classifier_model", "gpt-4o-mini"
+    )
     manifest = {
         "project": "ResolveFlow",
         "brand": cfg["brand"]["name"],
@@ -751,14 +811,16 @@ def main() -> int:
         "golden_checksum": checksum,
         "taxonomy_version": "v1",
         "num_intents": len(labels),
-        "classifier_model": "tfidf_logistic_regression (offline eval)",
-        "responder_model": "grounded_template (offline eval)",
+        "classifier_model": llm_model if args.mode in {"openai", "auto"} else "tfidf_logistic_regression",
+        "responder_model": llm_model if args.mode in {"openai", "auto"} else "grounded_template",
         "embedding_model": cfg["retrieval"]["embedding_model"],
         "classifier_prompt": "classifier_v1",
         "responder_prompt": "responder_v1",
         "judge_prompt": "judge_v1",
+        "judge_backend": "openai" if use_llm_judge else "heuristic",
         "retrieval_k": 3,
         "seed": 42,
+        "runtime_mode": args.mode,
         "headline": headline,
         "retrieval_recall": {
             "r1": retrieval["recall_at_1"],

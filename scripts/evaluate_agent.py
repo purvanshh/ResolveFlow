@@ -21,9 +21,12 @@ from resolveflow.schemas import AgentRequest  # noqa: E402
 from resolveflow.taxonomy import intent_names, load_taxonomy  # noqa: E402
 
 
-def _run_corpus(agent, golden):
+def _run_corpus(agent, golden, *, label: str = "agent"):
     rows = []
-    for _, row in golden.iterrows():
+    n = len(golden)
+    for i, (_, row) in enumerate(golden.iterrows()):
+        if i % 10 == 0:
+            print(f"[{label}] {i}/{n}", flush=True)
         d = agent.handle(
             AgentRequest(message=row["input_text"], context=row.get("context") or "")
         )
@@ -44,6 +47,9 @@ def _run_corpus(agent, golden):
                 "evidence": [e.to_dict() for e in d.evidence],
                 "safety_flags": d.safety_flags,
                 "escalation_reason": d.escalation_reason,
+                "customer_message": row["input_text"],
+                "context": row.get("context") or "",
+                "difficulty": row.get("difficulty") or "",
                 "meta": d.meta,
             }
         )
@@ -93,7 +99,7 @@ def main() -> int:
 
     # Main agent
     agent, meta = build_agent(config_path=args.config, provider_mode=args.mode, top_k=3)
-    rows = _run_corpus(agent, golden)
+    rows = _run_corpus(agent, golden, label="main_k3")
     pred_path = art / "agent_predictions.jsonl"
     with pred_path.open("w") as f:
         for r in rows:
@@ -183,7 +189,7 @@ def main() -> int:
             top_k=k,
             disable_retrieval=(k == 0),
         )
-        arows = _run_corpus(a, golden)
+        arows = _run_corpus(a, golden, label=f"ablation_k{k}")
         if k == 0:
             with (art / "no_retrieval_predictions.jsonl").open("w") as f:
                 for r in arows:
