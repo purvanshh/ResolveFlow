@@ -5,9 +5,11 @@ from __future__ import annotations
 import json
 import os
 import re
+import time
 from typing import Any
 
 from resolveflow.llm.base import LLMProvider
+from resolveflow.llm.deepseek import DeepSeekProvider
 from resolveflow.llm.mock import MockProvider
 
 
@@ -42,8 +44,6 @@ class OpenAIProvider(LLMProvider):
             hint = "\nRespond with a JSON object matching keys: " + ", ".join(
                 schema_hint.keys()
             )
-        import time
-
         last_err: Exception | None = None
         resp = None
         messages = [
@@ -71,8 +71,10 @@ class OpenAIProvider(LLMProvider):
             data["_usage"] = {
                 "prompt_tokens": getattr(usage, "prompt_tokens", None),
                 "completion_tokens": getattr(usage, "completion_tokens", None),
+                "total_tokens": getattr(usage, "total_tokens", None),
             }
         data["_model"] = self.model
+        data["_provider"] = self.name
         return data
 
 
@@ -91,9 +93,18 @@ def _parse_json(text: str) -> dict[str, Any]:
             return {}
 
 
-def get_provider(mode: str = "auto", *, model: str | None = None, intents: list[str] | None = None) -> LLMProvider:
+def get_provider(
+    mode: str = "auto",
+    *,
+    model: str | None = None,
+    intents: list[str] | None = None,
+    thinking_enabled: bool = False,
+    reasoning_effort: str = "high",
+    base_url: str | None = None,
+    model_version: str | None = None,
+) -> LLMProvider:
     """
-    mode: auto | openai | mock
+    mode: auto | openai | deepseek | mock
     auto uses OpenAI when OPENAI_API_KEY is set, else mock.
     """
     from resolveflow.config import load_dotenv
@@ -102,6 +113,16 @@ def get_provider(mode: str = "auto", *, model: str | None = None, intents: list[
     mode = (mode or "auto").lower()
     if mode == "mock":
         return MockProvider(intents=intents)
+    if mode == "deepseek":
+        kwargs: dict[str, Any] = {
+            "model": model,
+            "thinking_enabled": thinking_enabled,
+            "reasoning_effort": reasoning_effort,
+            "base_url": base_url,
+        }
+        if model_version:
+            kwargs["model_version"] = model_version
+        return DeepSeekProvider(**kwargs)
     if mode == "openai":
         return OpenAIProvider(model=model)
     if os.getenv("OPENAI_API_KEY"):

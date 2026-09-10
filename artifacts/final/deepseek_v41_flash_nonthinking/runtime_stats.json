@@ -1,0 +1,9 @@
+{
+  "n": 200,
+  "latency_mean_s": 1.9675800039700335,
+  "latency_median_s": 1.8748879579979985,
+  "latency_p95_s": 2.5747528017469437,
+  "prompt_tokens_sum": null,
+  "completion_tokens_sum": null,
+  "retries_total": 0
+}

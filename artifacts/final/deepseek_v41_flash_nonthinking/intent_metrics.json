@@ -1,0 +1,357 @@
+{
+  "accuracy": 0.645,
+  "macro_f1": 0.6531221075357745,
+  "weighted_f1": 0.6483028442350464,
+  "per_intent": {
+    "delivery_delay": {
+      "precision": 0.5294117647058824,
+      "recall": 0.72,
+      "f1": 0.6101694915254238,
+      "support": 25
+    },
+    "package_missing_or_misdelivered": {
+      "precision": 0.9230769230769231,
+      "recall": 0.46153846153846156,
+      "f1": 0.6153846153846154,
+      "support": 26
+    },
+    "order_quality_issue": {
+      "precision": 0.6842105263157895,
+      "recall": 0.6842105263157895,
+      "f1": 0.6842105263157895,
+      "support": 19
+    },
+    "cancellation_request": {
+      "precision": 0.75,
+      "recall": 0.6428571428571429,
+      "f1": 0.6923076923076923,
+      "support": 14
+    },
+    "return_request": {
+      "precision": 0.7142857142857143,
+      "recall": 0.6666666666666666,
+      "f1": 0.6896551724137931,
+      "support": 15
+    },
+    "refund_request": {
+      "precision": 0.5,
+      "recall": 0.46153846153846156,
+      "f1": 0.48,
+      "support": 13
+    },
+    "refund_status": {
+      "precision": 0.5238095238095238,
+      "recall": 0.6875,
+      "f1": 0.5945945945945946,
+      "support": 16
+    },
+    "payment_billing": {
+      "precision": 0.7142857142857143,
+      "recall": 0.7142857142857143,
+      "f1": 0.7142857142857143,
+      "support": 14
+    },
+    "prime_membership": {
+      "precision": 0.7,
+      "recall": 0.5,
+      "f1": 0.5833333333333334,
+      "support": 14
+    },
+    "account_access": {
+      "precision": 0.9230769230769231,
+      "recall": 0.9230769230769231,
+      "f1": 0.9230769230769231,
+      "support": 13
+    },
+    "technical_issue": {
+      "precision": 0.9,
+      "recall": 0.5625,
+      "f1": 0.6923076923076923,
+      "support": 16
+    },
+    "other_unclear": {
+      "precision": 0.42857142857142855,
+      "recall": 0.8,
+      "f1": 0.5581395348837209,
+      "support": 15
+    }
+  },
+  "confusion_matrix": {
+    "labels": [
+      "delivery_delay",
+      "package_missing_or_misdelivered",
+      "order_quality_issue",
+      "cancellation_request",
+      "return_request",
+      "refund_request",
+      "refund_status",
+      "payment_billing",
+      "prime_membership",
+      "account_access",
+      "technical_issue",
+      "other_unclear"
+    ],
+    "matrix": [
+      [
+        18,
+        0,
+        0,
+        1,
+        2,
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        2
+      ],
+      [
+        4,
+        12,
+        3,
+        1,
+        1,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        3
+      ],
+      [
+        1,
+        1,
+        13,
+        0,
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      [
+        1,
+        0,
+        0,
+        9,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        2
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        10,
+        1,
+        2,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        1,
+        0,
+        1,
+        0,
+        0,
+        6,
+        5,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        3,
+        11,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        1,
+        10,
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        7,
+        0,
+        0,
+        2
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        12,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        1,
+        9,
+        3
+      ],
+      [
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        12
+      ]
+    ]
+  },
+  "classification_report": {
+    "delivery_delay": {
+      "precision": 0.5294117647058824,
+      "recall": 0.72,
+      "f1-score": 0.6101694915254238,
+      "support": 25.0
+    },
+    "package_missing_or_misdelivered": {
+      "precision": 0.9230769230769231,
+      "recall": 0.46153846153846156,
+      "f1-score": 0.6153846153846154,
+      "support": 26.0
+    },
+    "order_quality_issue": {
+      "precision": 0.6842105263157895,
+      "recall": 0.6842105263157895,
+      "f1-score": 0.6842105263157895,
+      "support": 19.0
+    },
+    "cancellation_request": {
+      "precision": 0.75,
+      "recall": 0.6428571428571429,
+      "f1-score": 0.6923076923076923,
+      "support": 14.0
+    },
+    "return_request": {
+      "precision": 0.7142857142857143,
+      "recall": 0.6666666666666666,
+      "f1-score": 0.6896551724137931,
+      "support": 15.0
+    },
+    "refund_request": {
+      "precision": 0.5,
+      "recall": 0.46153846153846156,
+      "f1-score": 0.48,
+      "support": 13.0
+    },
+    "refund_status": {
+      "precision": 0.5238095238095238,
+      "recall": 0.6875,
+      "f1-score": 0.5945945945945946,
+      "support": 16.0
+    },
+    "payment_billing": {
+      "precision": 0.7142857142857143,
+      "recall": 0.7142857142857143,
+      "f1-score": 0.7142857142857143,
+      "support": 14.0
+    },
+    "prime_membership": {
+      "precision": 0.7,
+      "recall": 0.5,
+      "f1-score": 0.5833333333333334,
+      "support": 14.0
+    },
+    "account_access": {
+      "precision": 0.9230769230769231,
+      "recall": 0.9230769230769231,
+      "f1-score": 0.9230769230769231,
+      "support": 13.0
+    },
+    "technical_issue": {
+      "precision": 0.9,
+      "recall": 0.5625,
+      "f1-score": 0.6923076923076923,
+      "support": 16.0
+    },
+    "other_unclear": {
+      "precision": 0.42857142857142855,
+      "recall": 0.8,
+      "f1-score": 0.5581395348837209,
+      "support": 15.0
+    },
+    "accuracy": 0.645,
+    "macro avg": {
+      "precision": 0.690894043177325,
+      "recall": 0.6520144913565967,
+      "f1-score": 0.6531221075357745,
+      "support": 200.0
+    },
+    "weighted avg": {
+      "precision": 0.6947955182072828,
+      "recall": 0.645,
+      "f1-score": 0.6483028442350464,
+      "support": 200.0
+    }
+  },
+  "macro_f1_bootstrap_mean": 0.6442157986476125,
+  "macro_f1_bootstrap_ci95": [
+    0.5766471468592728,
+    0.7164757408648613
+  ]
+}

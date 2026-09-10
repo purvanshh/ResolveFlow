@@ -1,0 +1,10 @@
+{
+  "correctness": 4.78,
+  "groundedness": 4.77,
+  "helpfulness": 4.725,
+  "completeness": 4.37,
+  "tone": 4.985,
+  "hallucination_safety": 4.955,
+  "escalation_appropriateness": 5.0,
+  "overall": 4.715
+}

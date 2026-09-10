@@ -26,6 +26,7 @@ def build_agent(
     retrieval_mode: str | None = None,
     similarity_threshold: float | None = None,
     disable_retrieval: bool = False,
+    thinking_enabled: bool | None = None,
 ) -> tuple[AgentPipeline, dict[str, Any]]:
     cfg = load_config(config_path)
     tax = load_taxonomy()
@@ -35,22 +36,68 @@ def build_agent(
     safety_cfg = cfg.get("safety", {})
     rcfg = cfg["retrieval"]
 
-    # Default offline path when no API key: TF-IDF + grounded templates
     import os
 
     from resolveflow.config import load_dotenv
 
     load_dotenv()
-    has_key = bool(os.getenv("OPENAI_API_KEY"))
-    model = os.getenv("RESOLVEFLOW_LLM_MODEL") or agent_cfg.get("classifier_model") or "gpt-4o-mini"
-    if provider_mode in {"offline", "tfidf"} or (provider_mode == "auto" and not has_key):
+
+    # Config may pin provider (e.g. deepseek experiments)
+    cfg_provider = (agent_cfg.get("provider") or "").lower()
+    if provider_mode == "auto" and cfg_provider:
+        provider_mode = cfg_provider
+
+    think = (
+        bool(thinking_enabled)
+        if thinking_enabled is not None
+        else bool(agent_cfg.get("thinking_enabled", False))
+    )
+    model = (
+        agent_cfg.get("classifier_model")
+        or os.getenv("RESOLVEFLOW_LLM_MODEL")
+        or "gpt-4o-mini"
+    )
+    model_version = agent_cfg.get("model_version")
+    reasoning_effort = str(agent_cfg.get("reasoning_effort") or "high")
+    base_url = agent_cfg.get("base_url")
+
+    has_openai = bool((os.getenv("OPENAI_API_KEY") or "").strip())
+    has_deepseek = bool((os.getenv("DEEPSEEK_API_KEY") or "").strip())
+
+    if provider_mode in {"offline", "tfidf"}:
+        classifier_mode = classifier_mode or "tfidf"
+        responder_mode = responder_mode or "grounded_template"
+        provider = get_provider("mock", intents=intent_names(tax))
+    elif provider_mode == "deepseek":
+        if not has_deepseek:
+            raise RuntimeError("DEEPSEEK_API_KEY required for provider_mode=deepseek")
+        provider = get_provider(
+            "deepseek",
+            model=model,
+            thinking_enabled=think,
+            reasoning_effort=reasoning_effort,
+            base_url=base_url,
+            model_version=model_version,
+            intents=intent_names(tax),
+        )
+        classifier_mode = classifier_mode or agent_cfg.get("classifier_mode") or "llm"
+        responder_mode = responder_mode or agent_cfg.get("responder_mode") or "llm"
+    elif provider_mode in {"openai"} or (provider_mode == "auto" and has_openai):
+        provider = get_provider("openai", model=model, intents=intent_names(tax))
+        classifier_mode = classifier_mode or agent_cfg.get("classifier_mode") or "llm"
+        responder_mode = responder_mode or agent_cfg.get("responder_mode") or "llm"
+    elif provider_mode == "auto" and not has_openai:
         classifier_mode = classifier_mode or "tfidf"
         responder_mode = responder_mode or "grounded_template"
         provider = get_provider("mock", intents=intent_names(tax))
     else:
         provider = get_provider(
-            "openai" if provider_mode == "auto" else provider_mode,
+            provider_mode,
             model=model,
+            thinking_enabled=think,
+            reasoning_effort=reasoning_effort,
+            base_url=base_url,
+            model_version=model_version,
             intents=intent_names(tax),
         )
         classifier_mode = classifier_mode or agent_cfg.get("classifier_mode") or "llm"
@@ -109,10 +156,16 @@ def build_agent(
         max_reply_chars=int(safety_cfg.get("max_reply_characters", 280)),
         skip_generation_on_high_risk=bool(agent_cfg.get("skip_generation_on_high_risk", True)),
     )
-    meta = {
+    meta: dict[str, Any] = {
         "provider": provider.name,
         "classifier_mode": classifier_mode,
         "responder_mode": responder_mode,
         "brand": brand,
+        "model": getattr(provider, "model", model),
+        "thinking_enabled": think if provider.name == "deepseek" else False,
     }
+    if hasattr(provider, "request_extras"):
+        meta["request"] = provider.request_extras()  # type: ignore[attr-defined]
+    if model_version:
+        meta["model_version"] = model_version
     return pipeline, meta

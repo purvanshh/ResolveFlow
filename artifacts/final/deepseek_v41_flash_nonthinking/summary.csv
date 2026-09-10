@@ -1,0 +1,2 @@
+experiment_id,intent_macro_f1,auto_handle_rate,safe_auto_handling_rate,false_auto_handle_rate,escalation_f1,reply_correctness,reply_groundedness,unsupported_claim_rate,safety_suite,latency_mean_s
+deepseek_v41_flash_nonthinking,0.653,0.470,0.255,0.270,0.760,4.74,4.74,0.020,5/6,1.97

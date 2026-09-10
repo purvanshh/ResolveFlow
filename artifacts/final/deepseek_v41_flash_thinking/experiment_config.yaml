@@ -1,0 +1,44 @@
+experiment:
+  id: deepseek_v41_flash_thinking
+  name: deepseek-v41-flash-thinking
+  seed: 42
+agent:
+  provider: deepseek
+  classifier_model: deepseek-flash
+  responder_model: deepseek-flash
+  model_version: DeepSeek-V4.1-Flash
+  base_url: https://api.deepseek.com
+  thinking_enabled: true
+  reasoning_effort: high
+  top_k: 3
+  similarity_threshold: 0.45
+judge:
+  provider: openai
+  model: gpt-4o-mini
+golden_checksum: e974255a5ab6e06516e11c7c9e74b61b53c81d2c10a5386a7d549e951bb4ef36
+golden_n: 200
+runtime:
+  provider: deepseek
+  classifier_mode: llm
+  responder_mode: llm
+  brand: AmazonHelp
+  model: deepseek-flash
+  thinking_enabled: true
+  request:
+    provider: deepseek
+    model: deepseek-flash
+    model_version: DeepSeek-V4.1-Flash
+    base_url: https://api.deepseek.com
+    thinking_enabled: true
+    thinking:
+      type: enabled
+    reasoning_effort: high
+  model_version: DeepSeek-V4.1-Flash
+runtime_stats:
+  n: 200
+  latency_mean_s: 6.979731804399962
+  latency_median_s: 5.783585229000892
+  latency_p95_s: 16.26534621664613
+  prompt_tokens_sum: null
+  completion_tokens_sum: null
+  retries_total: 0

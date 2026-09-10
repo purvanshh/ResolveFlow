@@ -1,0 +1,177 @@
+{
+  "gpt_vs_deepseek_nonthinking": {
+    "both_ok": 103,
+    "both_fail": 75,
+    "gpt_ok_deepseek_fail": 12,
+    "deepseek_ok_gpt_fail": 10
+  },
+  "deepseek_nonthinking_vs_thinking": {
+    "nonthinking_ok_thinking_fail": 16,
+    "both_ok": 97,
+    "both_fail": 77,
+    "thinking_ok_nonthinking_fail": 10
+  },
+  "examples": [
+    {
+      "tag": "gpt_ok_deepseek_fail",
+      "example_id": "gold_021",
+      "gold_intent": "cancellation_request",
+      "gpt_pred": "cancellation_request",
+      "ds_pred": "other_unclear",
+      "gpt_esc": "auto_handle",
+      "ds_esc": "escalate",
+      "customer": "@AmazonHelp Guys, any help? Yes? No? Can't help? Cancel order? Or simply '@115850 doesn't given a F**K? His number is still unreachable"
+    },
+    {
+      "tag": "gpt_ok_deepseek_fail",
+      "example_id": "gold_027",
+      "gold_intent": "cancellation_request",
+      "gpt_pred": "cancellation_request",
+      "ds_pred": "technical_issue",
+      "gpt_esc": "auto_handle",
+      "ds_esc": "auto_handle",
+      "customer": "Trying to cancel an order on @115821 but the website and app page come up blank when I hit \"cancel order\" @AmazonHelp"
+    },
+    {
+      "tag": "deepseek_ok_gpt_fail",
+      "example_id": "gold_030",
+      "gold_intent": "delivery_delay",
+      "gpt_pred": "other_unclear",
+      "ds_pred": "delivery_delay",
+      "gpt_esc": "escalate",
+      "ds_esc": "auto_handle",
+      "customer": "@amazonhelp hi again, I ordered something early hours of this morning for prime delivery on the 27th (which is fine), but now if I look at the item (not the order) it says \"out of "
+    },
+    {
+      "tag": "deepseek_ok_gpt_fail",
+      "example_id": "gold_038",
+      "gold_intent": "delivery_delay",
+      "gpt_pred": "other_unclear",
+      "ds_pred": "delivery_delay",
+      "gpt_esc": "escalate",
+      "ds_esc": "auto_handle",
+      "customer": "@115821 @4822 Still waiting for our product to be available. Over a month now. 719 units in \u201cFC Processing\u201d. This is brutal for a #smallbusiness"
+    },
+    {
+      "tag": "deepseek_ok_gpt_fail",
+      "example_id": "gold_047",
+      "gold_intent": "delivery_delay",
+      "gpt_pred": "refund_request",
+      "ds_pred": "delivery_delay",
+      "gpt_esc": "escalate",
+      "ds_esc": "auto_handle",
+      "customer": "Hey @AmazonHelp where is my one day delivery? I would like to have a refund for one day delivery charges."
+    },
+    {
+      "tag": "gpt_ok_deepseek_fail",
+      "example_id": "gold_050",
+      "gold_intent": "delivery_delay",
+      "gpt_pred": "delivery_delay",
+      "ds_pred": "delivery_delay",
+      "gpt_esc": "auto_handle",
+      "ds_esc": "escalate",
+      "customer": "@AmazonHelp Hang on a second, have you not read the fact that I believe a \u00a35 gift certificate is not enough for you missing a \u201cguaranteed\u201d delivery. It\u2019s simply not enough for spen"
+    },
+    {
+      "tag": "gpt_ok_deepseek_fail",
+      "example_id": "gold_072",
+      "gold_intent": "other_unclear",
+      "gpt_pred": "other_unclear",
+      "ds_pred": "delivery_delay",
+      "gpt_esc": "escalate",
+      "ds_esc": "auto_handle",
+      "customer": "@AmazonHelp Ya lo intente pero no los reconoce, los ped\u00ed en .es y me abre el de M\u00e9xico \u00bfeso tiene alguna relaci\u00f3n con el problema?"
+    },
+    {
+      "tag": "gpt_ok_deepseek_fail",
+      "example_id": "gold_081",
+      "gold_intent": "other_unclear",
+      "gpt_pred": "other_unclear",
+      "ds_pred": "delivery_delay",
+      "gpt_esc": "escalate",
+      "ds_esc": "auto_handle",
+      "customer": "@AmazonHelp Here is 3 websites, one of which being the official Nintendo Website, which says it's out today! You can't honestly tell me that I'm wrong. https://t.co/gc3cVQhxdf"
+    },
+    {
+      "tag": "deepseek_ok_gpt_fail",
+      "example_id": "gold_092",
+      "gold_intent": "package_missing_or_misdelivered",
+      "gpt_pred": "refund_request",
+      "ds_pred": "package_missing_or_misdelivered",
+      "gpt_esc": "escalate",
+      "ds_esc": "escalate",
+      "customer": "@AmazonHelp so where is my parcel and I want a refund for my next day delivery 2/2"
+    },
+    {
+      "tag": "gpt_ok_deepseek_fail",
+      "example_id": "gold_102",
+      "gold_intent": "package_missing_or_misdelivered",
+      "gpt_pred": "package_missing_or_misdelivered",
+      "ds_pred": "other_unclear",
+      "gpt_esc": "escalate",
+      "ds_esc": "escalate",
+      "customer": "@AmazonHelp Luckily you guys had messaged me the delivery guys mobile number with the message when package was out for delivery, I was frantically calling him repeatedly but he did"
+    },
+    {
+      "tag": "gpt_ok_deepseek_fail",
+      "example_id": "gold_119",
+      "gold_intent": "payment_billing",
+      "gpt_pred": "payment_billing",
+      "ds_pred": "refund_status",
+      "gpt_esc": "escalate",
+      "ds_esc": "escalate",
+      "customer": "@115850 can refund received in the form of amazon pay balance be transfred to bank account ?"
+    },
+    {
+      "tag": "gpt_ok_deepseek_fail",
+      "example_id": "gold_131",
+      "gold_intent": "prime_membership",
+      "gpt_pred": "prime_membership",
+      "ds_pred": "delivery_delay",
+      "gpt_esc": "auto_handle",
+      "ds_esc": "auto_handle",
+      "customer": "Wondering what the value of having a  prime membership is when it seems nothing ever comes in 2 days w/ 2 day shipping... @115821 #fail"
+    },
+    {
+      "tag": "deepseek_ok_gpt_fail",
+      "example_id": "gold_140",
+      "gold_intent": "prime_membership",
+      "gpt_pred": "payment_billing",
+      "ds_pred": "prime_membership",
+      "gpt_esc": "escalate",
+      "ds_esc": "auto_handle",
+      "customer": "@AmazonHelp Yes I do have prime account already neither I renewed it nor added any new services to this. Despite of that my card was charged without my consent"
+    },
+    {
+      "tag": "deepseek_ok_gpt_fail",
+      "example_id": "gold_158",
+      "gold_intent": "refund_status",
+      "gpt_pred": "refund_request",
+      "ds_pred": "refund_status",
+      "gpt_esc": "escalate",
+      "ds_esc": "escalate",
+      "customer": "@AmazonHelp If I do not provide details than what I do. Where the hell I should go. You are simply harassing me. Can't you see my account that you cancelled this order immediately "
+    },
+    {
+      "tag": "deepseek_ok_gpt_fail",
+      "example_id": "gold_168",
+      "gold_intent": "refund_status",
+      "gpt_pred": "refund_request",
+      "ds_pred": "refund_status",
+      "gpt_esc": "escalate",
+      "ds_esc": "escalate",
+      "customer": "@AmazonHelp Where do you request a refund?????"
+    },
+    {
+      "tag": "deepseek_ok_gpt_fail",
+      "example_id": "gold_171",
+      "gold_intent": "return_request",
+      "gpt_pred": "other_unclear",
+      "ds_pred": "return_request",
+      "gpt_esc": "escalate",
+      "ds_esc": "auto_handle",
+      "customer": "@AmazonHelp Why are your guys asking me to contact blue dart and return my product through them ?? Ridiculous service.."
+    }
+  ],
+  "note": "Observable outcomes only; no chain-of-thought stored."
+}

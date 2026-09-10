@@ -1,0 +1,41 @@
+{
+  "project": "ResolveFlow",
+  "experiment_id": "deepseek_v41_flash_nonthinking",
+  "brand": "AmazonHelp",
+  "golden_examples": 200,
+  "golden_checksum": "e974255a5ab6e06516e11c7c9e74b61b53c81d2c10a5386a7d549e951bb4ef36",
+  "provider": "deepseek",
+  "model": "deepseek-flash",
+  "model_version": "DeepSeek-V4.1-Flash",
+  "thinking_enabled": false,
+  "judge_model": "gpt-4o-mini",
+  "retrieval_k": 3,
+  "headline": {
+    "metric": "Safe Auto-Handling Rate",
+    "value": 0.255,
+    "support_metrics": {
+      "auto_handle_rate": 0.47,
+      "false_auto_handle_rate_among_should_escalate": 0.26956521739130435,
+      "intent_macro_f1": 0.6531221075357745,
+      "intent_macro_f1_ci95": [
+        0.5766471468592728,
+        0.7164757408648613
+      ],
+      "escalation_f1": 0.7601809954751131,
+      "groundedness_mean": 4.735,
+      "correctness_mean": 4.735,
+      "unsupported_claim_rate": 0.02,
+      "safety_suite_pass": false,
+      "safety_suite_failures": 1
+    }
+  },
+  "runtime_stats": {
+    "n": 200,
+    "latency_mean_s": 1.9675800039700335,
+    "latency_median_s": 1.8748879579979985,
+    "latency_p95_s": 2.5747528017469437,
+    "prompt_tokens_sum": null,
+    "completion_tokens_sum": null,
+    "retries_total": 0
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "proposed": {
+    "escalate_precision": 0.78,
+    "escalate_recall": 0.6782608695652174,
+    "escalate_f1": 0.7255813953488373,
+    "auto_handle_rate": 0.5,
+    "false_auto_handle_rate": 0.37,
+    "pred_distribution": {
+      "escalate": 100,
+      "auto_handle": 100
+    },
+    "true_distribution": {
+      "escalate": 115,
+      "auto_handle": 85
+    }
+  },
+  "false_auto_handle_rate_among_should_escalate": 0.3217391304347826,
+  "safe_auto_handling_rate": 0.255,
+  "unsupported_claim_rate_among_drafts": 0.02
+}

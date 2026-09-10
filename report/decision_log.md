@@ -46,3 +46,16 @@ Real decisions for ResolveFlow (AmazonHelp). Ordered roughly by impact.
 
 ### Decision 15 — Report “What is misleading about my headline”
 **Why:** Small golden set, offline mode, judge saturation, and no live CSAT would otherwise invite overconfidence.
+
+### Decision 16 — Benchmark DeepSeek-V4.1-Flash thinking vs non-thinking
+**Hypothesis:** Substituting `deepseek-flash` (DeepSeek-V4.1-Flash) into the same pipeline may match/beat GPT-4o-mini on safe automation; thinking mode may help hard cases.
+**Controls:** frozen golden n=200; same taxonomy/prompts/retrieval k=3/safety/escalation; judge=`gpt-4o-mini`; thinking via API `extra_body.thinking.type` (not prompt simulation); isolated artifact dirs.
+**Results (measured):**
+- Safe auto-handle: GPT=DeepSeek-NT=DeepSeek-T=**0.255**
+- FAH among should-escalate: GPT **0.243** < NT 0.270 < T 0.322
+- Escalation F1: GPT **0.767** ≈ NT 0.760 > T 0.726
+- Reply correctness/groundedness: DeepSeek higher (~4.74–4.78) than GPT (~4.33–4.36)
+- Intent Macro-F1: TF-IDF 0.683 > GPT 0.669 > NT 0.653 > T 0.634 (CIs overlap GPT vs NT)
+- Latency: NT ~2.0s vs T ~7.0s mean
+- Safety suite: all LLMs 5/6
+**Decision:** Keep **GPT-4o-mini** as default (better FAH + escalation F1 at tied safe auto-handle). Prefer DeepSeek **non-thinking** over thinking. Do not enable thinking mode by default.

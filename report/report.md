@@ -137,6 +137,30 @@ Artifacts: `artifacts/final/`.
 
 ---
 
+## 7b. LLM Model Comparison
+
+Same frozen golden set, retrieval, safety, escalation, and **gpt-4o-mini** judge. DeepSeek uses API model `deepseek-flash` (version DeepSeek-V4.1-Flash). Thinking uses `extra_body={"thinking":{"type":"enabled"}}` + `reasoning_effort=high`; non-thinking uses `type=disabled`.
+
+| Metric | TF-IDF | GPT-4o-mini | DeepSeek Non-thinking | DeepSeek Thinking |
+| --- | ---: | ---: | ---: | ---: |
+| Intent Macro-F1 | **0.683** | 0.669 | 0.653 | 0.634 |
+| Safe Auto-Handling Rate | — | **0.255** | **0.255** | **0.255** |
+| False Auto-handle | — | **0.243** | 0.270 | 0.322 |
+| Escalation F1 | — | **0.767** | 0.760 | 0.726 |
+| Reply correctness | — | 4.36 | **4.74** | **4.78** |
+| Reply groundedness | — | 4.33 | **4.74** | **4.77** |
+| Unsupported-claim rate | — | **0.015** | 0.020 | 0.020 |
+| Safety suite | — | 5/6 | 5/6 | 5/6 |
+| Mean latency (s) | — | — | **1.97** | 6.98 |
+
+**Interpretation (n=200):** safe auto-handle is tied. GPT-4o-mini is better on false auto-handle and escalation F1. DeepSeek scores higher on judged reply quality. Thinking mode does not improve safe automation vs non-thinking and increases latency ~3.5× with worse FAH. Intent Macro-F1 differences GPT vs DeepSeek-NT have overlapping bootstrap CIs; TF-IDF remains strongest on intent alone.
+
+**Model selection:** keep **GPT-4o-mini** as the default ResolveFlow LLM. Treat DeepSeek non-thinking as a strong alternative if optimizing judge reply scores; do not default to thinking mode.
+
+See `artifacts/final/model_comparison.md` and `artifacts/final/model_failure_comparison.json`.
+
+---
+
 ## 8. Failure Analysis
 
 Top modes (see `report/failure_analysis.md` and refreshed rankings):

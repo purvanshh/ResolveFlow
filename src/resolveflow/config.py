@@ -23,7 +23,6 @@ def load_dotenv(override: bool = False) -> None:
 
         _load(env_path, override=override)
     except ImportError:
-        # Minimal fallback if python-dotenv is not installed
         if env_path.exists():
             for line in env_path.read_text().splitlines():
                 line = line.strip()
@@ -36,13 +35,35 @@ def load_dotenv(override: bool = False) -> None:
     _ENV_LOADED = True
 
 
+def _deep_merge(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
+    out = dict(base)
+    for k, v in override.items():
+        if k in out and isinstance(out[k], dict) and isinstance(v, dict):
+            out[k] = _deep_merge(out[k], v)
+        else:
+            out[k] = v
+    return out
+
+
 def load_config(path: str | Path | None = None) -> dict[str, Any]:
     load_dotenv()
     cfg_path = Path(path) if path else DEFAULT_CONFIG
+    if not cfg_path.is_absolute():
+        cfg_path = (ROOT / cfg_path).resolve()
     data = yaml.safe_load(cfg_path.read_text())
     if not isinstance(data, dict):
         raise ValueError(f"Invalid config: {cfg_path}")
+    extends = data.pop("extends", None)
+    if extends:
+        parent_path = Path(extends)
+        if not parent_path.is_absolute():
+            parent_path = ROOT / extends
+        parent = load_config(parent_path)
+        parent.pop("_root", None)
+        parent.pop("_config_path", None)
+        data = _deep_merge(parent, data)
     data["_root"] = str(ROOT)
+    data["_config_path"] = str(cfg_path)
     return data
 
 

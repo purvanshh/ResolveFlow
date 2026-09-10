@@ -27,6 +27,37 @@ On this golden set, **TF-IDF still edges the LLM on intent Macro-F1**; ResolveFl
 
 Full story: [`report/report.md`](report/report.md). Limits of the headline: report §9.
 
+## LLM Model Comparison
+
+Controlled substitution on the same frozen golden set (n=200), retrieval (k=3), safety, escalation, and **gpt-4o-mini judge**. DeepSeek API model: `deepseek-flash` (version `DeepSeek-V4.1-Flash`).
+
+| Metric | TF-IDF | GPT-4o-mini | DeepSeek Non-thinking | DeepSeek Thinking |
+| --- | ---: | ---: | ---: | ---: |
+| Intent Macro-F1 | **0.683** | 0.669 | 0.653 | 0.634 |
+| Auto-handle rate | — | 0.440 | 0.470 | 0.500 |
+| Safe Auto-Handling Rate | — | **0.255** | **0.255** | **0.255** |
+| False Auto-handle (should-escalate) | — | **0.243** | 0.270 | 0.322 |
+| Escalation F1 | — | **0.767** | 0.760 | 0.726 |
+| Reply correctness | — | 4.36 | **4.74** | **4.78** |
+| Reply groundedness | — | 4.33 | **4.74** | **4.77** |
+| Unsupported-claim rate | — | **0.015** | 0.020 | 0.020 |
+| Safety suite | — | 5/6 | 5/6 | 5/6 |
+| Mean latency (s) | — | — | **1.97** | 6.98 |
+
+**Selection:** keep **GPT-4o-mini** as the primary ResolveFlow model. Safe auto-handle is tied (0.255), but GPT has lower false auto-handle and higher escalation F1. DeepSeek non-thinking wins judged reply quality; thinking mode does **not** improve safe automation and is ~3.5× slower with worse FAH.
+
+Artifacts: `artifacts/final/model_comparison.md`, `artifacts/final/deepseek_v41_flash_{nonthinking,thinking}/`.
+
+### Run DeepSeek experiments
+
+```bash
+python scripts/run_experiment.py --config configs/experiments/deepseek_v41_flash_nonthinking.yaml --force
+python scripts/run_experiment.py --config configs/experiments/deepseek_v41_flash_thinking.yaml --force
+python scripts/compare_llm_models.py
+```
+
+Artifacts are isolated and do **not** overwrite GPT-4o-mini results.
+
 ## Architecture
 
 ```text
