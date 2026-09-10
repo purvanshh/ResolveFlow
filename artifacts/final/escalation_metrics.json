@@ -1,0 +1,53 @@
+{
+  "proposed": {
+    "escalate_precision": 0.6486486486486487,
+    "escalate_recall": 0.8347826086956521,
+    "escalate_f1": 0.7300380228136882,
+    "auto_handle_rate": 0.26,
+    "false_auto_handle_rate": 0.36538461538461536,
+    "pred_distribution": {
+      "escalate": 148,
+      "auto_handle": 52
+    },
+    "true_distribution": {
+      "escalate": 115,
+      "auto_handle": 85
+    }
+  },
+  "always": {
+    "escalate_precision": 0.575,
+    "escalate_recall": 1.0,
+    "escalate_f1": 0.7301587301587301,
+    "auto_handle_rate": 0.0,
+    "false_auto_handle_rate": 0.0,
+    "pred_distribution": {
+      "escalate": 200
+    },
+    "true_distribution": {
+      "escalate": 115,
+      "auto_handle": 85
+    }
+  },
+  "confidence_threshold": {
+    "escalate_precision": 0.568,
+    "escalate_recall": 0.6173913043478261,
+    "escalate_f1": 0.5916666666666667,
+    "auto_handle_rate": 0.375,
+    "false_auto_handle_rate": 0.5866666666666667,
+    "pred_distribution": {
+      "escalate": 125,
+      "auto_handle": 75
+    },
+    "true_distribution": {
+      "escalate": 115,
+      "auto_handle": 85
+    }
+  },
+  "false_auto_handle_definition": {
+    "among_auto_handled": "false_auto / n_auto (legacy in escalation_metrics)",
+    "among_should_escalate": "false_auto / n_should_escalate (Phase 5 safety metric)",
+    "proposed_among_should_escalate": 0.16521739130434782,
+    "confidence_threshold_among_should_escalate": 0.3826086956521739,
+    "always_among_should_escalate": 0.0
+  }
+}

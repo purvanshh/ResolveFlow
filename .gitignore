@@ -21,6 +21,12 @@ artifacts/*
 !artifacts/.gitkeep
 !artifacts/metrics/
 !artifacts/metrics/.gitkeep
+!artifacts/final/
+!artifacts/final/**
+!artifacts/figures/
+!artifacts/figures/**
+!artifacts/examples/
+!artifacts/examples/**
 data/golden/.label_progress.json
 data/processed/*
 !data/processed/.gitkeep

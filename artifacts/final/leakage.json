@@ -1,0 +1,12 @@
+{
+  "conversation_overlap": 0,
+  "exact_text_overlap": 0,
+  "normalized_text_overlap": 0,
+  "conversation_ids": [],
+  "status": "PASS",
+  "retrieval_conversation_overlap": 0,
+  "retrieval_exact_text_overlap": 0,
+  "prompt_example_overlap": 0,
+  "few_shot_overlap": 0,
+  "threshold_tuning_overlap": 0
+}

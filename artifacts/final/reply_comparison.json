@@ -1,0 +1,24 @@
+{
+  "generic": {
+    "correctness": 3.695,
+    "groundedness": 5.0,
+    "helpfulness": 4.0,
+    "hallucination_safety": 5.0,
+    "overall": 4.0
+  },
+  "nearest_case": {
+    "correctness": 3.68,
+    "groundedness": 4.96,
+    "helpfulness": 3.59,
+    "hallucination_safety": 4.96,
+    "overall": 4.165
+  },
+  "llm_retrieval_offline": {
+    "correctness": 3.695,
+    "groundedness": 5.0,
+    "helpfulness": 4.0,
+    "hallucination_safety": 5.0,
+    "overall": 4.505
+  },
+  "note": "Scores from heuristic judge_v1 (no OpenAI key). Human calibration below."
+}

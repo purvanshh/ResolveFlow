@@ -1,0 +1,71 @@
+{
+  "n_human": 40,
+  "annotators": 1,
+  "second_human": false,
+  "agreement": {
+    "correctness": {
+      "n": 40,
+      "exact_agreement": 0.725,
+      "within_one_agreement": 1.0,
+      "spearman": 1.0,
+      "weighted_kappa": 0.7435897435897436
+    },
+    "groundedness": {
+      "n": 40,
+      "exact_agreement": 0.975,
+      "within_one_agreement": 0.975,
+      "spearman": 0.0,
+      "weighted_kappa": 0.0
+    },
+    "helpfulness": {
+      "n": 40,
+      "exact_agreement": 1.0,
+      "within_one_agreement": 1.0,
+      "spearman": 0.0,
+      "weighted_kappa": 1.0
+    },
+    "completeness": {
+      "n": 40,
+      "exact_agreement": 1.0,
+      "within_one_agreement": 1.0,
+      "spearman": 0.0,
+      "weighted_kappa": 1.0
+    },
+    "tone": {
+      "n": 40,
+      "exact_agreement": 1.0,
+      "within_one_agreement": 1.0,
+      "spearman": 0.0,
+      "weighted_kappa": 1.0
+    },
+    "hallucination_safety": {
+      "n": 40,
+      "exact_agreement": 0.975,
+      "within_one_agreement": 0.975,
+      "spearman": 0.0,
+      "weighted_kappa": 0.0
+    },
+    "escalation_appropriateness": {
+      "n": 40,
+      "exact_agreement": 1.0,
+      "within_one_agreement": 1.0,
+      "spearman": 1.0,
+      "weighted_kappa": 1.0
+    },
+    "overall": {
+      "n": 40,
+      "exact_agreement": 1.0,
+      "within_one_agreement": 1.0,
+      "spearman": 1.0,
+      "weighted_kappa": 1.0
+    }
+  },
+  "judge_bias": {
+    "length_vs_overall_corr": 0.11962132537791031,
+    "sorry_count_vs_overall_corr": 0.038731770098996254,
+    "mean_overall": 4.505,
+    "mean_reply_length": 193.235,
+    "note": "Diagnostic only; heuristic judge on template replies."
+  },
+  "limitation": "Single human annotator; heuristic judge (no API). Exact agreement can look high when both assign near-constant 5s (Spearman/kappa uninformative on flat dimensions). Treat as calibration diagnostic; prefer Streamlit independent ratings."
+}

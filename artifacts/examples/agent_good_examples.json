@@ -1,0 +1,342 @@
+[
+  {
+    "example_id": "gold_002",
+    "gold_intent": "account_access",
+    "predicted_intent": "account_access",
+    "intent_correct": true,
+    "gold_escalation": "escalate",
+    "predicted_escalation": "escalate",
+    "escalation_correct": true,
+    "confidence": 0.9839784032511948,
+    "reply": "Sorry you're dealing with this. We can't verify account or payment details from this channel. Please contact us through the available support channel so the case can be reviewed securely.",
+    "evidence": [
+      {
+        "case_id": "da78341312d654f9",
+        "similarity": 0.8166605234146118,
+        "customer_issue": "@AmazonHelp They said that they would email me the first time I contacted support. But it's been a whole week and I still haven't gotten any emails or updates on the situation so I called again today. And they said the same thing \ud83d\ude15",
+        "historical_response": "@703118 Have you checked your spam/junk folders e-mail? Sometimes the messages go there. Please keep us posted. ^CC",
+        "intent": "account_access",
+        "resolution_summary": "Brand replied: Have you checked your spam/junk folders e-mail? Sometimes the messages go there. Please keep us posted. ^CC"
+      },
+      {
+        "case_id": "5fbe16968c2f21c8",
+        "similarity": 0.8003101348876953,
+        "customer_issue": "@AmazonHelp Quite a few e-mails have been received advising exactly the same thing. Password resets which do not work. I have got stuck in a loop and I am now becoming quite dizzy.",
+        "historical_response": "@269688 Hi! Thank you so much for contacting us! Please try clearing your cache/cookies and/or trying a new browser. This should fix your issue and I hope this helps! ^VR",
+        "intent": "account_access",
+        "resolution_summary": "Brand replied: Hi! Thank you so much for contacting us! Please try clearing your cache/cookies and/or trying a new browser. This should fix your issue and I hope this helps! ^VR"
+      },
+      {
+        "case_id": "5cbfe6f91edb303c",
+        "similarity": 0.7961848974227905,
+        "customer_issue": "@AmazonHelp Just re-ordered with another email address and now that account has been immediately locked",
+        "historical_response": "@127582 I'd like to have someone from my team look into this further. Please provide the following info: https://t.co/XaEFXZ9x8f ^MW",
+        "intent": "account_access",
+        "resolution_summary": "Brand replied: I'd like to have someone from my team look into this further. Please provide the following info: [URL] ^MW"
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": "Escalated because this request falls into a high-risk support category.",
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 3,
+        "top_similarity": 0.8166605234146118
+      },
+      "similarity_gap": 0.016350388526916504,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "high_risk_intent"
+      ],
+      "risk_score": 3,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.001,
+        "retrieve": 0.0123,
+        "generate": 0.0,
+        "total": 0.0134
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    }
+  },
+  {
+    "example_id": "gold_003",
+    "gold_intent": "account_access",
+    "predicted_intent": "account_access",
+    "intent_correct": true,
+    "gold_escalation": "escalate",
+    "predicted_escalation": "escalate",
+    "escalation_correct": true,
+    "confidence": 0.8594737223232235,
+    "reply": "Sorry you're dealing with this. We can't verify account or payment details from this channel. Please contact us through the available support channel so the case can be reviewed securely.",
+    "evidence": [
+      {
+        "case_id": "d1d1bce30010af61",
+        "similarity": 0.8806248307228088,
+        "customer_issue": "@148042 @AmazonHelp I'm having the same issue - 'incorrect password' yet its not. no emails about account being locked. the code you send to reset password is not being delivered either.",
+        "historical_response": "@148042 Thanks for the update! We'd be happy to help, can you let us know which site you're using (https://t.co/nUUp5MLhYl, https://t.co/ykTUEmdsQA, Amazon.cn, etc.)? ^GS",
+        "intent": "account_access",
+        "resolution_summary": "Brand replied: Thanks for the update! We'd be happy to help, can you let us know which site you're using ([URL] [URL] Amazon.cn, etc.)? ^GS"
+      },
+      {
+        "case_id": "5fbe16968c2f21c8",
+        "similarity": 0.8571974039077759,
+        "customer_issue": "@AmazonHelp Quite a few e-mails have been received advising exactly the same thing. Password resets which do not work. I have got stuck in a loop and I am now becoming quite dizzy.",
+        "historical_response": "@269688 Hi! Thank you so much for contacting us! Please try clearing your cache/cookies and/or trying a new browser. This should fix your issue and I hope this helps! ^VR",
+        "intent": "account_access",
+        "resolution_summary": "Brand replied: Hi! Thank you so much for contacting us! Please try clearing your cache/cookies and/or trying a new browser. This should fix your issue and I hope this helps! ^VR"
+      },
+      {
+        "case_id": "d759bda80eac9eaa",
+        "similarity": 0.8378876447677612,
+        "customer_issue": "@AmazonHelp It's making me sign in to contact you... and this is a problem since I can't sign in or get the reset code.",
+        "historical_response": "@210974 I'm sorry! Please use this link instead: https://t.co/jzvkhdlrK5 ^TR",
+        "intent": "account_access",
+        "resolution_summary": "Brand replied: I'm sorry! Please use this link instead: [URL] ^TR"
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": "Escalated because this request falls into a high-risk support category.",
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 3,
+        "top_similarity": 0.8806248307228088
+      },
+      "similarity_gap": 0.02342742681503296,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "high_risk_intent"
+      ],
+      "risk_score": 3,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0005,
+        "retrieve": 0.0146,
+        "generate": 0.0,
+        "total": 0.0151
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    }
+  },
+  {
+    "example_id": "gold_004",
+    "gold_intent": "account_access",
+    "predicted_intent": "account_access",
+    "intent_correct": true,
+    "gold_escalation": "escalate",
+    "predicted_escalation": "escalate",
+    "escalation_correct": true,
+    "confidence": 0.9214918258112748,
+    "reply": "Sorry you're dealing with this. We can't verify account or payment details from this channel. Please contact us through the available support channel so the case can be reviewed securely.",
+    "evidence": [
+      {
+        "case_id": "1459b4f71ed5a235",
+        "similarity": 0.6739598512649536,
+        "customer_issue": "@AmazonHelp I've been fighting with your support for over two months. Someone hacked my account and placed a $4,000 order for gift cards. I told my CC company to file a chargeback and now you've locked my account! I won't pay for a $4,000 fraudulent order! Amazon doesn't care.",
+        "historical_response": "@266928 I can confirm a member of our team is taking a look into this for you. Please keep an eye on your e-mail for a response from us. ^KP",
+        "intent": "account_access",
+        "resolution_summary": "Brand replied: I can confirm a member of our team is taking a look into this for you. Please keep an eye on your e-mail for a response from us. ^KP"
+      },
+      {
+        "case_id": "0ab676c0f2bf0a04",
+        "similarity": 0.6721112132072449,
+        "customer_issue": "@AmazonHelp Absolutely nothing. Constantly passed to a \u201cspecialist\u201d and receive generic emails. I was charged for an item that I never ordered or received and I flagged this hacked order to you in September and this month you charged me for not returning it.",
+        "historical_response": "@746600 This is certainly not what we expect for our customers. We want to help! Please share your info with us here, so we can get this escalated: https://t.co/06AEP9zae6 ^SH",
+        "intent": "account_access",
+        "resolution_summary": "Brand replied: This is certainly not what we expect for our customers. We want to help! Please share your info with us here, so we can get this escalated: [URL] ^SH"
+      },
+      {
+        "case_id": "ace4071501bcbc6d",
+        "similarity": 0.6696233749389648,
+        "customer_issue": "@AmazonHelp No. What I did was change password and information. I am very concerned. I don't understand how this happened?",
+        "historical_response": "@809482 Have you looked into setting up Two-Step Verification? It will add an extra layer of security to your account. You can learn more here: https://t.co/9lMdd4ko3D ^LJ",
+        "intent": "account_access",
+        "resolution_summary": "Brand replied: Have you looked into setting up Two-Step Verification? It will add an extra layer of security to your account. You can learn more here: [URL] ^LJ"
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": "Escalated because this request falls into a high-risk support category.",
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 3,
+        "top_similarity": 0.6739598512649536
+      },
+      "similarity_gap": 0.0018486380577087402,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "high_risk_intent"
+      ],
+      "risk_score": 3,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0004,
+        "retrieve": 0.0084,
+        "generate": 0.0,
+        "total": 0.0089
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    }
+  },
+  {
+    "example_id": "gold_005",
+    "gold_intent": "account_access",
+    "predicted_intent": "account_access",
+    "intent_correct": true,
+    "gold_escalation": "escalate",
+    "predicted_escalation": "escalate",
+    "escalation_correct": true,
+    "confidence": 0.9897544677985173,
+    "reply": "Sorry you're dealing with this. We can't verify account or payment details from this channel. Please contact us through the available support channel so the case can be reviewed securely.",
+    "evidence": [
+      {
+        "case_id": "573e4a8fe3cef99d",
+        "similarity": 0.8496962785720825,
+        "customer_issue": "@AmazonHelp please send me a DM, somebody has hacked our Amazon account overnight and purchased gift cards",
+        "historical_response": "@663738 Oh no! We're not able to access your account via Twitter, but we'd like to help in any way we can. Please click here: https://t.co/zYVX1Qi29G so we can take a look with you in real time. ^NM https://t.co/1XyLaGkcaN",
+        "intent": "account_access",
+        "resolution_summary": "Brand replied: Oh no! We're not able to access your account via Twitter, but we'd like to help in any way we can. Please click here: [URL] so we can take a look with you in real time. ^NM [URL]"
+      },
+      {
+        "case_id": "909b103f1b3aa0c4",
+        "similarity": 0.8202661275863647,
+        "customer_issue": "Change your password for Amazon constantly!!  If you don't and you get hacked @AmazonHelp is useless. Your account will be locked   And be asked to pay for fraudulent charges you didn't make. Their customer service model does not allow direct contact with anyone of authority.",
+        "historical_response": "@632359 Hey, have you forwarded your details via the link previously provided, so we can investigate further? Here is the link again - https://t.co/tkLCr7DNil you can choose the skip sign in option. ^TP",
+        "intent": "account_access",
+        "resolution_summary": "Brand replied: Hey, have you forwarded your details via the link previously provided, so we can investigate further? Here is the link again - [URL] you can choose the skip sign in option. ^TP"
+      },
+      {
+        "case_id": "5cbfe6f91edb303c",
+        "similarity": 0.8192093968391418,
+        "customer_issue": "@AmazonHelp Just re-ordered with another email address and now that account has been immediately locked",
+        "historical_response": "@127582 I'd like to have someone from my team look into this further. Please provide the following info: https://t.co/XaEFXZ9x8f ^MW",
+        "intent": "account_access",
+        "resolution_summary": "Brand replied: I'd like to have someone from my team look into this further. Please provide the following info: [URL] ^MW"
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": "Escalated because this request falls into a high-risk support category.",
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 3,
+        "top_similarity": 0.8496962785720825
+      },
+      "similarity_gap": 0.029430150985717773,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "high_risk_intent"
+      ],
+      "risk_score": 3,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0004,
+        "retrieve": 0.0084,
+        "generate": 0.0,
+        "total": 0.0089
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    }
+  },
+  {
+    "example_id": "gold_006",
+    "gold_intent": "account_access",
+    "predicted_intent": "account_access",
+    "intent_correct": true,
+    "gold_escalation": "escalate",
+    "predicted_escalation": "escalate",
+    "escalation_correct": true,
+    "confidence": 0.6295457604833431,
+    "reply": "Sorry you're dealing with this. We can't verify account or payment details from this channel. Please contact us through the available support channel so the case can be reviewed securely. A private support channel is best for account-specific help.",
+    "evidence": [
+      {
+        "case_id": "1068d6f95ded8c8a",
+        "similarity": 0.7444946765899658,
+        "customer_issue": "@AmazonHelp Is that a joke amazon! I CANT LOG IN TO CONTACT YOU BECAUSE THEY CHANGED MY EMAIL AND PASSWORD",
+        "historical_response": "@118498 I'm sorry about the link. For a faster response, contact us by phone here: https://t.co/jzvkhdlrK5 without signing in. ^BE",
+        "intent": "account_access",
+        "resolution_summary": "Brand replied: I'm sorry about the link. For a faster response, contact us by phone here: [URL] without signing in. ^BE"
+      },
+      {
+        "case_id": "7159f5c2c8219be7",
+        "similarity": 0.7375710010528564,
+        "customer_issue": "@AmazonHelp Can't log into my Amazon account. Keeps saying password is incorrect even after changing it, or using a verification code. I've tried clearing browser cache/cookie data on all my devices and it still won't let me in. It was after making a purchase last night.",
+        "historical_response": "@264535 Hey, did you get any emails from us about your account? Please check your spam/junk mail as well. ^MA",
+        "intent": "account_access",
+        "resolution_summary": "Brand replied: Hey, did you get any emails from us about your account? Please check your spam/junk mail as well. ^MA"
+      },
+      {
+        "case_id": "338010f1f6d7eccb",
+        "similarity": 0.7362630367279053,
+        "customer_issue": "@AmazonHelp How do I call you? Can't log-in to my account, and contacting you requires me to log-in to my account??",
+        "historical_response": "@523256 Hi, sorry to hear that, contact us here: https://t.co/hApLpMlfHN so we can help ^AS",
+        "intent": "account_access",
+        "resolution_summary": "Brand replied: Hi, sorry to hear that, contact us here: [URL] so we can help ^AS"
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": "Escalated because this request falls into a high-risk support category.",
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 3,
+        "top_similarity": 0.7444946765899658
+      },
+      "similarity_gap": 0.006923675537109375,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "high_risk_intent"
+      ],
+      "risk_score": 3,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0003,
+        "retrieve": 0.0078,
+        "generate": 0.0,
+        "total": 0.0082
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    }
+  }
+]

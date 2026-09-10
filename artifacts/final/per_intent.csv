@@ -1,0 +1,13 @@
+Intent,Support,Precision,Recall,F1
+delivery_delay,25,0.643,0.720,0.679
+package_missing_or_misdelivered,26,0.778,0.538,0.636
+order_quality_issue,19,0.833,0.789,0.811
+cancellation_request,14,0.765,0.929,0.839
+return_request,15,0.765,0.867,0.812
+refund_request,13,0.476,0.769,0.588
+refund_status,16,1.000,0.250,0.400
+payment_billing,14,0.700,1.000,0.824
+prime_membership,14,0.800,0.857,0.828
+account_access,13,0.923,0.923,0.923
+technical_issue,16,1.000,0.188,0.316
+other_unclear,15,0.423,0.733,0.537

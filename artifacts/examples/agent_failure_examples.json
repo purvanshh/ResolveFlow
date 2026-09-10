@@ -1,0 +1,500 @@
+[
+  {
+    "example_id": "gold_001",
+    "gold_intent": "account_access",
+    "predicted_intent": "other_unclear",
+    "intent_correct": false,
+    "gold_escalation": "escalate",
+    "predicted_escalation": "escalate",
+    "escalation_correct": true,
+    "confidence": 0.35358685704654874,
+    "reply": "Thanks for contacting us. We don't have enough clear details here to resolve this safely. Please reply with more information or contact support so a specialist can help.",
+    "evidence": [
+      {
+        "case_id": "5388225dd96d719c",
+        "similarity": 0.7583389282226562,
+        "customer_issue": "@AmazonHelp Serious problem when resetting @115830 passwords using mobile number option. You have *AGAIN* sent a code to unknown email! https://t.co/ZJnijxvEHo",
+        "historical_response": "@699168 Hey Chris, Give us a call and we'll get this fixed for you. Sorry for the trouble.  https://t.co/JzP7hlA23B ^EM",
+        "intent": "other_unclear",
+        "resolution_summary": "Brand replied: Hey Chris, Give us a call and we'll get this fixed for you. Sorry for the trouble. [URL] ^EM"
+      },
+      {
+        "case_id": "e0861a458123ffbd",
+        "similarity": 0.7474076151847839,
+        "customer_issue": "@AmazonHelp I called the help line out of panic and discovered that they too couldn't get in to my account.  They shut down the account and removed my payment option so everything is safe now :)",
+        "historical_response": "@279922 Thanks for the update! I'm glad we were able to help! ^LR",
+        "intent": "other_unclear",
+        "resolution_summary": "Brand replied: Thanks for the update! I'm glad we were able to help! ^LR"
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": "Escalated because the message does not contain enough information to identify the customer's issue reliably.",
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 2,
+        "top_similarity": 0.7583389282226562
+      },
+      "similarity_gap": 0.010931313037872314,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "unclear_intent",
+        "low_intent_confidence"
+      ],
+      "risk_score": 4,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0026,
+        "retrieve": 7.3266,
+        "generate": 0.0001,
+        "total": 7.3294
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    }
+  },
+  {
+    "example_id": "gold_015",
+    "gold_intent": "cancellation_request",
+    "predicted_intent": "cancellation_request",
+    "intent_correct": true,
+    "gold_escalation": "auto_handle",
+    "predicted_escalation": "escalate",
+    "escalation_correct": false,
+    "confidence": 0.47042099521774855,
+    "reply": "Thanks for reaching out. Please use your order's cancellation/return options in your account, or contact support if those options aren't available for this order.",
+    "evidence": [
+      {
+        "case_id": "49d4980ed2d8a81e",
+        "similarity": 0.7574354410171509,
+        "customer_issue": "@AmazonHelp Made order next Saturday failed to be delivered on Wednesday and Thursday rang yesterday and this afternoon around 12:30 was promised that would be delivered today then rang again this afternoon told be delivered until Monday now been waiting 7 days one of worse customer services",
+        "historical_response": "@232821 Oh no! We never want you to have this experience with us. We are here to help any way we can. Just to clarify, were you given a reason for the delay? ^AL",
+        "intent": "delivery_delay",
+        "resolution_summary": "Brand replied: Oh no! We never want you to have this experience with us. We are here to help any way we can. Just to clarify, were you given a reason for the delay? ^AL"
+      },
+      {
+        "case_id": "81e8a7adbce299da",
+        "similarity": 0.7549300789833069,
+        "customer_issue": "@AmazonHelp You don't. Company rep abusing. After a delay of 2 days and lying, I am asked to wait for a day more. Pathetic.",
+        "historical_response": "@296764 We have escalated this and are working on it. We'll ensure to take appropriate actions. Appreciate your understanding. ^PS",
+        "intent": "delivery_delay",
+        "resolution_summary": "Brand replied: We have escalated this and are working on it. We'll ensure to take appropriate actions. Appreciate your understanding. ^PS"
+      },
+      {
+        "case_id": "48c47ff3f90fde3e",
+        "similarity": 0.7528666853904724,
+        "customer_issue": "@AmazonHelp deliver until after 4pm. Well this didn\u2019t happen and I\u2019ve now had more failed delivery attempts!! Also since been told that they can\u2019t guarantee a delivery time which I know but why tell me in the first place that yous can?!! I have the email for proof of this btw!!",
+        "historical_response": "@157587 Thank you for taking the time to let us know what happened, I can definitely understand your frustration. Our team would like to make sure your feedback has been escalated, and look for a resolution for you. Please send us your info here: https://t.co/5mG3FJy3L9 ^JR",
+        "intent": "package_missing_or_misdelivered",
+        "resolution_summary": "Brand replied: Thank you for taking the time to let us know what happened, I can definitely understand your frustration. Our team would like to make sure your feedback has been escalated, and look for a resolution for you. Please se..."
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": "Escalated because intent classification confidence was insufficient.",
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "global_fallback",
+        "n_hits": 3,
+        "top_similarity": 0.7574354410171509
+      },
+      "similarity_gap": 0.002505362033843994,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "low_intent_confidence"
+      ],
+      "risk_score": 2,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0004,
+        "retrieve": 0.0147,
+        "generate": 0.0,
+        "total": 0.0152
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    }
+  },
+  {
+    "example_id": "gold_016",
+    "gold_intent": "cancellation_request",
+    "predicted_intent": "refund_request",
+    "intent_correct": false,
+    "gold_escalation": "auto_handle",
+    "predicted_escalation": "escalate",
+    "escalation_correct": false,
+    "confidence": 0.42334536148836716,
+    "reply": "Sorry you're dealing with this. We can't verify account or payment details from this channel. Please contact us through the available support channel so the case can be reviewed securely.",
+    "evidence": [
+      {
+        "case_id": "d49138bbdbb8e166",
+        "similarity": 0.8031802177429199,
+        "customer_issue": "@AmazonHelp I've got the order cancelled th' ur Social Media Escalation Team &amp; product was picked by courier agent. So kindly get my refund back on asap",
+        "historical_response": "@169973 Sure, Ramandeep. We will make sure to get your issue resolved at the earliest. ^GU",
+        "intent": "refund_request",
+        "resolution_summary": "Brand replied: Sure, Ramandeep. We will make sure to get your issue resolved at the earliest. ^GU"
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": "Escalated because this request falls into a high-risk support category.",
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 1,
+        "top_similarity": 0.8031802177429199
+      },
+      "similarity_gap": null,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "low_intent_confidence",
+        "high_risk_intent"
+      ],
+      "risk_score": 5,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0004,
+        "retrieve": 0.0069,
+        "generate": 0.0,
+        "total": 0.0073
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    }
+  },
+  {
+    "example_id": "gold_019",
+    "gold_intent": "cancellation_request",
+    "predicted_intent": "cancellation_request",
+    "intent_correct": true,
+    "gold_escalation": "auto_handle",
+    "predicted_escalation": "escalate",
+    "escalation_correct": false,
+    "confidence": 0.5273563725518913,
+    "reply": "Thanks for reaching out. Please use your order's cancellation/return options in your account, or contact support if those options aren't available for this order. A private support channel is best for account-specific help.",
+    "evidence": [
+      {
+        "case_id": "7c31ebb87b7adadb",
+        "similarity": 0.7342254519462585,
+        "customer_issue": "@AmazonHelp Would it be too late to cancel this order now if I wanted? Maybe ordering Xbox credit then buying from their store on the Xbox maybe the way",
+        "historical_response": "@312248 We can look into your available options. Please contact us using the link ^DO provided above. ^RA",
+        "intent": "cancellation_request",
+        "resolution_summary": "Brand replied: We can look into your available options. Please contact us using the link ^DO provided above. ^RA"
+      },
+      {
+        "case_id": "af401755b30b003e",
+        "similarity": 0.7198580503463745,
+        "customer_issue": "@AmazonHelp Here it says it will be w business day before they tell me when it\u2019s dispatched and that the money won\u2019t come out my account when it has https://t.co/Sv38GHI2PP",
+        "historical_response": "@467055 Very strange. Does the tracking show out for delivery ? Have a look here : https://t.co/aaDyEz1VgE ^CR",
+        "intent": "cancellation_request",
+        "resolution_summary": "Brand replied: Very strange. Does the tracking show out for delivery ? Have a look here : [URL] ^CR"
+      },
+      {
+        "case_id": "35a666139a3df698",
+        "similarity": 0.71834397315979,
+        "customer_issue": "@AmazonHelp Item was guaranteed to be delivered yesterday. Still hasn't shipped. CS tells me they don't know when I will receive it and they can cancel order &amp; I can re-order and their credit back one-day shipping. Did that but they haven't canceled original order.",
+        "historical_response": "@368172 I'm so sorry your order didn't ship!\n\nHave you tried to cancel it through your account? You can do so by visiting us here: https://t.co/Y5jpI9gRhE and clicking \"Cancel Items.\" \n\nFor more information about canceling, visit us here: https://t.co/UZM8b7Vf1W\n\n-Joshua",
+        "intent": "cancellation_request",
+        "resolution_summary": "Brand replied: I'm so sorry your order didn't ship! Have you tried to cancel it through your account? You can do so by visiting us here: [URL] and clicking \"Cancel Items.\" For more information about canceling, visit us here: [URL] -..."
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": "Escalated because intent classification confidence was insufficient.",
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 3,
+        "top_similarity": 0.7342254519462585
+      },
+      "similarity_gap": 0.014367401599884033,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "low_intent_confidence"
+      ],
+      "risk_score": 2,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0004,
+        "retrieve": 0.0065,
+        "generate": 0.0,
+        "total": 0.0069
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    }
+  },
+  {
+    "example_id": "gold_020",
+    "gold_intent": "cancellation_request",
+    "predicted_intent": "cancellation_request",
+    "intent_correct": true,
+    "gold_escalation": "auto_handle",
+    "predicted_escalation": "escalate",
+    "escalation_correct": false,
+    "confidence": 0.48091957371607885,
+    "reply": "Thanks for reaching out. Please use your order's cancellation/return options in your account, or contact support if those options aren't available for this order. A private support channel is best for account-specific help.",
+    "evidence": [
+      {
+        "case_id": "df6474ec479af4c4",
+        "similarity": 0.7522947788238525,
+        "customer_issue": "@AmazonHelp I have an urgent delivery due 30th Nov. Carrier was not able to deliver twice despite me leaving mobile number and delivery instructions and I'm trying to contact them so I can either pick it up or find out what the issue is",
+        "historical_response": "@229889 Here is the list of carriers and their contact information: https://t.co/zFh6UmTXYr  \nThe carrier delviering your item can be found here, https://t.co/aaDyEz1VgE\nIf you still have trouble contacting the carrier, pleace contact us  https://t.co/JzP7hlA23B\n\n-RD",
+        "intent": "cancellation_request",
+        "resolution_summary": "Brand replied: Here is the list of carriers and their contact information: [URL] The carrier delviering your item can be found here, [URL] If you still have trouble contacting the carrier, pleace contact us [URL] -RD"
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": "Escalated because intent classification confidence was insufficient.",
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 1,
+        "top_similarity": 0.7522947788238525
+      },
+      "similarity_gap": null,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "low_intent_confidence"
+      ],
+      "risk_score": 2,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0004,
+        "retrieve": 0.0078,
+        "generate": 0.0,
+        "total": 0.0082
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    }
+  },
+  {
+    "example_id": "gold_021",
+    "gold_intent": "cancellation_request",
+    "predicted_intent": "cancellation_request",
+    "intent_correct": true,
+    "gold_escalation": "auto_handle",
+    "predicted_escalation": "escalate",
+    "escalation_correct": false,
+    "confidence": 0.4638984240541518,
+    "reply": "Thanks for reaching out. Please use your order's cancellation/return options in your account, or contact support if those options aren't available for this order.",
+    "evidence": [
+      {
+        "case_id": "e3481a581f7d3ab5",
+        "similarity": 0.7887675762176514,
+        "customer_issue": "@AmazonHelp Have already cancelled order mentioned since there was no meaning in delivered after valuable time. We live in a very much time respecting world and I wish this can be improved later by @115850 and delivery team. Unfortunately nobody called up for reason of order cancellation.",
+        "historical_response": "@131070 Apologies for the inconvenience you had regarding your order. We would like to look into it. Please share your details here: https://t.co/GIJyeYqKE0 and we will get in touch with you soon. ^AH",
+        "intent": "cancellation_request",
+        "resolution_summary": "Brand replied: Apologies for the inconvenience you had regarding your order. We would like to look into it. Please share your details here: [URL] and we will get in touch with you soon. ^AH"
+      },
+      {
+        "case_id": "19bf6d059079f0a1",
+        "similarity": 0.7549650073051453,
+        "customer_issue": "@AmazonHelp So far I have been told issue is solved and order ready to dispatch, that my order has been cancelled (at my request) and lastly via email that order is on way and there will be no further delay..... app still shows order in red and needing payment details again!",
+        "historical_response": "@155877 Hey Amy. Very sorry for the poor experience. Please forward your details - https://t.co/tkLCr7DNil we'd like a specialist to investigate further. ^TP",
+        "intent": "cancellation_request",
+        "resolution_summary": "Brand replied: Hey Amy. Very sorry for the poor experience. Please forward your details - [URL] we'd like a specialist to investigate further. ^TP"
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": "Escalated because intent classification confidence was insufficient.",
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 2,
+        "top_similarity": 0.7887675762176514
+      },
+      "similarity_gap": 0.033802568912506104,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "low_intent_confidence"
+      ],
+      "risk_score": 2,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0004,
+        "retrieve": 0.007,
+        "generate": 0.0,
+        "total": 0.0074
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    }
+  },
+  {
+    "example_id": "gold_026",
+    "gold_intent": "cancellation_request",
+    "predicted_intent": "cancellation_request",
+    "intent_correct": true,
+    "gold_escalation": "auto_handle",
+    "predicted_escalation": "escalate",
+    "escalation_correct": false,
+    "confidence": 0.5421311780491175,
+    "reply": "Thanks for reaching out. Please use your order's cancellation/return options in your account, or contact support if those options aren't available for this order. A private support channel is best for account-specific help.",
+    "evidence": [
+      {
+        "case_id": "7237fdeffc284e92",
+        "similarity": 0.8045947551727295,
+        "customer_issue": "@AmazonHelp I hv requested my order cancellation but customer care cancelled my all order \nreally pathetic\nU cannot cancel my orders without my permissi",
+        "historical_response": "@379409 Sorry to know your orders were cancelled. I'd like to take a look, please fill this form here: https://t.co/GIJyeYqKE0. ^PS",
+        "intent": "cancellation_request",
+        "resolution_summary": "Brand replied: Sorry to know your orders were cancelled. I'd like to take a look, please fill this form here: [URL] ^PS"
+      },
+      {
+        "case_id": "a20870fcaac249e8",
+        "similarity": 0.7997209429740906,
+        "customer_issue": "@AmazonHelp I am disputing the charges and will have them reversed.  When @115817 has a massive delivery failure, Amazon needs to stop spouting useless policies and start responding to customers.",
+        "historical_response": "@246893 So glad we could help! ^BL",
+        "intent": "cancellation_request",
+        "resolution_summary": "Brand replied: So glad we could help! ^BL"
+      },
+      {
+        "case_id": "89e060a830159b9d",
+        "similarity": 0.7756034135818481,
+        "customer_issue": "Hey @115830, I\u2019ve been waiting 4 months for an order and it won\u2019t let me cancel it. What do I do please? https://t.co/H7So3ZvfVD",
+        "historical_response": "@756661 I'm so sorry for the trouble with your order. Please contact us here: https://t.co/JzP7hlA23B so we can look into this further with you. ^CO",
+        "intent": "cancellation_request",
+        "resolution_summary": "Brand replied: I'm so sorry for the trouble with your order. Please contact us here: [URL] so we can look into this further with you. ^CO"
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": "Escalated because intent classification confidence was insufficient.",
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 3,
+        "top_similarity": 0.8045947551727295
+      },
+      "similarity_gap": 0.004873812198638916,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "low_intent_confidence"
+      ],
+      "risk_score": 2,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0006,
+        "retrieve": 0.0071,
+        "generate": 0.0,
+        "total": 0.0078
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    }
+  },
+  {
+    "example_id": "gold_028",
+    "gold_intent": "delivery_delay",
+    "predicted_intent": "payment_billing",
+    "intent_correct": false,
+    "gold_escalation": "auto_handle",
+    "predicted_escalation": "escalate",
+    "escalation_correct": false,
+    "confidence": 0.8232710476329179,
+    "reply": "Sorry you're dealing with this. We can't verify account or payment details from this channel. Please contact us through the available support channel so the case can be reviewed securely.",
+    "evidence": [
+      {
+        "case_id": "02a60d5a4613e192",
+        "similarity": 0.6582016944885254,
+        "customer_issue": "@1386  @115850 @120688 \n\nmy bookmyshow order no INV1985521872 my 2k gift card was blocked but still not recived 1k gift card https://t.co/twP6NfPYug",
+        "historical_response": "@428189 Request you to please report this to our support team here: https://t.co/vlvfJr4nN9 for more help. Also, please 1/2 ^RS",
+        "intent": "payment_billing",
+        "resolution_summary": "Brand replied: Request you to please report this to our support team here: [URL] for more help. Also, please 1/2 ^RS"
+      },
+      {
+        "case_id": "c17998f2c3b3e063",
+        "similarity": 0.6563726663589478,
+        "customer_issue": "@AmazonHelp At first I was escalated to the Gift Card team, who then responded by telling me it was a store purchased gift card (it wasn\u2019t) and to return to the store. When I advised them of this they said communication needed to come from email address of purchaser,even though it was a gift",
+        "historical_response": "@233291 Is the purchaser able to get in contact with us, in order to resolve this matter? ^AP",
+        "intent": "payment_billing",
+        "resolution_summary": "Brand replied: Is the purchaser able to get in contact with us, in order to resolve this matter? ^AP"
+      },
+      {
+        "case_id": "d79fb18b2c4a4051",
+        "similarity": 0.6548000574111938,
+        "customer_issue": "@115821 @AmazonHelp Thank U for sending Gift Card without \"Card\". It looks like your most trusted courier boys are siphoning off big just like your customer care who claimed that they would help but Nothin yet\n\nThank you @118702 atleast never faced something like this with you. https://t.co/JMiJ1xAJSr",
+        "historical_response": "@764050 Truly sorry for the experience you had with this order, Shailesh. Please report this to our support team here: https://t.co/vlvfJr4nN9 and we'll assist you. ^NK",
+        "intent": "payment_billing",
+        "resolution_summary": "Brand replied: Truly sorry for the experience you had with this order, Shailesh. Please report this to our support team here: [URL] and we'll assist you. ^NK"
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": "Escalated because this request falls into a high-risk support category.",
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 3,
+        "top_similarity": 0.6582016944885254
+      },
+      "similarity_gap": 0.0018290281295776367,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "high_risk_intent"
+      ],
+      "risk_score": 3,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0003,
+        "retrieve": 0.0056,
+        "generate": 0.0,
+        "total": 0.0059
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    }
+  }
+]

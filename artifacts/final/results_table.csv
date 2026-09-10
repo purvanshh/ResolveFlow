@@ -1,0 +1,5 @@
+System,Intent Macro-F1,Escalation F1,Auto-Handle Rate,False Auto-Handle,Reply Correctness,Groundedness
+Majority,0.012,0.730,0.000,0.000,3.69,5.00
+TF-IDF + LR,0.683,0.592,0.375,0.383,—,—
+Nearest Case,—,—,—,—,3.68,4.96
+ResolveFlow,0.683,0.730,0.260,0.165,3.69,5.00

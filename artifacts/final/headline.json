@@ -1,0 +1,15 @@
+{
+  "metric": "Safe Auto-Handling Rate",
+  "definition": "auto-handled AND correct intent AND no safety flags AND gold also auto_handle",
+  "value": 0.165,
+  "support_metrics": {
+    "auto_handle_rate": 0.26,
+    "false_auto_handle_rate_among_should_escalate": 0.16521739130434782,
+    "intent_macro_f1": 0.682702673583864,
+    "intent_macro_f1_ci95": [
+      0.6178777980263933,
+      0.7451435747941585
+    ],
+    "groundedness_mean": 5.0
+  }
+}

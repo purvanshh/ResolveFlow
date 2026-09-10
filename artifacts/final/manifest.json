@@ -1,0 +1,36 @@
+{
+  "project": "ResolveFlow",
+  "brand": "AmazonHelp",
+  "golden_examples": 200,
+  "golden_checksum": "e974255a5ab6e06516e11c7c9e74b61b53c81d2c10a5386a7d549e951bb4ef36",
+  "taxonomy_version": "v1",
+  "num_intents": 12,
+  "classifier_model": "tfidf_logistic_regression (offline eval)",
+  "responder_model": "grounded_template (offline eval)",
+  "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+  "classifier_prompt": "classifier_v1",
+  "responder_prompt": "responder_v1",
+  "judge_prompt": "judge_v1",
+  "retrieval_k": 3,
+  "seed": 42,
+  "headline": {
+    "metric": "Safe Auto-Handling Rate",
+    "definition": "auto-handled AND correct intent AND no safety flags AND gold also auto_handle",
+    "value": 0.165,
+    "support_metrics": {
+      "auto_handle_rate": 0.26,
+      "false_auto_handle_rate_among_should_escalate": 0.16521739130434782,
+      "intent_macro_f1": 0.682702673583864,
+      "intent_macro_f1_ci95": [
+        0.6178777980263933,
+        0.7451435747941585
+      ],
+      "groundedness_mean": 5.0
+    }
+  },
+  "retrieval_recall": {
+    "r1": 0.31,
+    "r3": 0.565,
+    "r5": 0.67
+  }
+}

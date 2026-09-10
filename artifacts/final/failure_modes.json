@@ -1,0 +1,51 @@
+[
+  {
+    "failure_mode": "over_escalation",
+    "frequency": 26,
+    "severity": "Low",
+    "root_cause": "Conservative policy (often acceptable)",
+    "proposed_fix": "Acceptable tradeoff; optional soft auto-handle for clear delivery_delay"
+  },
+  {
+    "failure_mode": "intent_error_other",
+    "frequency": 26,
+    "severity": "Medium",
+    "root_cause": "Classifier lexical confusion",
+    "proposed_fix": "More labeled train data; LLM classifier when API available"
+  },
+  {
+    "failure_mode": "ambiguous_or_unclear",
+    "frequency": 19,
+    "severity": "High",
+    "root_cause": "Missing context; forced classification risk",
+    "proposed_fix": "Context builder + abstain policy (already partial)"
+  },
+  {
+    "failure_mode": "false_auto_handle",
+    "frequency": 19,
+    "severity": "Critical",
+    "root_cause": "Risk policy / annotator conservatism mismatch on low-risk intents",
+    "proposed_fix": "Tighten auto-handle eligibility; calibrate to human escalate labels on validation"
+  },
+  {
+    "failure_mode": "intent_confusion_refund",
+    "frequency": 5,
+    "severity": "Medium",
+    "root_cause": "Taxonomy boundary overlap (request vs status)",
+    "proposed_fix": "Strengthen annotation boundaries; add disambiguation features"
+  },
+  {
+    "failure_mode": "intent_confusion_delivery",
+    "frequency": 3,
+    "severity": "Medium",
+    "root_cause": "Topic-level lexical overlap (late vs missing)",
+    "proposed_fix": "Hybrid retrieval + delivery-status features"
+  },
+  {
+    "failure_mode": "safety_violation",
+    "frequency": 1,
+    "severity": "High",
+    "root_cause": "Generation overconfidence or weak safety gate",
+    "proposed_fix": "Expand deterministic claim detectors; block auto-handle on any flag"
+  }
+]

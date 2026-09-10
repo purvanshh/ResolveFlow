@@ -15,6 +15,7 @@ dependencies = [
     "pyarrow",
     "scikit-learn",
     "joblib",
+    "matplotlib",
 ]
 
 [project.optional-dependencies]

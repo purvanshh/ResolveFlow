@@ -1,0 +1,23 @@
+{
+  "medium": {
+    "n": 128,
+    "accuracy": 0.640625,
+    "macro_f1": 0.5352024432284032,
+    "weighted_f1": 0.6396148461519244,
+    "note": "macro_f1 over intents present in this difficulty bucket"
+  },
+  "hard": {
+    "n": 14,
+    "accuracy": 0.42857142857142855,
+    "macro_f1": 0.254320987654321,
+    "weighted_f1": 0.47460317460317464,
+    "note": "macro_f1 over intents present in this difficulty bucket"
+  },
+  "easy": {
+    "n": 58,
+    "accuracy": 0.8793103448275862,
+    "macro_f1": 0.749901310051686,
+    "weighted_f1": 0.8909209362929871,
+    "note": "macro_f1 over intents present in this difficulty bucket"
+  }
+}

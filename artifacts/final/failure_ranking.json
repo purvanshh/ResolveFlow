@@ -1,0 +1,1368 @@
+[
+  {
+    "example_id": "gold_037",
+    "gold_intent": "delivery_delay",
+    "predicted_intent": "cancellation_request",
+    "intent_correct": false,
+    "gold_escalation": "escalate",
+    "predicted_escalation": "auto_handle",
+    "escalation_correct": false,
+    "confidence": 0.7915797395525307,
+    "reply": "Thanks for reaching out. Please use your order's cancellation/return options in your account, or contact support if those options aren't available for this order.",
+    "evidence": [
+      {
+        "case_id": "31a9077824f7c9a9",
+        "similarity": 0.7403005361557007,
+        "customer_issue": "@AmazonHelp Amazon Involved in Fake orders and using our hardworking money for at least a week. As I already guaranteed on 21st nov that my order will get cancelled. Today amazon cancelled my order and this is 4th time in last 3 months. I don't want anything..just want my order delivered.",
+        "historical_response": "@144607 We understand your concern regarding the repeated cancellation of your orders. We'd like to look into this, kindly share your details here: https://t.co/beaaDm0muc and we'll get in touch with at the earliest. ^SC",
+        "intent": "cancellation_request",
+        "resolution_summary": "Brand replied: We understand your concern regarding the repeated cancellation of your orders. We'd like to look into this, kindly share your details here: [URL] and we'll get in touch with at the earliest. ^SC"
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": null,
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 1,
+        "top_similarity": 0.7403005361557007
+      },
+      "similarity_gap": null,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "eligible_auto_handle"
+      ],
+      "risk_score": 0,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0004,
+        "retrieve": 0.0092,
+        "generate": 0.0,
+        "total": 0.0097
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    },
+    "customer_message": "@AmazonHelp Can you expedite shipping? I didn't cancel the order. Amazon claims it was fraudulent but when I was called I confirmed it wasn't fraudulent within an hour of placing the order.",
+    "context": "customer: Wow @115821 thanks for hanging up on me when I'm trying to get my orders delivered on orders you cancelled for no reason. #stoplyingtome #iaskedtobetransfered #iwanttotalktoyoursupervisor\nbrand: @287922 I'm so sorry for the inconvenience! When you contacted us, what options were given? We're always here to help out! ^MH\ncustomer: @AmazonHelp I was told to replace my order but that makes the safety equipment too late for the people that need it. So I requested they place the order to get it here by the original delivery date. Upon asking for that I was told \"anything else?\". I never got an answer then they hung up.\nbrand: @287922 Please fill out the survey we send to you by e-mail after you contact us. Your feedback will be reviewed &amp; addressed. We're unable to reinstate canceled orders. ^CO",
+    "difficulty": "hard",
+    "judge_overall": 4,
+    "failure_score": 6.0
+  },
+  {
+    "example_id": "gold_067",
+    "gold_intent": "order_quality_issue",
+    "predicted_intent": "delivery_delay",
+    "intent_correct": false,
+    "gold_escalation": "escalate",
+    "predicted_escalation": "auto_handle",
+    "escalation_correct": false,
+    "confidence": 0.5861410328405352,
+    "reply": "Sorry for the delay with your delivery. Please check the latest tracking update in your order details, and contact support if the status looks wrong so we can look into it. A private support channel is best for account-specific help.",
+    "evidence": [
+      {
+        "case_id": "151df5b9210a8c8f",
+        "similarity": 0.7921162843704224,
+        "customer_issue": "@AmazonHelp Spoke to customer service. The Book is literally 20 mins from my house at the Hebron, KY location. But delivering it will take 2 days \ud83e\udd14",
+        "historical_response": "@544159 Just to verify, who's the carrier shown in Your Orders here: https://t.co/Y5jpI9gRhE? ^JM",
+        "intent": "delivery_delay",
+        "resolution_summary": "Brand replied: Just to verify, who's the carrier shown in Your Orders here: [URL] ^JM"
+      },
+      {
+        "case_id": "03d08e9f90b02024",
+        "similarity": 0.780570924282074,
+        "customer_issue": "@AmazonHelp Do you really know what 1-day delivery service mean? The system showed \"Delivery by 9pm\" until the last minute and then said \"delay 1-2 day\"",
+        "historical_response": "@306027 Please get in touch via phone or chat so we can have a deeper look into this for you: https://t.co/IkvpragYQR ^CL",
+        "intent": "delivery_delay",
+        "resolution_summary": "Brand replied: Please get in touch via phone or chat so we can have a deeper look into this for you: [URL] ^CL"
+      },
+      {
+        "case_id": "b056abbb4134d59c",
+        "similarity": 0.7734261751174927,
+        "customer_issue": "@AmazonHelp I haven't received any emails explaining why order is delayed. My concern is larger trend emerging in last few months. This is 3rd occurrence of delayed order in last 2 weeks. I would appreciate someone senior in shipping dept. can take responsibility to investigate with USPS.",
+        "historical_response": "@708438 We'd like to look into this with you, take carrier feedback, and review our available options. Please reach out to us by phone or chat here: https://t.co/hApLpMlfHN ^WT",
+        "intent": "delivery_delay",
+        "resolution_summary": "Brand replied: We'd like to look into this with you, take carrier feedback, and review our available options. Please reach out to us by phone or chat here: [URL] ^WT"
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": null,
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 3,
+        "top_similarity": 0.7921162843704224
+      },
+      "similarity_gap": 0.011545360088348389,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "eligible_auto_handle"
+      ],
+      "risk_score": 0,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0004,
+        "retrieve": 0.0082,
+        "generate": 0.0,
+        "total": 0.0087
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    },
+    "customer_message": "@AmazonHelp No. It all started with shipping the wrong item. Since then it's been dragging out, with one order cancelled and this one delayed after the first fulfillment error.",
+    "context": "customer: @AmazonHelp Third order placed for an item. Says it should be here tonight but hasn't shipped yet.\ncustomer: @AmazonHelp And now finally changed the date until Tuesday. Three weeks is not acceptable for a book that should have been here in 2 days!!\nbrand: @742451 I'm sorry for the long delay! Have you been given a reason for the delivery date change? ^AL\nbrand: @742451 Thanks for reaching out to us! To better assist you could you let us know when  the order was placed? What was shipping speed selected at checkout and delivery date provided?  ^AZ",
+    "difficulty": "medium",
+    "judge_overall": 4,
+    "failure_score": 6.0
+  },
+  {
+    "example_id": "gold_088",
+    "gold_intent": "package_missing_or_misdelivered",
+    "predicted_intent": "delivery_delay",
+    "intent_correct": false,
+    "gold_escalation": "escalate",
+    "predicted_escalation": "auto_handle",
+    "escalation_correct": false,
+    "confidence": 0.837975391881004,
+    "reply": "Sorry for the delay with your delivery. Please check the latest tracking update in your order details, and contact support if the status looks wrong so we can look into it.",
+    "evidence": [
+      {
+        "case_id": "bd1cb2f82e530628",
+        "similarity": 0.7915775775909424,
+        "customer_issue": "@AmazonHelp Well I won\u2019t have a clue because I will be at work. I was off today which is why I selected Tuesday delivery. Is no one able to contact the driver to see what is happening? This is ridicukous",
+        "historical_response": "@809674 We may be able to contact the carrier, who can reach the driver. Who is the carrier for your order? ^AM",
+        "intent": "delivery_delay",
+        "resolution_summary": "Brand replied: We may be able to contact the carrier, who can reach the driver. Who is the carrier for your order? ^AM"
+      },
+      {
+        "case_id": "bb4dbdcef6c33935",
+        "similarity": 0.789235532283783,
+        "customer_issue": "@AmazonHelp Alas yet again no one day delivery on Amazon Prime service....I live in hope it arrives today yet I won\u2019t be in to receive it. Inconvenient! https://t.co/k6BQAqwYmA",
+        "historical_response": "@327459 We advise customers to avoid posting personal information via a public forum. Get in touch via: https://t.co/JzP7hlA23B. ^BM",
+        "intent": "delivery_delay",
+        "resolution_summary": "Brand replied: We advise customers to avoid posting personal information via a public forum. Get in touch via: [URL] ^BM"
+      },
+      {
+        "case_id": "091b34394335056d",
+        "similarity": 0.7651842832565308,
+        "customer_issue": "@AmazonHelp The first order was to be delivered yesterday by one of those personal drivers and now it won\u2019t be here it looks like until maybe Thursday. And it\u2019s only a half hour from here according to tracking. The other two might get here Thursday. When it said to be delivered today.",
+        "historical_response": "@809012 Thanks for confirming with us, Robyn. Did you receive an e-mail regarding any sort of delay? What does the current tracking indicate for your order? You can find this information here: https://t.co/Y5jpI9gRhE. ^VB",
+        "intent": "delivery_delay",
+        "resolution_summary": "Brand replied: Thanks for confirming with us, Robyn. Did you receive an e-mail regarding any sort of delay? What does the current tracking indicate for your order? You can find this information here: [URL] ^VB"
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": null,
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 3,
+        "top_similarity": 0.7915775775909424
+      },
+      "similarity_gap": 0.002342045307159424,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "eligible_auto_handle"
+      ],
+      "risk_score": 0,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0006,
+        "retrieve": 0.0076,
+        "generate": 0.0,
+        "total": 0.0083
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    },
+    "customer_message": "@AmazonHelp @1713 It says expected 21 Nov, contact courier for more info. DHL tracking says 2nd delivery attempt will be made (it'll be 3rd), that the driver usually leaves note but sometimes just sets the status but no driver came, i saw no1 out window :(",
+    "context": "customer: Amazon Prime: Free next day delivery - or maybe they'll tell you to wait for a 20:30 delivery at your work address 2 consecutive days and then when that fails maybe deliver on the 3rd day. Really annoying! @AmazonHelp @1713\nbrand: @126911 I'm sorry for the trouble with your delivery. What's the latest tracking update here: https://t.co/aaDyEz1VgE? Have we arranged another delivery attempt for tomorrow, or contacted the courier on your behalf? ^RA",
+    "difficulty": "hard",
+    "judge_overall": 4,
+    "failure_score": 6.0
+  },
+  {
+    "example_id": "gold_097",
+    "gold_intent": "package_missing_or_misdelivered",
+    "predicted_intent": "return_request",
+    "intent_correct": false,
+    "gold_escalation": "escalate",
+    "predicted_escalation": "auto_handle",
+    "escalation_correct": false,
+    "confidence": 0.980778524701455,
+    "reply": "Thanks for reaching out. Please use your order's cancellation/return options in your account, or contact support if those options aren't available for this order.",
+    "evidence": [
+      {
+        "case_id": "bac1acb2bdfb898c",
+        "similarity": 0.7775583267211914,
+        "customer_issue": "@115821 @AmazonHelp I received a completely empty package.. trying to get a refund but it says to return the item. Is there anything to do?",
+        "historical_response": "@527152 We'd be happy to look into your options with you. Please call or chat with us here: https://t.co/EKXRLsnxJu ^AF",
+        "intent": "return_request",
+        "resolution_summary": "Brand replied: We'd be happy to look into your options with you. Please call or chat with us here: [URL] ^AF"
+      },
+      {
+        "case_id": "1abe40d87d070f3c",
+        "similarity": 0.7412189245223999,
+        "customer_issue": "@AmazonHelp I used the return label generated from the return center, and dropped it off with USPS. Then, when I went to track my shipment online, I saw that it wasn't in transit. It said I generated a label on October 31st, but nothing after that!",
+        "historical_response": "@768318 Thanks for the details, Katie! In this case, I would contact our live support here: https://t.co/233GuUIPkP with the return tracking details so that we can help review the best options together. ^TM",
+        "intent": "return_request",
+        "resolution_summary": "Brand replied: Thanks for the details, Katie! In this case, I would contact our live support here: [URL] with the return tracking details so that we can help review the best options together. ^TM"
+      },
+      {
+        "case_id": "11463e7036b54bdd",
+        "similarity": 0.7305145263671875,
+        "customer_issue": "@AmazonHelp Deeply disappointed with return process of @115850 @AmazonHelp ;if possible please mail return label on my mail Id, I m not getting any return labels on return page",
+        "historical_response": "@373357 Apologies for the trouble. Please share your details here: https://t.co/cQVomR1pWz and we'll help you further. KH",
+        "intent": "return_request",
+        "resolution_summary": "Brand replied: Apologies for the trouble. Please share your details here: [URL] and we'll help you further. KH"
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": null,
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 3,
+        "top_similarity": 0.7775583267211914
+      },
+      "similarity_gap": 0.036339402198791504,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "eligible_auto_handle"
+      ],
+      "risk_score": 0,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0003,
+        "retrieve": 0.0067,
+        "generate": 0.0,
+        "total": 0.0071
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    },
+    "customer_message": "@AmazonHelp Nevermind, @AmazonHelp! Just got an email with the return label. Thanks for the help.",
+    "context": "customer: @AmazonHelp I started a return but never got a packaging slip. Says my refund won\u2019t be processed until return the item. Any tips?\nbrand: @327443 Sure thing, Jessica! Have you tried checking your email for a return label? Spam &amp; junk folders included! Let us know! ^SA\ncustomer: @AmazonHelp No luck! And when I got to the order I\u2019m unable to print the packing slip there either. Should I cancel the return and try again?",
+    "difficulty": "medium",
+    "judge_overall": 4,
+    "failure_score": 6.0
+  },
+  {
+    "example_id": "gold_111",
+    "gold_intent": "package_missing_or_misdelivered",
+    "predicted_intent": "cancellation_request",
+    "intent_correct": false,
+    "gold_escalation": "escalate",
+    "predicted_escalation": "auto_handle",
+    "escalation_correct": false,
+    "confidence": 0.901619184090135,
+    "reply": "Thanks for reaching out. Please use your order's cancellation/return options in your account, or contact support if those options aren't available for this order. A private support channel is best for account-specific help.",
+    "evidence": [
+      {
+        "case_id": "e794a293a5d2e89c",
+        "similarity": 0.8581247329711914,
+        "customer_issue": "@AmazonHelp @115850 I need to cancel my order but can't find an option on App",
+        "historical_response": "@227294 Please get in touch with our support team here: https://t.co/2t6DQoUmNZ for assistance on it. ^RW",
+        "intent": "cancellation_request",
+        "resolution_summary": "Brand replied: Please get in touch with our support team here: [URL] for assistance on it. ^RW"
+      },
+      {
+        "case_id": "9b667b9180f11873",
+        "similarity": 0.774867057800293,
+        "customer_issue": "@AmazonHelp @AmazonHelp Can I cancel it? No point in it arriving tomorrow.",
+        "historical_response": "@156040 I'm sorry for the wait. We can review options for your order by phone or chat here: https://t.co/JzP7hlA23B ^AN",
+        "intent": "cancellation_request",
+        "resolution_summary": "Brand replied: I'm sorry for the wait. We can review options for your order by phone or chat here: [URL] ^AN"
+      },
+      {
+        "case_id": "4ab8e62073b21e91",
+        "similarity": 0.7667598128318787,
+        "customer_issue": "@AmazonHelp So I can't cancel it as it hasn't been delivered yet",
+        "historical_response": "@720882 We want to make sure we look over the options available. Please contact us directly using this link: https://t.co/JzP7hlA23B ^MJ",
+        "intent": "cancellation_request",
+        "resolution_summary": "Brand replied: We want to make sure we look over the options available. Please contact us directly using this link: [URL] ^MJ"
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": null,
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 3,
+        "top_similarity": 0.8581247329711914
+      },
+      "similarity_gap": 0.08325767517089844,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "eligible_auto_handle"
+      ],
+      "risk_score": 0,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0003,
+        "retrieve": 0.0053,
+        "generate": 0.0,
+        "total": 0.0056
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    },
+    "customer_message": "@AmazonHelp my delivery didn't arrive yesterday so I need to cancel my order but can't on the website or app? Please help",
+    "context": "",
+    "difficulty": "medium",
+    "judge_overall": 4,
+    "failure_score": 6.0
+  },
+  {
+    "example_id": "gold_141",
+    "gold_intent": "refund_request",
+    "predicted_intent": "cancellation_request",
+    "intent_correct": false,
+    "gold_escalation": "escalate",
+    "predicted_escalation": "auto_handle",
+    "escalation_correct": false,
+    "confidence": 0.6614326913086123,
+    "reply": "Thanks for reaching out. Please use your order's cancellation/return options in your account, or contact support if those options aren't available for this order.",
+    "evidence": [
+      {
+        "case_id": "67a585540d96d7fd",
+        "similarity": 0.7424405813217163,
+        "customer_issue": "@AmazonHelp Thanks! It was resolved",
+        "historical_response": "@796607 Thanks for the update, Jennifer! I'm glad it was resolved. Let us know how we can help in the future.  ^SE",
+        "intent": "cancellation_request",
+        "resolution_summary": "Brand replied: Thanks for the update, Jennifer! I'm glad it was resolved. Let us know how we can help in the future. ^SE"
+      },
+      {
+        "case_id": "8383b425e7069a95",
+        "similarity": 0.7422279119491577,
+        "customer_issue": "@AmazonHelp @115850 I have got ur apology mail already , don't need another...all u guys are good at is writing apology mails",
+        "historical_response": "@337364 This certainly is turning out to be a bad experience. If you're not satisfied with the resolution 1/2 ^OS",
+        "intent": "cancellation_request",
+        "resolution_summary": "Brand replied: This certainly is turning out to be a bad experience. If you're not satisfied with the resolution 1/2 ^OS"
+      },
+      {
+        "case_id": "e1cd98d128442e10",
+        "similarity": 0.728147029876709,
+        "customer_issue": "@AmazonHelp @115850 @115851 Ur representative misguided me against the amount of 5001/- that my order will be cancelled. Now they say, they can't cancel it and I have placed a fresh order. I want refund on my previous order.  Check attached screenshot. https://t.co/08RHAlCBxg",
+        "historical_response": "@257155 Certainly, we will help you with the refund. We'd like to take a closer look. Could you please share the details here: https://t.co/beaaDm0muc? ^PR",
+        "intent": "cancellation_request",
+        "resolution_summary": "Brand replied: Certainly, we will help you with the refund. We'd like to take a closer look. Could you please share the details here: [URL] ^PR"
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": null,
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 3,
+        "top_similarity": 0.7424405813217163
+      },
+      "similarity_gap": 0.00021266937255859375,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "eligible_auto_handle"
+      ],
+      "risk_score": 0,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0004,
+        "retrieve": 0.0075,
+        "generate": 0.0,
+        "total": 0.0079
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    },
+    "customer_message": "@AmazonHelp Keep your offers and apologies for other customers. I just want my money back. Not going to use @115850 and @132995 for this kind of pathetic service.",
+    "context": "brand: @144362 Thank you for sharing the details, We'll get in touch with you soon. ^VH\ncustomer: @AmazonHelp I haven't received my mobile yet, and you are asking for feedback. Now how low can you go? #pathetic https://t.co/ZwZiSO2rZt\nbrand: @144362 The email sent to you is an automated feedback email. However, I'll be sure to share your comments on this as feedback with our team internally for a review. ^SF\ncustomer: @AmazonHelp It is 8:13PM and I am moving out from the address. I tried to cancel the request but not able to cancel through web and app.",
+    "difficulty": "easy",
+    "judge_overall": 4,
+    "failure_score": 6.0
+  },
+  {
+    "example_id": "gold_149",
+    "gold_intent": "refund_request",
+    "predicted_intent": "cancellation_request",
+    "intent_correct": false,
+    "gold_escalation": "escalate",
+    "predicted_escalation": "auto_handle",
+    "escalation_correct": false,
+    "confidence": 0.697874442191565,
+    "reply": "Thanks for reaching out. Please use your order's cancellation/return options in your account, or contact support if those options aren't available for this order.",
+    "evidence": [
+      {
+        "case_id": "e8f6780f2b57caac",
+        "similarity": 0.7524596452713013,
+        "customer_issue": "@AmazonHelp I reordered the items I cancelled (minus a 6 dollar headband) but how long will it take for the 40 dollars that never should have been taken out to be put back in??",
+        "historical_response": "@309424 If you canceled the order, you may be seeing an authorization. Learn more about authorizations: https://t.co/7KLTdroFPQ ^JE",
+        "intent": "cancellation_request",
+        "resolution_summary": "Brand replied: If you canceled the order, you may be seeing an authorization. Learn more about authorizations: [URL] ^JE"
+      },
+      {
+        "case_id": "3c06c1c3a3ca4855",
+        "similarity": 0.7117763757705688,
+        "customer_issue": "@AmazonHelp My order shouldve arrived yesterday, now am told if it  doesn't arrive next Wednesday, contact them. This is UNACCEPTABLE &amp; makes it not worth the wait. I'd like to cancel my order. 114-1833079-0185059",
+        "historical_response": "@227697 We would like to help you. Please share your details with us here: https://t.co/GIJyeYqKE0. We'll get in touch shortly.\nPlease don't provide your order details as we consider it personal information. Our twitter page is visible to public.^CB",
+        "intent": "cancellation_request",
+        "resolution_summary": "Brand replied: We would like to help you. Please share your details with us here: [URL] We'll get in touch shortly. Please don't provide your order details as we consider it personal information. Our twitter page is visible to publi..."
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": null,
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 2,
+        "top_similarity": 0.7524596452713013
+      },
+      "similarity_gap": 0.04068326950073242,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "eligible_auto_handle"
+      ],
+      "risk_score": 0,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0003,
+        "retrieve": 0.0051,
+        "generate": 0.0,
+        "total": 0.0055
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    },
+    "customer_message": "@AmazonHelp i didn't mean to cancel my last order so how long in to i get my money back so i can order it again?",
+    "context": "",
+    "difficulty": "easy",
+    "judge_overall": 4,
+    "failure_score": 6.0
+  },
+  {
+    "example_id": "gold_151",
+    "gold_intent": "refund_request",
+    "predicted_intent": "order_quality_issue",
+    "intent_correct": false,
+    "gold_escalation": "escalate",
+    "predicted_escalation": "auto_handle",
+    "escalation_correct": false,
+    "confidence": 0.7086257889226878,
+    "reply": "Sorry your order had a quality issue. Please contact support with the order details and photos if available so the team can review replacement/return options. A private support channel is best for account-specific help.",
+    "evidence": [
+      {
+        "case_id": "3acf9a7d0eea8359",
+        "similarity": 0.6270512342453003,
+        "customer_issue": "@115850 bought boat rockerz bluetooth headphone but after using it for a month, one of its speaker became defective!! Any piece of advice? @AmazonHelp https://t.co/mxx46SyR8A",
+        "historical_response": "@694886 All warranty related support is provided by the manufacturer. We would recommend you to reach out to an authorized service center. Please don't provide your order details as we consider it personal information. Our twitter page is visible to public.^CB",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: All warranty related support is provided by the manufacturer. We would recommend you to reach out to an authorized service center. Please don't provide your order details as we consider it personal information. Our tw..."
+      },
+      {
+        "case_id": "fa2ab8849803cc6c",
+        "similarity": 0.6268091797828674,
+        "customer_issue": "@AmazonHelp they cn send wrong product twice, we cnt hav refunds or compensation..this is harassment",
+        "historical_response": "@336585 Please share your details in the above link and we'll check this for you. ^HN",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: Please share your details in the above link and we'll check this for you. ^HN"
+      },
+      {
+        "case_id": "154b2637b0de49b1",
+        "similarity": 0.6040436029434204,
+        "customer_issue": "@AmazonHelp Hello,\nIt's just formality to told u,ur not eligible for it ,it's my 4th time worth experience with Amazon .I had ordered headphones due to some circumstances it's damaged. So,I had call no of time with Amazon  customer care and third party (\"SHOPODEALZ\")but they can't solved.",
+        "historical_response": "@132134 We're sorry to know about the issues with the product. All items fulfilled by a seller are safeguarded under our A-Z guarantee policy. However, we'd like to check this close and assist. Please share the required details, here: https://t.co/GIJyeYqKE0. ^YP",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: We're sorry to know about the issues with the product. All items fulfilled by a seller are safeguarded under our A-Z guarantee policy. However, we'd like to check this close and assist. Please share the required detai..."
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": null,
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 3,
+        "top_similarity": 0.6270512342453003
+      },
+      "similarity_gap": 0.00024205446243286133,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "eligible_auto_handle"
+      ],
+      "risk_score": 0,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0004,
+        "retrieve": 0.0059,
+        "generate": 0.0,
+        "total": 0.0063
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    },
+    "customer_message": "@115850 Order# 408-7019058-8016314. Ordered a JBL headphone received a damaged one. I asked for replacement and got a duplicate JBL product in which the sound splits/burst as soon as base pick up. Did not expect such a bad experience from amazon. Please refund and compensate.",
+    "context": "",
+    "difficulty": "easy",
+    "judge_overall": 4,
+    "failure_score": 6.0
+  },
+  {
+    "example_id": "gold_054",
+    "gold_intent": "order_quality_issue",
+    "predicted_intent": "order_quality_issue",
+    "intent_correct": true,
+    "gold_escalation": "escalate",
+    "predicted_escalation": "auto_handle",
+    "escalation_correct": false,
+    "confidence": 0.6506059136760368,
+    "reply": "Sorry your order had a quality issue. Please contact support with the order details and photos if available so the team can review replacement/return options.",
+    "evidence": [
+      {
+        "case_id": "c3340a28bbd7486b",
+        "similarity": 0.6550703644752502,
+        "customer_issue": "@AmazonHelp Your customer support is so pathetically abysmal. Orders get packed horribly and damaged, orders get lost, warehouse deals orders have improper conditions listed and then support tries to blame the customer and make it nearly impossible to get anything resolved",
+        "historical_response": "@229555 I'm really sorry for the poor experience you've had with us, Nick! Without providing account specific or personal information, can you tell us more about the situation? We'd like to try to help! ^LB",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: I'm really sorry for the poor experience you've had with us, Nick! Without providing account specific or personal information, can you tell us more about the situation? We'd like to try to help! ^LB"
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": null,
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 1,
+        "top_similarity": 0.6550703644752502
+      },
+      "similarity_gap": null,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "eligible_auto_handle"
+      ],
+      "risk_score": 0,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0003,
+        "retrieve": 0.0056,
+        "generate": 0.0,
+        "total": 0.006
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    },
+    "customer_message": "l refuse to order through amazon until they stop using their shitty yellow envelopes as literally my past 5 orders have come damaged.",
+    "context": "",
+    "difficulty": "medium",
+    "judge_overall": 4,
+    "failure_score": 4.0
+  },
+  {
+    "example_id": "gold_055",
+    "gold_intent": "order_quality_issue",
+    "predicted_intent": "order_quality_issue",
+    "intent_correct": true,
+    "gold_escalation": "escalate",
+    "predicted_escalation": "auto_handle",
+    "escalation_correct": false,
+    "confidence": 0.7349168633681135,
+    "reply": "Sorry your order had a quality issue. Please contact support with the order details and photos if available so the team can review replacement/return options.",
+    "evidence": [
+      {
+        "case_id": "c410392effb792b0",
+        "similarity": 0.8096410036087036,
+        "customer_issue": "@1404 @AmazonHelp @115850 AMAZON SELLS FAKE PRODUCTS ON ITS PLATFORM. AFTER YOU BUY PRODUCT EVN IF U GIVE LETTER/MAIL  FROM MANUFACTURER THAT THE PRODUCT ID FAKE, AMAZON WILL NOT ENTERTAIN AS, AMAZON AT ORGANISATIONAL IS INVOLVED IN SELLING FAKE PRODUCTS",
+        "historical_response": "@270757 That's quite a comment. We'd like to have a look into this, please share your details here: https://t.co/beaaDm0muc and we\u2019ll contact you soon. ^SU",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: That's quite a comment. We'd like to have a look into this, please share your details here: [URL] and we\u2019ll contact you soon. ^SU"
+      },
+      {
+        "case_id": "9a5ec75956d9dfb2",
+        "similarity": 0.7990434169769287,
+        "customer_issue": "@1404 @AmazonHelp @115850 AMAZON SELLS FAKE PRODUCTS ON ITS PLATFORM.   AFTER YOU BUY PRODUCT EVEN IF U GIVE LETTER/MAIL  FROM MANUFACTURER THAT THE PRODUCT ID FAKE, AMAZON WILL NOT ENTERTAIN AS, AMAZON AT ORGANISATIONAL IS INVOLVED  IN  SELLING  FAKE PRODUCTS",
+        "historical_response": "@270757 That's quite a remark! Apologies for the unpleasant experience you've had. We'd like to look into this, kindly drop in your details here: https://t.co/beaaDm0muc &amp; we'll have this checked right away. ^EM",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: That's quite a remark! Apologies for the unpleasant experience you've had. We'd like to look into this, kindly drop in your details here: [URL] &amp; we'll have this checked right away. ^EM"
+      },
+      {
+        "case_id": "12f3738d7ef0dbb1",
+        "similarity": 0.7415369749069214,
+        "customer_issue": "@115850  fake product was delivered to me.when i went to the service centre they told me the product was duplicate. and gave me https://t.co/hTNSE64Toa 7532051814 for further details https://t.co/6o0paNakc5",
+        "historical_response": "@775651 I get your concern about the product. We\u2019d like to help you, please fill in your details : https://t.co/beaaDm0muc and we\u2019ll contact you soon. Please don't provide your order details, we consider it to be personal information. Our page is visible to the public. ^PJ",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: I get your concern about the product. We\u2019d like to help you, please fill in your details : [URL] and we\u2019ll contact you soon. Please don't provide your order details, we consider it to be personal information. Our page..."
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": null,
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 3,
+        "top_similarity": 0.8096410036087036
+      },
+      "similarity_gap": 0.010597586631774902,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "eligible_auto_handle"
+      ],
+      "risk_score": 0,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0003,
+        "retrieve": 0.0055,
+        "generate": 0.0,
+        "total": 0.0058
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    },
+    "customer_message": "@115851 is amazon selling fake products on their website? @115821",
+    "context": "",
+    "difficulty": "medium",
+    "judge_overall": 4,
+    "failure_score": 4.0
+  },
+  {
+    "example_id": "gold_057",
+    "gold_intent": "order_quality_issue",
+    "predicted_intent": "order_quality_issue",
+    "intent_correct": true,
+    "gold_escalation": "escalate",
+    "predicted_escalation": "auto_handle",
+    "escalation_correct": false,
+    "confidence": 0.8505779031957885,
+    "reply": "Sorry your order had a quality issue. Please contact support with the order details and photos if available so the team can review replacement/return options.",
+    "evidence": [
+      {
+        "case_id": "f41c0407f799def8",
+        "similarity": 0.5803136229515076,
+        "customer_issue": "@AmazonHelp The device was faulty from day 1 even after replacement. U refused to replace it. Apple service centre has refused to acknowledge the prblm.",
+        "historical_response": "@444056 I'm sorry to hear that, Ankit. If they are not helping you in anyways, please request a service denial letter from the 1/2 ^NK",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: I'm sorry to hear that, Ankit. If they are not helping you in anyways, please request a service denial letter from the 1/2 ^NK"
+      },
+      {
+        "case_id": "8db0809b16e8d1fd",
+        "similarity": 0.5279393792152405,
+        "customer_issue": "@AmazonHelp Have already filled up the form. For your kind information, the returnable window is 10 days only and 2 days have already passed. Kindly expedite. All the information with images has already been communicated through mail.",
+        "historical_response": "@523369 Thanks for the confirmation, Nilay. Our team will check and get back to you with an update soon. Request you to wait. ^NK",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: Thanks for the confirmation, Nilay. Our team will check and get back to you with an update soon. Request you to wait. ^NK"
+      },
+      {
+        "case_id": "d5fe81ea950a5fff",
+        "similarity": 0.5163881182670593,
+        "customer_issue": "@AmazonHelp I can provide you the order number. But i dont want to switch this tweet as a customer chat support. My purpous of this tweet is to let know people how careless you becoming and disrespecting your customers now who has come trusting you these years.",
+        "historical_response": "@707783 Apologies for the unpleasant experience, that wasn't intended. Please share your details here: https://t.co/GIJyeYqKE0 and we will get in touch with you. Further I will be sure to share your comments internally to provide better services. ^BS",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: Apologies for the unpleasant experience, that wasn't intended. Please share your details here: [URL] and we will get in touch with you. Further I will be sure to share your comments internally to provide better servic..."
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": null,
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 3,
+        "top_similarity": 0.5803136229515076
+      },
+      "similarity_gap": 0.05237424373626709,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "eligible_auto_handle"
+      ],
+      "risk_score": 0,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0004,
+        "retrieve": 0.0078,
+        "generate": 0.0,
+        "total": 0.0083
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    },
+    "customer_message": "@115821 @AmazonHelp (3/)\n- water damage\n- power/sleep button not clicking properly\n- screw missing\n- two tabs for the back panel missing (indicating it was a cheap part - cheap parts don\u2019t come with tabs)\n- frame damage on the bottom right &amp; top left, frame slightly bent\n\n...On a week old iPhone.",
+    "context": "customer: So, If you buy an @115821 refurbished phone, I STRONGLY ADVISE AGAINST IT. Here's why, and pay attention, @AmazonHelp: (1/ )\ncustomer: @115821 @AmazonHelp I received my iPhone 6s a week ago. One week ago. It arrived damaged. But here's the thing - I didn't know it was as damaged as it was until I had to get the screen repaired. Now - I cracked the screen. My fault. But - when the repair guy opened it, this is what he found: (2/ )",
+    "difficulty": "medium",
+    "judge_overall": 4,
+    "failure_score": 4.0
+  },
+  {
+    "example_id": "gold_061",
+    "gold_intent": "order_quality_issue",
+    "predicted_intent": "order_quality_issue",
+    "intent_correct": true,
+    "gold_escalation": "escalate",
+    "predicted_escalation": "auto_handle",
+    "escalation_correct": false,
+    "confidence": 0.7364414806795997,
+    "reply": "Sorry your order had a quality issue. Please contact support with the order details and photos if available so the team can review replacement/return options.",
+    "evidence": [
+      {
+        "case_id": "e767606bd1f61cb8",
+        "similarity": 0.7266206741333008,
+        "customer_issue": "@115850 @115821 How will there be honest reviews and ratings if you are denying customers of their right to give reviews as they feel. In this exact case, i am not even ranting about quality, just wrong item delivered. Keep your shit together ppl. #fakeratings #freedomofreviews https://t.co/21DbD8iCRN",
+        "historical_response": "@706883 I'm sorry to know about this. Please fill this form: https://t.co/GIJyeYqKE0 and we'll contact you shortly. ^MP",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: I'm sorry to know about this. Please fill this form: [URL] and we'll contact you shortly. ^MP"
+      },
+      {
+        "case_id": "12f3738d7ef0dbb1",
+        "similarity": 0.720197319984436,
+        "customer_issue": "@115850  fake product was delivered to me.when i went to the service centre they told me the product was duplicate. and gave me https://t.co/hTNSE64Toa 7532051814 for further details https://t.co/6o0paNakc5",
+        "historical_response": "@775651 I get your concern about the product. We\u2019d like to help you, please fill in your details : https://t.co/beaaDm0muc and we\u2019ll contact you soon. Please don't provide your order details, we consider it to be personal information. Our page is visible to the public. ^PJ",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: I get your concern about the product. We\u2019d like to help you, please fill in your details : [URL] and we\u2019ll contact you soon. Please don't provide your order details, we consider it to be personal information. Our page..."
+      },
+      {
+        "case_id": "c410392effb792b0",
+        "similarity": 0.6976953744888306,
+        "customer_issue": "@1404 @AmazonHelp @115850 AMAZON SELLS FAKE PRODUCTS ON ITS PLATFORM. AFTER YOU BUY PRODUCT EVN IF U GIVE LETTER/MAIL  FROM MANUFACTURER THAT THE PRODUCT ID FAKE, AMAZON WILL NOT ENTERTAIN AS, AMAZON AT ORGANISATIONAL IS INVOLVED IN SELLING FAKE PRODUCTS",
+        "historical_response": "@270757 That's quite a comment. We'd like to have a look into this, please share your details here: https://t.co/beaaDm0muc and we\u2019ll contact you soon. ^SU",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: That's quite a comment. We'd like to have a look into this, please share your details here: [URL] and we\u2019ll contact you soon. ^SU"
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": null,
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 3,
+        "top_similarity": 0.7266206741333008
+      },
+      "similarity_gap": 0.006423354148864746,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "eligible_auto_handle"
+      ],
+      "risk_score": 0,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0004,
+        "retrieve": 0.0069,
+        "generate": 0.0,
+        "total": 0.0073
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    },
+    "customer_message": "@115850  \nStop selling fake products with misleading information and fake reviews. Pathetic experience,can't trust you ever. https://t.co/oIjyuZ3UPN",
+    "context": "",
+    "difficulty": "medium",
+    "judge_overall": 4,
+    "failure_score": 4.0
+  },
+  {
+    "example_id": "gold_062",
+    "gold_intent": "order_quality_issue",
+    "predicted_intent": "order_quality_issue",
+    "intent_correct": true,
+    "gold_escalation": "escalate",
+    "predicted_escalation": "auto_handle",
+    "escalation_correct": false,
+    "confidence": 0.9238760977680641,
+    "reply": "Sorry your order had a quality issue. Please contact support with the order details and photos if available so the team can review replacement/return options. A private support channel is best for account-specific help.",
+    "evidence": [
+      {
+        "case_id": "7d4be3f18d5bd873",
+        "similarity": 0.5755083560943604,
+        "customer_issue": "@115850 received wrong product very disappointed this time",
+        "historical_response": "@338505 I'm sorry you received the wrong product. Please contact our support team here: https://t.co/vlvfJr4nN9. ^OS",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: I'm sorry you received the wrong product. Please contact our support team here: [URL] ^OS"
+      },
+      {
+        "case_id": "8266cae66faebbe0",
+        "similarity": 0.5729695558547974,
+        "customer_issue": "@115850 Really order first time through @115850 got defective and customer care made a story and no one help and now they will teach there police's great going guys. @118702 I had ordered many time till didn't got any defective product",
+        "historical_response": "@147824 We're sorry for the experience you've had, Umar. Please share your details here: https://t.co/beaaDm0muc and I\u2019ll contact you soon. ^SM",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: We're sorry for the experience you've had, Umar. Please share your details here: [URL] and I\u2019ll contact you soon. ^SM"
+      },
+      {
+        "case_id": "1057d0271c3cf331",
+        "similarity": 0.5724131464958191,
+        "customer_issue": "@115850 Really pathetic service from @115850 . worst pickup .. it is now 17th of nov n pick up date was 31st oct. Neither #amazonIN is refunding nor replacing... amazon is going worse..",
+        "historical_response": "@661960 I'm sorry for the hassle. Please share our details using the secured link : https://t.co/beaaDm0muc and we\u2019ll reach out to you soon. ^SD",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: I'm sorry for the hassle. Please share our details using the secured link : [URL] and we\u2019ll reach out to you soon. ^SD"
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": null,
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 3,
+        "top_similarity": 0.5755083560943604
+      },
+      "similarity_gap": 0.0025388002395629883,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "eligible_auto_handle"
+      ],
+      "risk_score": 0,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0003,
+        "retrieve": 0.0063,
+        "generate": 0.0,
+        "total": 0.0067
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    },
+    "customer_message": "I guess @115821 hates the @168743 or @52226 as my replacement print is even MORE damaged than the 1st one. https://t.co/f70PlVsa2S",
+    "context": "",
+    "difficulty": "medium",
+    "judge_overall": 4,
+    "failure_score": 4.0
+  },
+  {
+    "example_id": "gold_064",
+    "gold_intent": "order_quality_issue",
+    "predicted_intent": "order_quality_issue",
+    "intent_correct": true,
+    "gold_escalation": "escalate",
+    "predicted_escalation": "auto_handle",
+    "escalation_correct": false,
+    "confidence": 0.8854643046640981,
+    "reply": "Sorry your order had a quality issue. Please contact support with the order details and photos if available so the team can review replacement/return options. A private support channel is best for account-specific help.",
+    "evidence": [
+      {
+        "case_id": "e1de6438f977618b",
+        "similarity": 0.6935752630233765,
+        "customer_issue": "@282995 @115830 Mine were exactly the same!!! Sent straight back the same day! Only option I could see to prevent the damage was to order individually!!! Poor service!!! Sent two back and they only replaced one!!!!!!",
+        "historical_response": "@282995 I'm terribly sorry to hear the second set arrived damaged as well. When you have a moment, please call us so we can look into options and share feedback with our fulfillment center: https://t.co/ly6Qr90Ctx ^MB",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: I'm terribly sorry to hear the second set arrived damaged as well. When you have a moment, please call us so we can look into options and share feedback with our fulfillment center: [URL] ^MB"
+      },
+      {
+        "case_id": "6593556206a129c8",
+        "similarity": 0.6704909801483154,
+        "customer_issue": "@AmazonHelp It been when I\u2019ve ordered with Prime. Although, I don\u2019t believe it\u2019s the carrier, it\u2019s the way the package is being filled. Is chat the best option to get this fixed for future orders?",
+        "historical_response": "@245491 That is good feedback! If you'd like, you can also provide packaging feedback on any order by visiting us here: https://t.co/JNExrRliHG ^TK",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: That is good feedback! If you'd like, you can also provide packaging feedback on any order by visiting us here: [URL] ^TK"
+      },
+      {
+        "case_id": "678551149441786e",
+        "similarity": 0.663366436958313,
+        "customer_issue": "@AmazonHelp Will do- and yes, the covers to hardbacks are arriving torn, and the edges of quite a few paperbacks have arrived smushed (technical term). Thanks for responding so quickly. What\u2019s the next step.",
+        "historical_response": "@726326 Thanks for confirming that the items are arriving damaged! The next step is to contact us directly so that we can get this sorted for you. You can do that through the following link, either through chat or phone:  https://t.co/JzP7hlA23B ^JD",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: Thanks for confirming that the items are arriving damaged! The next step is to contact us directly so that we can get this sorted for you. You can do that through the following link, either through chat or phone: [URL..."
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": null,
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 3,
+        "top_similarity": 0.6935752630233765
+      },
+      "similarity_gap": 0.023084282875061035,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "eligible_auto_handle"
+      ],
+      "risk_score": 0,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0004,
+        "retrieve": 0.0069,
+        "generate": 0.0,
+        "total": 0.0073
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    },
+    "customer_message": "@AmazonHelp Of course, after #amazon destroys 5 Prime books and sends 2 more NOT SEALED, it's YOUR job to take photos &amp; do paperback. Sweet. @115821",
+    "context": "customer: Amazon Prime just sent me 5 books, all damaged. My fave is the paperback that was FOLDED IN HALF to fit in a box. Don't you love @115821?\nbrand: @600584 I'm very sorry for this issue! Have you had a chance to look at our return/replacement options here: https://t.co/SSEH4ohnwy ^HM",
+    "difficulty": "medium",
+    "judge_overall": 4,
+    "failure_score": 4.0
+  },
+  {
+    "example_id": "gold_065",
+    "gold_intent": "order_quality_issue",
+    "predicted_intent": "order_quality_issue",
+    "intent_correct": true,
+    "gold_escalation": "escalate",
+    "predicted_escalation": "auto_handle",
+    "escalation_correct": false,
+    "confidence": 0.6134821611627798,
+    "reply": "Sorry your order had a quality issue. Please contact support with the order details and photos if available so the team can review replacement/return options.",
+    "evidence": [
+      {
+        "case_id": "f3a924ba357bc390",
+        "similarity": 0.7147125601768494,
+        "customer_issue": "@AmazonHelp I contacted customer support by chat&amp;was told to wait for 72 hrs while investigating.:/ This has happened to others for over a week though",
+        "historical_response": "@120175 Have you heard back about the investigation, yet? Please let us know! ^LB",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: Have you heard back about the investigation, yet? Please let us know! ^LB"
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": null,
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 1,
+        "top_similarity": 0.7147125601768494
+      },
+      "similarity_gap": null,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "eligible_auto_handle"
+      ],
+      "risk_score": 0,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0005,
+        "retrieve": 0.008,
+        "generate": 0.0,
+        "total": 0.0085
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    },
+    "customer_message": "@AmazonHelp Huge fail- Verified Purchase\nLike others recently, I received nothing but an empty box with styrofoam. Now I have to wait 72 hours for 1/2",
+    "context": "brand: @626838 Oh no! I'm so sorry for the way your order arrived! Please reach us here, so we can look into this. https://t.co/hApLpMlfHN ^AG\ncustomer: @AmazonHelp I actually am talking to CS right now about it. It's not going well. What else can the Twitter team do to help?\ncustomer: @AmazonHelp Here's the product. I'm going to replying with some of the latest comments of customers experiencing the same issue. https://t.co/NCrNVclTMd\ncustomer: @AmazonHelp I RECEIVED AN EMPTY BOX!!! - Verified Purchase\nNot sure if Elgato or Amazon is at fault but I received a completely empty box. DO NOT BUY.",
+    "difficulty": "medium",
+    "judge_overall": 4,
+    "failure_score": 4.0
+  },
+  {
+    "example_id": "gold_066",
+    "gold_intent": "order_quality_issue",
+    "predicted_intent": "order_quality_issue",
+    "intent_correct": true,
+    "gold_escalation": "escalate",
+    "predicted_escalation": "auto_handle",
+    "escalation_correct": false,
+    "confidence": 0.8685211328993704,
+    "reply": "Sorry your order had a quality issue. Please contact support with the order details and photos if available so the team can review replacement/return options. A private support channel is best for account-specific help.",
+    "evidence": [
+      {
+        "case_id": "1057d0271c3cf331",
+        "similarity": 0.7492527961730957,
+        "customer_issue": "@115850 Really pathetic service from @115850 . worst pickup .. it is now 17th of nov n pick up date was 31st oct. Neither #amazonIN is refunding nor replacing... amazon is going worse..",
+        "historical_response": "@661960 I'm sorry for the hassle. Please share our details using the secured link : https://t.co/beaaDm0muc and we\u2019ll reach out to you soon. ^SD",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: I'm sorry for the hassle. Please share our details using the secured link : [URL] and we\u2019ll reach out to you soon. ^SD"
+      },
+      {
+        "case_id": "9a52a6337e5637f4",
+        "similarity": 0.7388982772827148,
+        "customer_issue": "@AmazonHelp Replacement at no charge, keep the existing defective item for a 20% discount, or a full refund. I need the item so I opted for replacement.",
+        "historical_response": "@171829 If there are any issues receiving the replacement, please let us know. ^AM",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: If there are any issues receiving the replacement, please let us know. ^AM"
+      },
+      {
+        "case_id": "b41438733429f0b9",
+        "similarity": 0.7305805087089539,
+        "customer_issue": "@1384 @115850 @AmazonHelp An example of how the quality of service with amazon has deteriorated.Received an incomplete order w/o any notification of order modification, called customer care and asked for the missing item where they shamelessly asked me to place a new order https://t.co/MiW1wrgz90",
+        "historical_response": "@231574 We're sorry for the incomplete order. Allow us to check this and assist, please share the required details, here: https://t.co/GIJyeYqKE0 and we'll get back. (1/2)",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: We're sorry for the incomplete order. Allow us to check this and assist, please share the required details, here: [URL] and we'll get back. (1/2)"
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": null,
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 3,
+        "top_similarity": 0.7492527961730957
+      },
+      "similarity_gap": 0.01035451889038086,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "eligible_auto_handle"
+      ],
+      "risk_score": 0,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0003,
+        "retrieve": 0.0057,
+        "generate": 0.0,
+        "total": 0.0061
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    },
+    "customer_message": "@115850 @AmazonHelp @115821 never takes any action on your request for replacement of product. I have been a victim. It has been more than 22 days since I requested. Their only agenda is selling products, but not care about customers who received damaged product.",
+    "context": "",
+    "difficulty": "medium",
+    "judge_overall": 4,
+    "failure_score": 4.0
+  },
+  {
+    "example_id": "gold_068",
+    "gold_intent": "order_quality_issue",
+    "predicted_intent": "order_quality_issue",
+    "intent_correct": true,
+    "gold_escalation": "escalate",
+    "predicted_escalation": "auto_handle",
+    "escalation_correct": false,
+    "confidence": 0.6476944257180375,
+    "reply": "Sorry your order had a quality issue. Please contact support with the order details and photos if available so the team can review replacement/return options.",
+    "evidence": [
+      {
+        "case_id": "94d972867e0ad132",
+        "similarity": 0.6171038746833801,
+        "customer_issue": "@AmazonHelp I reach out direct and get fast service, but it's just become a hassle again, can't really justify a monthly subscription fee for that.",
+        "historical_response": "@290615 I'm sorry we've let you down; that's never our intent! Have you already contacted us to explore options to resolve this? ^MV",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: I'm sorry we've let you down; that's never our intent! Have you already contacted us to explore options to resolve this? ^MV"
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": null,
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 1,
+        "top_similarity": 0.6171038746833801
+      },
+      "similarity_gap": null,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "eligible_auto_handle"
+      ],
+      "risk_score": 0,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0003,
+        "retrieve": 0.0063,
+        "generate": 0.0,
+        "total": 0.0067
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    },
+    "customer_message": "First time I\u2019m very disappointed in @115821 - subscription product every 3\nmonths - wrong item sent. Getting too big for their own good?! $AMZN",
+    "context": "",
+    "difficulty": "medium",
+    "judge_overall": 4,
+    "failure_score": 4.0
+  },
+  {
+    "example_id": "gold_070",
+    "gold_intent": "order_quality_issue",
+    "predicted_intent": "order_quality_issue",
+    "intent_correct": true,
+    "gold_escalation": "escalate",
+    "predicted_escalation": "auto_handle",
+    "escalation_correct": false,
+    "confidence": 0.8117468670327892,
+    "reply": "Sorry your order had a quality issue. Please contact support with the order details and photos if available so the team can review replacement/return options. A private support channel is best for account-specific help.",
+    "evidence": [
+      {
+        "case_id": "4b968da69ef5186a",
+        "similarity": 0.6352987289428711,
+        "customer_issue": "@AmazonHelp Order no. 204-2081477-9130735 wrong product sent on two occasions &amp; both damaged. All I wanted was the product pictured now I have nothing. Offered derisory \u00a310 gift voucher. Just wanted the product that you incorrectly advertised.",
+        "historical_response": "@683411 Can you tell us more about what happened without posting account or order info? ^DO",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: Can you tell us more about what happened without posting account or order info? ^DO"
+      },
+      {
+        "case_id": "8a7b5b720762facd",
+        "similarity": 0.6101768016815186,
+        "customer_issue": "@363778 @115830 Absolutely  terrible.  I thought my little bit mangled box was bad, I got off lucky and  it wasn't ripped with its contents broken inside. https://t.co/gRs63PU2yL",
+        "historical_response": "@365816 I'm sorry for the troubling condition of your Funko Pop! Checkout replacement or refund options here: https://t.co/SfJtd7CI1i ^ST",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: I'm sorry for the troubling condition of your Funko Pop! Checkout replacement or refund options here: [URL] ^ST"
+      },
+      {
+        "case_id": "1057d0271c3cf331",
+        "similarity": 0.6079684495925903,
+        "customer_issue": "@115850 Really pathetic service from @115850 . worst pickup .. it is now 17th of nov n pick up date was 31st oct. Neither #amazonIN is refunding nor replacing... amazon is going worse..",
+        "historical_response": "@661960 I'm sorry for the hassle. Please share our details using the secured link : https://t.co/beaaDm0muc and we\u2019ll reach out to you soon. ^SD",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: I'm sorry for the hassle. Please share our details using the secured link : [URL] and we\u2019ll reach out to you soon. ^SD"
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": null,
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 3,
+        "top_similarity": 0.6352987289428711
+      },
+      "similarity_gap": 0.02512192726135254,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "eligible_auto_handle"
+      ],
+      "risk_score": 0,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0003,
+        "retrieve": 0.0066,
+        "generate": 0.0,
+        "total": 0.007
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    },
+    "customer_message": "@AmazonHelp The package arrived damaged and the item inside was broke",
+    "context": "customer: I spent a lot of money on Nathan\u2019s neon sign, and fucking @115821 broke it\nbrand: @778820 That's not what we like to hear at all! Without personal or account details, can you tell us what happened? ^TR",
+    "difficulty": "medium",
+    "judge_overall": 4,
+    "failure_score": 4.0
+  },
+  {
+    "example_id": "gold_071",
+    "gold_intent": "order_quality_issue",
+    "predicted_intent": "order_quality_issue",
+    "intent_correct": true,
+    "gold_escalation": "escalate",
+    "predicted_escalation": "auto_handle",
+    "escalation_correct": false,
+    "confidence": 0.7178887746338718,
+    "reply": "Sorry your order had a quality issue. Please contact support with the order details and photos if available so the team can review replacement/return options. A private support channel is best for account-specific help.",
+    "evidence": [
+      {
+        "case_id": "079784e0c9fee924",
+        "similarity": 0.7224876880645752,
+        "customer_issue": "wow really @AmazonHelp @115821 now my package has been labeled damaged and undeliverable?!?! After spending hours with you on trying to get it. #EpicFail",
+        "historical_response": "@226477 Hello Ron, I am sorry to hear that please contact us here:  https://t.co/JzP7hlA23B. We will investigate further. ^HS",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: Hello Ron, I am sorry to hear that please contact us here: [URL] We will investigate further. ^HS"
+      },
+      {
+        "case_id": "5cf8c914f9d73d18",
+        "similarity": 0.7153791189193726,
+        "customer_issue": "@AmazonHelp No, had to track the package to find out it wasn't going to be delivered. Needed it for tonight and now have nothing!",
+        "historical_response": "@463684 I'm sorry to hear that, its not what we want you to experience ^AS",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: I'm sorry to hear that, its not what we want you to experience ^AS"
+      },
+      {
+        "case_id": "b6ddf82be9e7a130",
+        "similarity": 0.7102603912353516,
+        "customer_issue": "@AmazonHelp 4 out of my last 4 orders had problems. starting to lose faith in @115830 1 damaged, 2 didn't even attempt delivery and 1 item not as described. 2 hours wasted chatting to support execs online to try resolve it. disillusioned to say the least.",
+        "historical_response": "@281023 So sorry about your receive experiences Cormac- Were the 4 orders with the same carrier do you happen to know? Have refunds/replacements been organized for these? ^NV",
+        "intent": "order_quality_issue",
+        "resolution_summary": "Brand replied: So sorry about your receive experiences Cormac- Were the 4 orders with the same carrier do you happen to know? Have refunds/replacements been organized for these? ^NV"
+      }
+    ],
+    "safety_flags": [],
+    "escalation_reason": null,
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 3,
+        "top_similarity": 0.7224876880645752
+      },
+      "similarity_gap": 0.007108569145202637,
+      "evidence_sufficient": true,
+      "policy_triggers": [
+        "eligible_auto_handle"
+      ],
+      "risk_score": 0,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0003,
+        "retrieve": 0.0056,
+        "generate": 0.0,
+        "total": 0.0059
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    },
+    "customer_message": "No @118706 has informed @AmazonHelp that my packages have been damaged before they even made an attempt to ship them out",
+    "context": "",
+    "difficulty": "medium",
+    "judge_overall": 4,
+    "failure_score": 4.0
+  },
+  {
+    "example_id": "gold_175",
+    "gold_intent": "return_request",
+    "predicted_intent": "return_request",
+    "intent_correct": true,
+    "gold_escalation": "auto_handle",
+    "predicted_escalation": "escalate",
+    "escalation_correct": false,
+    "confidence": 0.4380591431490729,
+    "reply": "Thanks for reaching out. Please use your order's cancellation/return options in your account, or contact support if those options aren't available for this order.",
+    "evidence": [],
+    "safety_flags": [
+      "MISSING_EVIDENCE"
+    ],
+    "escalation_reason": "Escalated because the drafted response contained unsupported claims.",
+    "meta": {
+      "brand": "AmazonHelp",
+      "retrieval": {
+        "mode": "auto",
+        "top_k": 3,
+        "mode_used": "filtered",
+        "n_hits": 0
+      },
+      "similarity_gap": null,
+      "evidence_sufficient": false,
+      "policy_triggers": [
+        "low_intent_confidence",
+        "insufficient_evidence",
+        "safety_flags"
+      ],
+      "risk_score": 9,
+      "prompt_versions": {
+        "classifier": "classifier_v1",
+        "responder": "responder_v1"
+      },
+      "latency_s": {
+        "classify": 0.0004,
+        "retrieve": 0.0067,
+        "generate": 0.0,
+        "total": 0.0071
+      },
+      "provider": "mock",
+      "classifier_mode": "tfidf",
+      "responder_mode": "grounded_template"
+    },
+    "customer_message": "@AmazonHelp Wasn't sure if i would be entitled to a refund!",
+    "context": "customer: @115830 p2 because i've ordered an item and it isn't safe for my daughter and at \u00a33.00 its not exactly cheap!!\nbrand: @463006 Hello, I am very sorry to hear this. Were the ingredients not listed properly on this particular item ? ^CR\ncustomer: @AmazonHelp https://t.co/8U0XijyqoV no mention of may contains, if there was a pic i would have decided no. Due to, mc of soya and egg.\nbrand: @463006 Sorry to hear that, have you looked in to returning the item? ^JJ",
+    "difficulty": "easy",
+    "judge_overall": 4,
+    "failure_score": 4.0
+  }
+]

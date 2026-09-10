@@ -1,0 +1,4 @@
+Policy,Auto-handle Rate,False Auto-handle Rate,Escalation F1
+Always escalate,0.000,0.000,0.730
+Confidence threshold (TF-IDF 0.7),0.375,0.383,0.592
+Proposed risk-aware,0.260,0.165,0.730

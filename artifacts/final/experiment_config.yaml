@@ -1,0 +1,30 @@
+experiment:
+  name: resolveflow-final-v1
+  seed: 42
+brand:
+  name: AmazonHelp
+models:
+  classifier: tfidf_logistic_regression (offline) / openai optional
+  responder: grounded_template (offline) / openai optional
+  embedding: sentence-transformers/all-MiniLM-L6-v2
+prompts:
+  classifier: classifier_v1
+  responder: responder_v1
+  judge: judge_v1
+retrieval:
+  top_k: 3
+  similarity_threshold: 0.45
+escalation:
+  min_intent_confidence: 0.55
+  require_evidence: true
+  risk_threshold: 3
+  high_risk_intents:
+  - payment_billing
+  - refund_request
+  - refund_status
+  - account_access
+  - package_missing_or_misdelivered
+safety:
+  max_reply_characters: 280
+golden_checksum: e974255a5ab6e06516e11c7c9e74b61b53c81d2c10a5386a7d549e951bb4ef36
+runtime_mode: offline

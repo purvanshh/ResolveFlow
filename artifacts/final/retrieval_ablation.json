@@ -1,0 +1,34 @@
+{
+  "k_0": {
+    "intent_macro_f1": 0.682702673583864,
+    "auto_handle_rate": 0.0,
+    "false_auto_handle_rate": 0.0,
+    "unsupported_claim_rate": 0.0,
+    "mean_evidence": 0.0,
+    "draft_rate": 0.49
+  },
+  "k_1": {
+    "intent_macro_f1": 0.682702673583864,
+    "auto_handle_rate": 0.26,
+    "false_auto_handle_rate": 0.36538461538461536,
+    "unsupported_claim_rate": 0.0,
+    "mean_evidence": 0.995,
+    "draft_rate": 1.0
+  },
+  "k_3": {
+    "intent_macro_f1": 0.682702673583864,
+    "auto_handle_rate": 0.26,
+    "false_auto_handle_rate": 0.36538461538461536,
+    "unsupported_claim_rate": 0.0,
+    "mean_evidence": 2.57,
+    "draft_rate": 1.0
+  },
+  "k_5": {
+    "intent_macro_f1": 0.682702673583864,
+    "auto_handle_rate": 0.26,
+    "false_auto_handle_rate": 0.36538461538461536,
+    "unsupported_claim_rate": 0.0,
+    "mean_evidence": 4.205,
+    "draft_rate": 1.0
+  }
+}
