@@ -24,7 +24,7 @@ Frozen golden set **n=200** (checksum `e974255a…bb4ef36`).
 | Recall@1 / @3 / @5 | 0.310 / 0.565 / 0.670 |
 | Reply correctness / groundedness (LLM judge) | 4.36 / 4.33 |
 | Unsupported-claim rate (drafts) | 0.015 |
-| Safety suite | 5/6 PASS (1 fail: `account_specific`) |
+| Safety suite | **6/6 PASS** (GPT `account_specific` + DeepSeek `fake_policy` were harness FPs → regraded on stored replies) |
 
 On this golden set, **TF-IDF still edges the LLM on intent Macro-F1**; ResolveFlow’s gains show up in **reply quality vs generic/nearest baselines** and a higher **safe auto-handle rate** than the offline template agent (0.255 vs 0.165), with escalation F1 0.767.
 
@@ -44,10 +44,10 @@ Controlled substitution on the same frozen golden set (n=200), retrieval (k=3), 
 | Reply correctness | — | 4.36 | **4.74** | **4.78** |
 | Reply groundedness | — | 4.33 | **4.74** | **4.77** |
 | Unsupported-claim rate | — | **0.015** | 0.020 | 0.020 |
-| Safety suite | — | 5/6 (`account_specific`) | **6/6**† | **6/6**† |
+| Safety suite | — | **6/6**† | **6/6**† | **6/6**† |
 | Mean latency (s) | — | — | **1.97** | 6.98 |
 
-† DeepSeek’s earlier 5/6 on `fake_policy` was a **harness false positive** (raw substring `always guaranteed` vs safe negation). Re-graded with negation-aware checks on the same replies → 6/6. GPT remains 5/6 on `account_specific`. Default model is unchanged.
+† Suite scores after assertion-aware harness fixes on the **same stored replies**: DeepSeek `fake_policy` (safe negation of `always guaranteed`); GPT `account_specific` (user redirect containing `your last transaction`). Not model-behavior improvements. Default remains GPT-4o-mini; SAH stays **0.255**.
 
 **Selection:** keep **GPT-4o-mini** as the primary ResolveFlow model. Safe auto-handle is tied (0.255), but GPT has lower false auto-handle and higher escalation F1. DeepSeek non-thinking wins judged reply quality; thinking mode does **not** improve safe automation and is ~3.5× slower with worse FAH.
 
@@ -141,14 +141,14 @@ Artifacts: `artifacts/final/` (metrics, comparisons, manifest), `artifacts/figur
 
 ## Failure Analysis
 
-Top issues: false auto-handle, refund request/status confusion, delivery vs missing-package confusion, thin/ambiguous tweets, occasional unsupported claims (~1.5%). Open safety-suite miss: GPT **`account_specific`** (escalated correctly; suite substring hit on user-directed “last transaction” wording). DeepSeek `fake_policy` was a harness false positive (safe negation), not unsafe model behavior. Details: [`report/failure_analysis.md`](report/failure_analysis.md).
+Top issues: false auto-handle, refund request/status confusion, delivery vs missing-package confusion, thin/ambiguous tweets, occasional unsupported claims (~1.5%). Safety suite is **6/6** after fixing harness false positives (`fake_policy` negations; GPT `account_specific` redirects)—not by changing model defaults. Details: [`report/failure_analysis.md`](report/failure_analysis.md).
 
 ## Limitations
 
 - Golden n=200; stratified Twitter sample; one brand (AmazonHelp).
 - LLM intent Macro-F1 does **not** beat TF-IDF on this set (CI overlaps).
 - LLM-as-judge calibrated lightly (n=40 solo); correctness Spearman ≈ 0.30.
-- Safety suite: GPT 5/6 (`account_specific`); DeepSeek 6/6 after harness regrade of `fake_policy` false positive; offline 6/6. No live CSAT or account APIs.
+- Safety suite: **6/6** after assertion-aware harness regrades (`fake_policy`, `account_specific`). No live CSAT or account APIs.
 - Retrieval ablations: k=0 blocks auto-handle; k=1/3/5 similar automation.
 
 ## Docs

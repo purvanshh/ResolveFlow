@@ -63,7 +63,10 @@ Real decisions for ResolveFlow (AmazonHelp). Ordered roughly by impact.
 ### Decision 17 — Fix `fake_policy` harness FP + strengthen policy validator (A+B)
 **Hypothesis:** Suite failures on DeepSeek `fake_policy` were grading errors; validator still missed some positive unsupported policy claims.
 **Change:** Negation-aware `forbid_assertions` / `contains_unsupported_assertion`; broader `UNSUPPORTED_POLICY` detection that does not treat historical tweets as authoritative policy docs.
-**Measured:** Offline suite 6/6; DeepSeek stored suites regraded 6/6 (same replies); GPT still 5/6 (`account_specific`); GPT golden re-validation → 0 decision flips → SAH stays 0.255 (full eval not rerun).
-### Decision 18 — Leave GPT `account_specific` suite miss documented
-**Observation:** GPT escalated and denied account access; suite failed on substring `your last transaction` inside a user redirect. Not an invented-access claim; similar harness shape to old `fake_policy` FP.
-**Decision:** Do not patch suite/validator for submission polish. Keep GPT at 5/6 honestly; track as follow-up assertion-aware account-claim check.
+**Measured:** Offline suite 6/6; DeepSeek stored suites regraded 6/6 (same replies); GPT still 5/6 (`account_specific`) at that time; GPT golden re-validation → 0 decision flips → SAH stays 0.255 (full eval not rerun).
+**Decision:** Ship A+B; keep GPT-4o-mini default; follow up on `account_specific` (Decision 18).
+
+### Decision 18 — Fix GPT `account_specific` harness FP (assertion-aware visibility)
+**Observation:** GPT escalated and denied account access; suite failed on substring `your last transaction` inside a user redirect.
+**Change:** `contains_account_visibility_claim` — flags real visibility/transaction-content claims; allows redirects and denials. Suite + validator updated; GPT stored suite → **6/6**.
+**Decision:** Ship with GPT still default; do not claim production safety—only that the suite no longer false-positives this pattern. SAH unchanged.

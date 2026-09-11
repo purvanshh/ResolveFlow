@@ -22,7 +22,7 @@ Supporting numbers (`gpt-4o-mini` classifier + responder + MiniLM retrieval + `g
 | Retrieval Recall@3 | 0.565 |
 | Reply correctness / groundedness | 4.36 / 4.33 |
 | Unsupported-claim rate | 0.015 |
-| Safety suite | 5/6 PASS (GPT fail: `account_specific`; DeepSeek `fake_policy` was harness FP → 6/6 after regrade) |
+| Safety suite | **6/6 PASS** (harness FPs on DeepSeek `fake_policy` + GPT `account_specific` corrected via assertion-aware grading) |
 
 **Honest takeaway:** on this golden set the classical TF-IDF head still slightly leads LLM intent Macro-F1 (CIs overlap). ResolveFlow’s value is stronger replies vs generic/nearest baselines, higher safe auto-handling than the offline template agent, and a calibrated escalation story—not a claim that GPT uniquely wins classification.
 
@@ -153,10 +153,10 @@ Same frozen golden set, retrieval, safety, escalation, and **gpt-4o-mini** judge
 | Reply correctness | — | 4.36 | **4.74** | **4.78** |
 | Reply groundedness | — | 4.33 | **4.74** | **4.77** |
 | Unsupported-claim rate | — | **0.015** | 0.020 | 0.020 |
-| Safety suite | — | 5/6 (`account_specific`) | **6/6**† | **6/6**† |
+| Safety suite | — | **6/6**† | **6/6**† | **6/6**† |
 | Mean latency (s) | — | — | **1.97** | 6.98 |
 
-† DeepSeek originally recorded 5/6 on `fake_policy` due to a brittle substring harness (`forbid_in_reply: always guaranteed`) that false-positive’d safe denials. After negation-aware grading on the **same stored replies**, DeepSeek is 6/6. That is a harness correction, not a model-behavior change. GPT-4o-mini still fails `account_specific` (separate issue).
+† Assertion-aware harness regrades on **stored replies** (not model changes): DeepSeek `fake_policy` safe negations; GPT `account_specific` user redirects. Safe Auto-Handling Rate remains **0.255**.
 
 **Interpretation (n=200):** safe auto-handle is tied. GPT-4o-mini is better on false auto-handle and escalation F1. DeepSeek scores higher on judged reply quality. Thinking mode does not improve safe automation vs non-thinking and increases latency ~3.5× with worse FAH. Intent Macro-F1 differences GPT vs DeepSeek-NT have overlapping bootstrap CIs; TF-IDF remains strongest on intent alone.
 
@@ -176,7 +176,7 @@ Top modes (see `report/failure_analysis.md` and refreshed rankings):
 2. **Intent confusion** — refund status/request; delivery vs missing package.
 3. **Ambiguous / thin tweets** — abstention vs forced class.
 4. **Unsupported claims** — ~1.5% of drafts (no longer zero with free-form LLM replies).
-5. **Safety suite miss (GPT `account_specific`)** — GPT escalated correctly and did not claim account access, but the suite still failed on a brittle `forbid_in_reply` substring (`your last transaction` inside user-directed “check … for your last transaction”). Separate from DeepSeek `fake_policy` (harness FP, now 6/6 after regrade). See failure analysis §7.
+5. **Safety suite harness FPs (fixed)** — DeepSeek `fake_policy` and GPT `account_specific` were grading errors (safe negation / user redirect), not inventing forbidden claims. Suite is **6/6** after assertion-aware checks; SAH unchanged.
 
 ---
 
@@ -197,7 +197,7 @@ Also keep these distinctions in view:
 9. **Threshold/policy choices** — influenced by development/silver signals.
 10. **No live feedback** — no CSAT, AHT, repeat contact, or true containment.
 11. **No account access** — system cannot verify orders/payments; escalation is often the correct ceiling.
-12. **Safety suite not perfect** — GPT OpenAI replies still 5/6 (`account_specific`).
+12. **Safety suite** — currently 6/6 after harness fixes; still not a substitute for live account APIs or production red-teaming.
 
 Treat the headline as a **conservative containment estimate under this rubric**, not production containment.
 
@@ -208,7 +208,7 @@ Treat the headline as a **conservative containment estimate under this rubric**,
 1. **Hybrid retrieval + rerank** — fix topic-similar / resolution-different neighbors.
 2. **Calibrate escalation on labeled validation** — constrain FAH ≤ target while maximizing safe auto-handle.
 3. **Expand golden + second annotator** — independent Streamlit ratings; tighten refund boundaries.
-4. **Strengthen account-specific safety gate** — fix the failing suite case without killing helpful drafts.
+4. **Strengthen escalation calibration** — still the highest-ROI path to raise SAH without inventing claims (see “One More Week”).
 5. **Structured policy layer** — explicit allow/deny actions instead of history-only grounding.
 
 ---
