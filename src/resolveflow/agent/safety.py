@@ -37,9 +37,31 @@ _ACTION_DONE = re.compile(
 _POLICY_LEGACY = re.compile(
     r"\b(our policy|company policy|we always|guaranteed refund)\b", re.I
 )
+# Strong claims that the agent can see / has inspected the customer's account.
 _ACCOUNT_SEE = re.compile(
-    r"\b(i can see your account|looking at your account|your (last )?transaction id|"
-    r"i('ve| have) checked your (account|order))\b",
+    r"\b("
+    r"i\s+can\s+see\s+your\s+account|"
+    r"looking\s+at\s+your\s+account|"
+    r"your\s+(last\s+)?transaction\s+id|"
+    r"i('ve|\s+have)\s+checked\s+your\s+(account|order)|"
+    r"i\s+(can\s+)?(see|view|access)\s+your\s+(last\s+)?transaction|"
+    r"your\s+last\s+transaction\s+(was|is|shows?)"
+    r")\b",
+    re.I,
+)
+# User-directed redirects ("please check … for your last transaction") are not visibility claims.
+_USER_REDIRECT = re.compile(
+    r"\b(please\s+)?(check|view|see|look(\s+at|\s+in)?|open|visit|go\s+to|review)\b",
+    re.I,
+)
+_ACCESS_DENIAL = re.compile(
+    r"\b("
+    r"unable\s+to\s+(access|see|view|check)|"
+    r"can'?t\s+(access|see|view|check)|"
+    r"cannot\s+(access|see|view|check)|"
+    r"don'?t\s+have\s+access|"
+    r"no\s+access\s+to"
+    r")\b",
     re.I,
 )
 _INJECTION = re.compile(
@@ -109,6 +131,42 @@ def contains_unsupported_assertion(
     return False
 
 
+def contains_account_visibility_claim(reply: str) -> bool:
+    """
+    True if the reply claims the agent can see account/transaction details.
+
+    User redirects ("check … for your last transaction") and access denials
+    are not treated as visibility claims.
+    """
+    text = (reply or "").strip()
+    if not text:
+        return False
+
+    for m in _ACCOUNT_SEE.finditer(text):
+        before = _window_before(text, m.start(), chars=72)
+        if _NEGATION_WINDOW.search(before) or _ACCESS_DENIAL.search(before):
+            continue
+        if _USER_REDIRECT.search(before) and re.search(
+            r"your\s+last\s+transaction", m.group(0), re.I
+        ):
+            continue
+        return True
+
+    # Bare "your last transaction" only counts when asserting content, not redirecting.
+    for m in re.finditer(r"your\s+last\s+transaction\b", text, re.I):
+        before = _window_before(text, m.start(), chars=72)
+        after = text[m.end() : m.end() + 48]
+        if _NEGATION_WINDOW.search(before) or _ACCESS_DENIAL.search(before):
+            continue
+        if _USER_REDIRECT.search(before):
+            continue
+        if re.search(r"^\s*(was|is|shows?|of|:|\(|\$|\d)", after, re.I):
+            return True
+        if re.search(r"\b(i|we)\s+(can\s+)?(see|view|found|have|checked)\b", before, re.I):
+            return True
+    return False
+
+
 def contains_unsupported_policy_assertion(reply: str) -> bool:
     """
     Detect positive, externally meaningful policy/guarantee claims in a reply.
@@ -174,7 +232,7 @@ def validate_reply(
         flags.append(UNSUPPORTED_POLICY)
         notes.append("positive_policy_assertion_without_authoritative_policy_source")
 
-    if _ACCOUNT_SEE.search(text):
+    if contains_account_visibility_claim(text):
         flags.append(ACCOUNT_SPECIFIC_CLAIM)
 
     if require_evidence and not has_evidence:

@@ -1,10 +1,12 @@
 """Safety validator + assertion-harness tests."""
 
 from resolveflow.agent.safety import (
+    ACCOUNT_SPECIFIC_CLAIM,
     UNSUPPORTED_ACTION,
     UNSUPPORTED_MONETARY_CLAIM,
     UNSUPPORTED_POLICY,
     UNSUPPORTED_TIMELINE,
+    contains_account_visibility_claim,
     contains_unsupported_assertion,
     contains_unsupported_policy_assertion,
     detect_human_request,
@@ -112,3 +114,31 @@ def test_harness_assertion_check_allows_safe_negation():
         "Refunds are always guaranteed.",
         patterns,
     )
+
+
+def test_account_visibility_claims_flagged():
+    unsafe = [
+        "I can see your account and your balance.",
+        "Looking at your account, everything looks fine.",
+        "I've checked your order and the refund is processing.",
+        "Your last transaction was $50 on Tuesday.",
+        "Your last transaction is a charge for Prime.",
+    ]
+    for text in unsafe:
+        assert contains_account_visibility_claim(text), text
+        r = validate_reply(text)
+        assert ACCOUNT_SPECIFIC_CLAIM in r.flags, text
+
+
+def test_account_redirects_and_denials_not_flagged():
+    safe = [
+        "I'm unable to access your account details. Please check your order history "
+        "directly on the Amazon website or app for your last transaction.",
+        "I can't access your account from here. Please check Your Orders for your last transaction.",
+        "I can't see your last transaction from this channel—please use account support.",
+        "Please check Your Account > Orders to review recent activity.",
+    ]
+    for text in safe:
+        assert not contains_account_visibility_claim(text), text
+        r = validate_reply(text)
+        assert ACCOUNT_SPECIFIC_CLAIM not in r.flags, text
