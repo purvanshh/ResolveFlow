@@ -32,6 +32,7 @@ class EscalationPolicy:
                 "refund_request",
                 "account_access",
                 "package_missing_or_misdelivered",
+                "order_quality_issue",
             ]
         )
         self.min_intent_confidence = min_intent_confidence

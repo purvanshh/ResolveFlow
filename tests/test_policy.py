@@ -22,6 +22,21 @@ def test_high_risk_intent_escalates():
     assert "high_risk_intent" in d.triggers
 
 
+def test_order_quality_issue_escalates_by_default():
+    """Calibrated: order_quality_issue is high-risk (damaged/defective often need account review)."""
+    p = EscalationPolicy()
+    d = p.decide(
+        message="my package arrived damaged and the item inside was broken",
+        intent=_intent("order_quality_issue", 0.9),
+        top_similarity=0.8,
+        evidence_count=2,
+        evidence_sufficient=True,
+        safety=SafetyResult(safe=True),
+    )
+    assert d.escalate
+    assert "high_risk_intent" in d.triggers
+
+
 def test_low_retrieval_escalates():
     p = EscalationPolicy()
     d = p.decide(
