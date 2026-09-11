@@ -10,7 +10,7 @@ Frozen golden set **n=200** (checksum `e974255a…bb4ef36`).
 **Fingerprint:** `gpt-4o-mini` classifier + responder + MiniLM retrieval (k=3) + risk-aware escalation + `gpt-4o-mini` judge.
 
 **Safe Auto-Handling Rate** = fraction of golden examples that were auto-handled **and** had correct intent **and** no safety/unsupported-claim flags **and** gold also auto_handle (**51/200 = 0.255**).  
-**Auto-handle rate (0.440)** is only “policy did not escalate”—not the same as safe automation.
+**Auto-handle rate (0.350)** is only “policy did not escalate”—not the same as safe automation.
 
 | Metric | Value |
 | --- | ---: |
@@ -18,15 +18,17 @@ Frozen golden set **n=200** (checksum `e974255a…bb4ef36`).
 | Intent Macro-F1 (ResolveFlow / LLM) | 0.669 (95% CI [0.598, 0.727]) |
 | TF-IDF Macro-F1 (baseline) | **0.683** |
 | Majority Macro-F1 | 0.012 |
-| Auto-handle rate | 0.440 |
-| False auto-handle (among should-escalate) | 0.243 |
-| Escalation F1 | 0.767 |
+| Auto-handle rate | 0.350 |
+| False auto-handle (among should-escalate) | **0.096** |
+| Escalation F1 | **0.849** |
 | Recall@1 / @3 / @5 | 0.310 / 0.565 / 0.670 |
 | Reply correctness / groundedness (LLM judge) | 4.36 / 4.33 |
 | Unsupported-claim rate (drafts) | 0.015 |
-| Safety suite | **6/6 PASS** (GPT `account_specific` + DeepSeek `fake_policy` were harness FPs → regraded on stored replies) |
+| Safety suite | **6/6 PASS** |
 
-On this golden set, **TF-IDF still edges the LLM on intent Macro-F1**; ResolveFlow’s gains show up in **reply quality vs generic/nearest baselines** and a higher **safe auto-handle rate** than the offline template agent (0.255 vs 0.165), with escalation F1 0.767.
+Escalation calibration (offline, frozen GPT replies): added `order_quality_issue` to high-risk intents. SAH unchanged at 0.255; FAH 0.243→0.096; Escalation F1 0.767→0.849. Details: `artifacts/final/escalation_calibration.json`.
+
+On this golden set, **TF-IDF still edges the LLM on intent Macro-F1**; ResolveFlow’s gains show up in **reply quality vs generic/nearest baselines**, calibrated escalation, and safe auto-handle **0.255** (vs offline template 0.165).
 
 Full story: [`report/report.md`](report/report.md). Limits of the headline: report §9.
 
@@ -37,19 +39,19 @@ Controlled substitution on the same frozen golden set (n=200), retrieval (k=3), 
 | Metric | TF-IDF | GPT-4o-mini | DeepSeek Non-thinking | DeepSeek Thinking |
 | --- | ---: | ---: | ---: | ---: |
 | Intent Macro-F1 | **0.683** | 0.669 | 0.653 | 0.634 |
-| Auto-handle rate | — | 0.440 | 0.470 | 0.500 |
+| Auto-handle rate | — | 0.350 | 0.380 | 0.390 |
 | Safe Auto-Handling Rate | — | **0.255** | **0.255** | **0.255** |
-| False Auto-handle (should-escalate) | — | **0.243** | 0.270 | 0.322 |
-| Escalation F1 | — | **0.767** | 0.760 | 0.726 |
+| False Auto-handle (should-escalate) | — | **0.096** | 0.130 | 0.139 |
+| Escalation F1 | — | **0.849** | 0.837 | 0.835 |
 | Reply correctness | — | 4.36 | **4.74** | **4.78** |
 | Reply groundedness | — | 4.33 | **4.74** | **4.77** |
 | Unsupported-claim rate | — | **0.015** | 0.020 | 0.020 |
 | Safety suite | — | **6/6**† | **6/6**† | **6/6**† |
 | Mean latency (s) | — | — | **1.97** | 6.98 |
 
-† Suite scores after assertion-aware harness fixes on the **same stored replies**: DeepSeek `fake_policy` (safe negation of `always guaranteed`); GPT `account_specific` (user redirect containing `your last transaction`). Not model-behavior improvements. Default remains GPT-4o-mini; SAH stays **0.255**.
+† Safety harness regrades on stored replies. Escalation metrics recomputed under calibrated high-risk set (`+order_quality_issue`); replies/intents frozen. Default remains GPT-4o-mini; SAH stays **0.255**.
 
-**Selection:** keep **GPT-4o-mini** as the primary ResolveFlow model. Safe auto-handle is tied (0.255), but GPT has lower false auto-handle and higher escalation F1. DeepSeek non-thinking wins judged reply quality; thinking mode does **not** improve safe automation and is ~3.5× slower with worse FAH.
+**Selection:** keep **GPT-4o-mini** as the primary ResolveFlow model. Safe auto-handle is tied (0.255); GPT has the lowest FAH and highest escalation F1 after calibration. DeepSeek non-thinking wins judged reply quality; thinking mode does **not** improve safe automation and is ~3.5× slower.
 
 Artifacts: `artifacts/final/model_comparison.md`, `artifacts/final/deepseek_v41_flash_{nonthinking,thinking}/`.
 
@@ -137,7 +139,7 @@ Artifacts: `artifacts/final/` (metrics, comparisons, manifest), `artifacts/figur
 | Majority | 0.012 | 0.730 | 0.000 | 0.000 | 3.24 | 2.38 |
 | TF-IDF + LR | 0.683 | 0.592 | 0.375 | 0.383 | — | — |
 | Nearest Case | — | — | — | — | 3.46 | 3.42 |
-| ResolveFlow (gpt-4o-mini) | 0.669 | 0.767 | 0.440 | 0.243 | 4.36 | 4.33 |
+| ResolveFlow (gpt-4o-mini) | 0.669 | 0.849 | 0.350 | 0.096 | 4.36 | 4.33 |
 
 ## Failure Analysis
 

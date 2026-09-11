@@ -1,9 +1,9 @@
 {
   "proposed": {
-    "escalate_precision": 0.7767857142857143,
-    "escalate_recall": 0.7565217391304347,
-    "escalate_f1": 0.7665198237885462,
-    "auto_handle_rate": 0.44,
+    "escalate_precision": 0.8,
+    "escalate_recall": 0.9043478260869565,
+    "escalate_f1": 0.8489795918367347,
+    "auto_handle_rate": 0.35,
     "false_auto_handle_rate": 0.3181818181818182,
     "pred_distribution": {
       "escalate": 112,
@@ -46,8 +46,23 @@
   "false_auto_handle_definition": {
     "among_auto_handled": "false_auto / n_auto (legacy in escalation_metrics)",
     "among_should_escalate": "false_auto / n_should_escalate (Phase 5 safety metric)",
-    "proposed_among_should_escalate": 0.24347826086956523,
+    "proposed_among_should_escalate": 0.09565217391304348,
     "confidence_threshold_among_should_escalate": 0.3826086956521739,
     "always_among_should_escalate": 0.0
+  },
+  "calibrated_policy": {
+    "high_risk_intents": [
+      "payment_billing",
+      "refund_request",
+      "refund_status",
+      "account_access",
+      "package_missing_or_misdelivered",
+      "order_quality_issue"
+    ],
+    "min_intent_confidence": 0.55,
+    "similarity_threshold": 0.45,
+    "sah": 0.255,
+    "fah_among_should_escalate": 0.09565217391304348,
+    "escalate_f1": 0.8489795918367347
   }
 }

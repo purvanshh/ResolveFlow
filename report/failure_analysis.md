@@ -26,7 +26,9 @@ Frequencies from golden n=200 offline agent predictions (`artifacts/final/failur
 
 ## Failure Mode #1 — False auto-handle (policy gap)
 
-**Example:** `gold_037`
+**Status after calibration:** Treating `order_quality_issue` as high-risk cut FAH among should-escalate from **28/115 (0.243)** to **11/115 (0.096)** with SAH unchanged (51/200). Remaining FAH is still the primary automation risk.
+
+**Example (pre-calibration pattern):** `gold_037`
 
 - **Customer:** “Can you expedite shipping? I didn't cancel the order. Amazon claims it was fraudulent but when I was called I confirmed it wasn't…”
 - **Expected intent:** `delivery_delay` (gold escalate)
@@ -34,7 +36,7 @@ Frequencies from golden n=200 offline agent predictions (`artifacts/final/failur
 - **Evidence:** top neighbor also cancellation-themed (sim≈0.74)
 - **What failed:** Classifier + retrieval latched onto “cancel”; policy allowed auto-handle because predicted intent was not in the high-risk list.
 - **Mechanism:** Wrong intent → wrong risk class → unsafe automation.
-- **Fix:** Escalate on fraud mentions; don’t auto-handle when predicted≠retrieved intent consensus; expand high-risk cues.
+- **Fix (partial):** expand high-risk set for damaged/defective (`order_quality_issue`); still need fraud-language cues and intent–retrieval consensus for remaining FAH.
 
 ---
 

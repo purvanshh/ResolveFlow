@@ -3,13 +3,14 @@
   "definition": "auto-handled AND correct intent AND no safety flags AND gold also auto_handle",
   "value": 0.255,
   "support_metrics": {
-    "auto_handle_rate": 0.44,
-    "false_auto_handle_rate_among_should_escalate": 0.24347826086956523,
+    "auto_handle_rate": 0.35,
+    "false_auto_handle_rate_among_should_escalate": 0.09565217391304348,
     "intent_macro_f1": 0.669473449309427,
     "intent_macro_f1_ci95": [
       0.5975017985589075,
       0.7268534721510033
     ],
     "groundedness_mean": 4.33
-  }
+  },
+  "policy_note": "escalation high_risk_intents includes order_quality_issue (calibration 2026-09)"
 }

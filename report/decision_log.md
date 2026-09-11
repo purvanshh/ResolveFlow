@@ -45,7 +45,7 @@ Real decisions for ResolveFlow (AmazonHelp). Ordered roughly by impact.
 **Why:** Injection, unsupported refunds, fake policies, and account-specific asks must escalate without inventing actions. Suite 6/6 PASS offline.
 
 ### Decision 15 — Report “What is misleading about my headline”
-**Why:** 0.255 is not production coverage; sample/policy/taxonomy/validator-dependent; auto-handle 0.440 must not be read as safe automation.
+**Why:** 0.255 is not production coverage; sample/policy/taxonomy/validator-dependent; auto-handle rate must not be read as safe automation.
 
 ### Decision 16 — Benchmark DeepSeek-V4.1-Flash thinking vs non-thinking
 **Hypothesis:** Substituting `deepseek-flash` (DeepSeek-V4.1-Flash) into the same pipeline may match/beat GPT-4o-mini on safe automation; thinking mode may help hard cases.
@@ -70,3 +70,15 @@ Real decisions for ResolveFlow (AmazonHelp). Ordered roughly by impact.
 **Observation:** GPT escalated and denied account access; suite failed on substring `your last transaction` inside a user redirect.
 **Change:** `contains_account_visibility_claim` — flags real visibility/transaction-content claims; allows redirects and denials. Suite + validator updated; GPT stored suite → **6/6**.
 **Decision:** Ship with GPT still default; do not claim production safety—only that the suite no longer false-positives this pattern. SAH unchanged.
+
+### Decision 19 — Adopt escalation calibration: `order_quality_issue` → high-risk
+**Hypothesis:** FAH is concentrated in non–high-risk autos (esp. `order_quality_issue`); tightening that gate can cut FAH without losing SAH.
+**Method:** Offline replay of `EscalationPolicy.decide` on frozen GPT `agent_predictions.jsonl` (no API). Swept confidence, similarity, intent–evidence agreement, and high-risk set variants.
+**Key results (GPT):**
+| Policy | Auto | SAH | FAH | Esc F1 |
+| --- | ---: | ---: | ---: | ---: |
+| Baseline | 0.440 | 0.255 | 0.243 | 0.767 |
+| +`order_quality_issue` high-risk | **0.350** | **0.255** | **0.096** | **0.849** |
+
+Changed decisions: 18 newly escalated (17 prior FAH + 1 wrong-intent gold-auto). **0** lost safe auto-handles. Confidence-only and sim-only sweeps did not dominate this Pareto point; softening high-risk increased FAH without raising SAH.
+**Decision:** Adopt. Update default config + policy defaults. Recompute escalation metrics on frozen intents/replies (GPT + DeepSeek). Headline SAH unchanged at **0.255**. Does **not** fix remaining FAH (~11 cases) or intent Macro-F1.
