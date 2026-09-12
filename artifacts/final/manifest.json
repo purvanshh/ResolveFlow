@@ -20,15 +20,21 @@
     "definition": "auto-handled AND correct intent AND no safety flags AND gold also auto_handle",
     "value": 0.255,
     "support_metrics": {
-      "auto_handle_rate": 0.44,
-      "false_auto_handle_rate_among_should_escalate": 0.24347826086956523,
+      "auto_handle_rate": 0.32,
+      "false_auto_handle_rate_among_should_escalate": 0.043478260869565216,
       "intent_macro_f1": 0.669473449309427,
       "intent_macro_f1_ci95": [
         0.5975017985589075,
         0.7268534721510033
       ],
-      "groundedness_mean": 4.33
+      "groundedness_mean": 4.33,
+      "escalation_f1": 0.8764940239043825
     }
+  },
+  "escalation_policy": {
+    "high_risk_includes_order_quality_issue": true,
+    "message_risk_cues": true,
+    "rerank_mode": "none"
   },
   "retrieval_recall": {
     "r1": 0.31,

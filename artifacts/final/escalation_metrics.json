@@ -4,10 +4,10 @@
     "escalate_recall": 0.9565217391304348,
     "escalate_f1": 0.8764940239043825,
     "auto_handle_rate": 0.32,
-    "false_auto_handle_rate": 0.3181818181818182,
+    "false_auto_handle_rate": 0.078125,
     "pred_distribution": {
-      "escalate": 112,
-      "auto_handle": 88
+      "escalate": 136,
+      "auto_handle": 64
     },
     "true_distribution": {
       "escalate": 115,
@@ -51,6 +51,7 @@
     "always_among_should_escalate": 0.0
   },
   "calibrated_policy": {
+    "note": "Experiment 2 snapshot after adding order_quality_issue to high_risk_intents, BEFORE detect_message_risk. Final adopted numbers are in proposed + headline.json.",
     "high_risk_intents": [
       "payment_billing",
       "refund_request",
@@ -65,5 +66,6 @@
     "fah_among_should_escalate": 0.09565217391304348,
     "escalate_f1": 0.8489795918367347
   },
-  "message_risk_cues": true
+  "message_risk_cues": true,
+  "source_of_truth": "artifacts/evaluation/agent_predictions.jsonl recomputed; proposed.pred_distribution/false_auto_handle_rate corrected in freeze audit (were stale from a partial patch while F1/auto_rate/among_should_escalate were already final)."
 }
