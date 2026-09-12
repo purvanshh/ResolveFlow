@@ -1,0 +1,116 @@
+{
+  "source_predictions": "artifacts/evaluation/agent_predictions.jsonl",
+  "n_examples": 200,
+  "method": {
+    "bootstrap": {
+      "n_boot": 500,
+      "seed": 42,
+      "resample": "with_replacement over golden examples",
+      "ci": "percentile [2.5, 97.5]",
+      "consistent_with": "evaluation/run_all.py bootstrap_macro_f1"
+    },
+    "binomial_exact": {
+      "method": "Clopper-Pearson via scipy.stats.binomtest (when scipy available)",
+      "applies_to": "binary rates only (not Escalation F1)"
+    }
+  },
+  "interpretation": "Intervals quantify sampling variability over the frozen n=200 golden set under resampling. They do not correct for policy selection on the same set, judge noise, or domain shift. Point estimates are unchanged from headline.json.",
+  "point_estimates": {
+    "safe_auto_handling_rate": 0.255,
+    "auto_handle_rate": 0.32,
+    "false_auto_handle_rate_among_should_escalate": 0.043478260869565216,
+    "escalation_f1": 0.8764940239043825
+  },
+  "bootstrap_ci95": {
+    "safe_auto_handling_rate": {
+      "bootstrap_mean": 0.25443,
+      "ci95": [
+        0.195,
+        0.31
+      ],
+      "n_boot_used": 500
+    },
+    "auto_handle_rate": {
+      "bootstrap_mean": 0.31986000000000003,
+      "ci95": [
+        0.262375,
+        0.385
+      ],
+      "n_boot_used": 500
+    },
+    "false_auto_handle_rate_among_should_escalate": {
+      "bootstrap_mean": 0.04351912930502066,
+      "ci95": [
+        0.008808802980903587,
+        0.08854166666666663
+      ],
+      "n_boot_used": 500,
+      "n_boot_skipped_empty_should_escalate": 0
+    },
+    "escalation_f1": {
+      "bootstrap_mean": 0.876771510717247,
+      "ci95": [
+        0.8312196034418257,
+        0.9163346613545816
+      ],
+      "n_boot_used": 500
+    }
+  },
+  "binomial_exact_ci95": {
+    "safe_auto_handling_rate": {
+      "k": 51,
+      "n": 200,
+      "ci95_exact": [
+        0.1961408152004574,
+        0.3212753966387206
+      ]
+    },
+    "auto_handle_rate": {
+      "k": 64,
+      "n": 200,
+      "ci95_exact": [
+        0.25596118763995734,
+        0.38946988506165814
+      ]
+    },
+    "false_auto_handle_rate_among_should_escalate": {
+      "k": 5,
+      "n": 115,
+      "ci95_exact": [
+        0.014265830875120629,
+        0.09854972399265016
+      ],
+      "note": "Conditioned on gold should-escalate subset size in the frozen set (115)."
+    }
+  },
+  "display": {
+    "Safe Auto-Handling": {
+      "point": 0.255,
+      "bootstrap_ci95": [
+        0.195,
+        0.31
+      ]
+    },
+    "Auto-handle": {
+      "point": 0.32,
+      "bootstrap_ci95": [
+        0.262375,
+        0.385
+      ]
+    },
+    "FAH": {
+      "point": 0.043478260869565216,
+      "bootstrap_ci95": [
+        0.008808802980903587,
+        0.08854166666666663
+      ]
+    },
+    "Escalation F1": {
+      "point": 0.8764940239043825,
+      "bootstrap_ci95": [
+        0.8312196034418257,
+        0.9163346613545816
+      ]
+    }
+  }
+}
