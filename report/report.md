@@ -2,29 +2,30 @@
 
 ## 1. Executive Summary
 
-ResolveFlow is a grounded customer-support agent prototype for **AmazonHelp** tweets. It classifies intent (12-class brand taxonomy), retrieves historical cases, drafts a reply with **gpt-4o-mini**, runs safety checks, and applies a risk-aware escalation policy.
+ResolveFlow is a **conservative** AI support system for **AmazonHelp** tweets: LLM intent classification and grounded reply drafting, plus deterministic safety validation and escalation controls outside the model.
 
 **Headline metric: Safe Auto-Handling Rate = 0.255**  
 **Definition:** fraction of golden examples that were **auto-handled**, with **correct intent**, **no safety / unsupported-claim flags**, and **gold also labeled auto_handle**  
 (= 51 / 200 on the frozen set).
 
-Do **not** read **Auto-handle rate = 0.320** as “32% of queries can safely be automated.” That is only the share of cases the policy chose not to escalate. Safe Auto-Handling Rate is the stricter intersection with intent correctness, safety, and gold agreement.
+Do **not** read **Auto-handle rate = 0.320** as “32% of queries can safely be automated,” and do **not** read **SAH = 25.5%** as production coverage. Auto-handle is only “policy did not escalate”; SAH is the stricter intersection with intent correctness, safety, and gold agreement on a frozen sample.
 
-Supporting numbers (`gpt-4o-mini` + MiniLM retrieval + calibrated escalation with `order_quality_issue` high-risk **and** message-level risk cues):
+Supporting numbers (`gpt-4o-mini` / `classifier_v1` + MiniLM retrieval `rerank_mode=none` + `order_quality_issue` high-risk **and** `detect_message_risk`):
 
 | Metric | Value |
 | --- | ---: |
 | Intent Macro-F1 (LLM) | 0.669 (95% bootstrap CI [0.598, 0.727]) |
 | Intent Macro-F1 (TF-IDF baseline) | **0.683** |
 | Auto-handle rate | 0.320 |
-| False auto-handle rate (among should-escalate) | **0.043** |
+| False auto-handle rate (among should-escalate) | **0.043** (5/115) |
 | Escalation F1 | **0.876** |
 | Retrieval Recall@3 | 0.565 |
 | Reply correctness / groundedness | 4.36 / 4.33 |
 | Unsupported-claim rate | 0.015 |
 | Safety suite | **6/6 PASS** |
 
-**Honest takeaway:** TF-IDF still slightly leads LLM intent Macro-F1. ResolveFlow’s value is grounded replies plus calibrated escalation (high-risk intents + message risk cues) that cut FAH without lowering SAH—not a claim that GPT uniquely wins classification.
+**Central engineering lesson:** the LLM was not assumed best at every task. TF-IDF slightly beats GPT on intent Macro-F1 (0.683 vs 0.669), but TF-IDF-only and hybrid routing did **not** improve the end-to-end safety/automation operating point. The largest operational gain came from conservative escalation controls and message-level risk detection: **FAH fell from 24.3% → 4.3% while SAH remained 25.5%**.
+
 
 ---
 
@@ -185,7 +186,7 @@ Top modes (see `report/failure_analysis.md` and refreshed rankings):
 
 ## 9. What Is Misleading About My Headline Number?
 
-The 25.5% Safe Auto-Handling Rate is measured on a frozen 200-example golden set sampled from one brand's historical Twitter support data. It is **not** an estimate of production automation coverage. The sample may not represent current traffic, and the metric depends on the chosen escalation policy, taxonomy, safety validator, and labeling decisions. In particular, a conservative system can improve safety by escalating more cases, so the number should be interpreted together with escalation quality and false-auto-handle rate.
+The 25.5% Safe Auto-Handling Rate is measured on a frozen 200-example golden set sampled from one brand's historical Twitter support data. It is **not** an estimate of production automation coverage—**it does not mean “25.5% of production customer requests can safely be automated.”** The sample may not represent current traffic, and the metric depends on the chosen escalation policy, taxonomy, safety validator, labeling decisions, and evaluation definitions. In particular, a conservative system can improve safety by escalating more cases, so the number should be interpreted together with escalation quality and false-auto-handle rate.
 
 Also keep these distinctions in view:
 
@@ -208,11 +209,14 @@ Treat the headline as a **conservative containment estimate under this rubric**,
 
 ## 10. One More Week
 
-1. **Intent quality on residual FAH** — resolution-aware rerank was tested and did **not** move SAH/FAH; remaining 11 FAH are wrong-intent autos into non–high-risk classes.
-2. **Fraud / payment language gates** — escalate when message cues conflict with a soft predicted intent.
-3. **Expand golden + second annotator** — independent Streamlit ratings; tighten refund boundaries.
-4. **Structured policy layer** — explicit allow/deny actions instead of history-only grounding.
-5. **Reply-grounding quality** — optional rerank may still help drafts even when escalation is unchanged (not measured with a new judge pass here).
+Future experiments only (not implemented):
+
+1. **Intent boundaries for the remaining five FAH cases** — ambiguous FR delay; carrier-attempt missing; refuse-return; thanks/return-label; payment-as-cancel.
+2. **More boundary-focused golden examples** if annotation budget allows (without unfreezing the current checksum mid-study).
+3. **Calibrate confidence** on a larger validation set (GPT self-reported confidence was not useful for hybrid routing).
+4. **Principled ensemble** only if calibrated confidence becomes available—do not adopt Macro-F1-only hybrids.
+5. **Resolution-aware retrieval** on a larger eval set (prior ablation: Recall@K moved, end-to-end SAH/FAH did not).
+6. **Multi-brand generalization** beyond AmazonHelp.
 
 ---
 

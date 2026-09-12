@@ -48,6 +48,18 @@ All 11 had **wrong predicted intent**. Message risk cues then caught 6/11; **5 r
 
 Resolution-aware rerank: **0** end-to-end flips (Decision 20). Hybrid TF-IDF routing: Macro-F1↑ but SAH↓ — not adopted (Decision 21).
 
+### Final remaining FAH (n=5) — known failure modes (not retrieval)
+
+| ID | Category | Gold → Pred | Note |
+| --- | --- | --- | --- |
+| gold_085 | Ambiguous FR delay | other_unclear → delivery_delay | Multilingual delay complaint; no safe narrow cue |
+| gold_088 | Carrier-attempt missing | package_missing… → delivery_delay | Multiple DHL attempts; looks like delay |
+| gold_093 | Refuse-return | package_missing… → return_request | Refuses return; needs item |
+| gold_097 | Thanks / return-label boundary | package_missing… → return_request | Thanks + return label (resolved tone) |
+| gold_122 | Payment-as-cancel | payment_billing → cancellation_request | Cancel wording; billing gold |
+
+These are **intent/taxonomy boundary** failures. Do not describe them as retrieval failures.
+
 
 
 ---

@@ -104,3 +104,7 @@ Artifact: `artifacts/final/retrieval_rerank_ablation.json`.
 **Decision:** Adopt `detect_message_risk` in `EscalationPolicy` (additive to existing high-risk intents). Do **not** replace GPT or adopt hybrid routing. SAH stays **0.255**; FAH **0.096→0.043**; Escalation F1 **0.849→0.876**. Remaining 5 FAH lack narrow lexical cues (boundary/ambiguous cases).
 Artifact: `artifacts/final/intent_risk_experiment.json`.
 
+### Decision 22 — Freeze optimization; leave remaining 5 FAH as known failures
+**Why:** Further cue/intent patches would overfit the frozen n=200 set. Submission story is evidence-driven controls + honest residual failure modes, not zero FAH.
+**Frozen defaults:** GPT-4o-mini, `order_quality_issue` high-risk, `detect_message_risk` on, `rerank_mode=none`, golden checksum unchanged.
+

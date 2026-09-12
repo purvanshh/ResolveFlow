@@ -49,9 +49,9 @@ Controlled substitution on the same frozen golden set (n=200), retrieval (k=3), 
 | Safety suite | — | **6/6**† | **6/6**† | **6/6**† |
 | Mean latency (s) | — | — | **1.97** | 6.98 |
 
-† Safety harness regrades on stored replies. Escalation metrics recomputed under calibrated high-risk set (`+order_quality_issue`); replies/intents frozen. Default remains GPT-4o-mini; SAH stays **0.255**.
+† Safety harness regrades on stored replies (not model-behavior changes). Escalation metrics include `order_quality_issue` high-risk + message risk cues; intents/replies frozen. Default remains GPT-4o-mini; SAH stays **0.255**.
 
-**Selection:** keep **GPT-4o-mini** as the primary ResolveFlow model. Safe auto-handle is tied (0.255); GPT has the lowest FAH and highest escalation F1 after calibration. DeepSeek non-thinking wins judged reply quality; thinking mode does **not** improve safe automation and is ~3.5× slower.
+**Selection:** keep **GPT-4o-mini** as the primary ResolveFlow model. Safe auto-handle is tied (0.255); GPT has the lowest FAH and highest escalation F1. DeepSeek non-thinking wins judged reply quality; thinking mode does **not** improve safe automation and is ~3.5× slower.
 
 Artifacts: `artifacts/final/model_comparison.md`, `artifacts/final/deepseek_v41_flash_{nonthinking,thinking}/`.
 
@@ -68,7 +68,12 @@ Artifacts are isolated and do **not** overwrite GPT-4o-mini results.
 ## Architecture
 
 ```text
-Customer → Intent (gpt-4o-mini) → Retrieve (k=3) → Draft (gpt-4o-mini) → Safety → Escalation → Auto / Human
+Customer → Intent (gpt-4o-mini / classifier_v1)
+        → Retrieve (MiniLM, k=3, rerank_mode=none)
+        → Draft (gpt-4o-mini)
+        → Safety validator
+        → Escalation (high-risk intents + message risk cues)
+        → Auto-handle / Human
 ```
 
 Code: `src/resolveflow/agent/`, retrieval in `src/resolveflow/retrieval/`, eval in `evaluation/`.
@@ -143,7 +148,7 @@ Artifacts: `artifacts/final/` (metrics, comparisons, manifest), `artifacts/figur
 
 ## Failure Analysis
 
-Top issues: false auto-handle, refund request/status confusion, delivery vs missing-package confusion, thin/ambiguous tweets, occasional unsupported claims (~1.5%). Safety suite is **6/6** after fixing harness false positives (`fake_policy` negations; GPT `account_specific` redirects)—not by changing model defaults. Details: [`report/failure_analysis.md`](report/failure_analysis.md).
+Top issues: residual false auto-handle (**5/115** boundary cases), refund status/request confusion, delivery vs missing-package confusion, thin/ambiguous tweets. Safety suite **6/6** after harness fixes (`fake_policy`, `account_specific`)—grading semantics, not model changes. Details: [`report/failure_analysis.md`](report/failure_analysis.md).
 
 ## Limitations
 
