@@ -10,7 +10,7 @@ Frozen golden set **n=200** (checksum `e974255a…bb4ef36`).
 **Fingerprint:** `gpt-4o-mini` classifier + responder + MiniLM retrieval (k=3) + risk-aware escalation + `gpt-4o-mini` judge.
 
 **Safe Auto-Handling Rate** = fraction of golden examples that were auto-handled **and** had correct intent **and** no safety/unsupported-claim flags **and** gold also auto_handle (**51/200 = 0.255**).  
-**Auto-handle rate (0.350)** is only “policy did not escalate”—not the same as safe automation.
+**Auto-handle rate (0.320)** is only “policy did not escalate”—not the same as safe automation.
 
 | Metric | Value |
 | --- | ---: |
@@ -18,15 +18,15 @@ Frozen golden set **n=200** (checksum `e974255a…bb4ef36`).
 | Intent Macro-F1 (ResolveFlow / LLM) | 0.669 (95% CI [0.598, 0.727]) |
 | TF-IDF Macro-F1 (baseline) | **0.683** |
 | Majority Macro-F1 | 0.012 |
-| Auto-handle rate | 0.350 |
-| False auto-handle (among should-escalate) | **0.096** |
-| Escalation F1 | **0.849** |
+| Auto-handle rate | 0.320 |
+| False auto-handle (among should-escalate) | **0.043** |
+| Escalation F1 | **0.876** |
 | Recall@1 / @3 / @5 | 0.310 / 0.565 / 0.670 |
 | Reply correctness / groundedness (LLM judge) | 4.36 / 4.33 |
 | Unsupported-claim rate (drafts) | 0.015 |
 | Safety suite | **6/6 PASS** |
 
-Escalation calibration (offline, frozen GPT replies): added `order_quality_issue` to high-risk intents. SAH unchanged at 0.255; FAH 0.243→0.096; Escalation F1 0.767→0.849. Details: `artifacts/final/escalation_calibration.json`.
+Escalation: `order_quality_issue` high-risk + conservative **message-level risk cues** (refund/money-back, damaged/defective/wrong item, never-received, fraud). SAH unchanged; FAH 0.096→0.043. Hybrid GPT+TF-IDF was tested and **not** adopted (SAH regression). Retrieval `rerank_mode: none`.
 
 On this golden set, **TF-IDF still edges the LLM on intent Macro-F1**; ResolveFlow’s gains show up in **reply quality vs generic/nearest baselines**, calibrated escalation, and safe auto-handle **0.255** (vs offline template 0.165).
 
@@ -39,10 +39,10 @@ Controlled substitution on the same frozen golden set (n=200), retrieval (k=3), 
 | Metric | TF-IDF | GPT-4o-mini | DeepSeek Non-thinking | DeepSeek Thinking |
 | --- | ---: | ---: | ---: | ---: |
 | Intent Macro-F1 | **0.683** | 0.669 | 0.653 | 0.634 |
-| Auto-handle rate | — | 0.350 | 0.380 | 0.390 |
+| Auto-handle rate | — | 0.320 | 0.355 | 0.365 |
 | Safe Auto-Handling Rate | — | **0.255** | **0.255** | **0.255** |
-| False Auto-handle (should-escalate) | — | **0.096** | 0.130 | 0.139 |
-| Escalation F1 | — | **0.849** | 0.837 | 0.835 |
+| False Auto-handle (should-escalate) | — | **0.043** | 0.087 | 0.096 |
+| Escalation F1 | — | **0.876** | 0.861 | 0.860 |
 | Reply correctness | — | 4.36 | **4.74** | **4.78** |
 | Reply groundedness | — | 4.33 | **4.74** | **4.77** |
 | Unsupported-claim rate | — | **0.015** | 0.020 | 0.020 |
@@ -139,7 +139,7 @@ Artifacts: `artifacts/final/` (metrics, comparisons, manifest), `artifacts/figur
 | Majority | 0.012 | 0.730 | 0.000 | 0.000 | 3.24 | 2.38 |
 | TF-IDF + LR | 0.683 | 0.592 | 0.375 | 0.383 | — | — |
 | Nearest Case | — | — | — | — | 3.46 | 3.42 |
-| ResolveFlow (gpt-4o-mini) | 0.669 | 0.849 | 0.350 | 0.096 | 4.36 | 4.33 |
+| ResolveFlow (gpt-4o-mini) | 0.669 | 0.876 | 0.320 | 0.043 | 4.36 | 4.33 |
 
 ## Failure Analysis
 

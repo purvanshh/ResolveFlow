@@ -26,17 +26,29 @@ Frequencies from golden n=200 offline agent predictions (`artifacts/final/failur
 
 ## Failure Mode #1 — False auto-handle (policy gap)
 
-**Status after calibration:** Treating `order_quality_issue` as high-risk cut FAH among should-escalate from **28/115 (0.243)** to **11/115 (0.096)** with SAH unchanged (51/200). Remaining FAH is still the primary automation risk.
+**Status after calibration + message risk cues:** FAH among should-escalate went **28/115 (0.243)** → **11/115 (0.096)** (`order_quality_issue` high-risk) → **5/115 (0.043)** (message risk cues), with SAH unchanged (51/200).
 
-**Example (pre-calibration pattern):** `gold_037`
+### Remaining FAH after calibration (n=11 pre-cues) — retrieval not the bottleneck
 
-- **Customer:** “Can you expedite shipping? I didn't cancel the order. Amazon claims it was fraudulent but when I was called I confirmed it wasn't…”
-- **Expected intent:** `delivery_delay` (gold escalate)
-- **Predicted:** `cancellation_request` + **auto-handle**
-- **Evidence:** top neighbor also cancellation-themed (sim≈0.74)
-- **What failed:** Classifier + retrieval latched onto “cancel”; policy allowed auto-handle because predicted intent was not in the high-risk list.
-- **Mechanism:** Wrong intent → wrong risk class → unsafe automation.
-- **Fix (partial):** expand high-risk set for damaged/defective (`order_quality_issue`); still need fraud-language cues and intent–retrieval consensus for remaining FAH.
+All 11 had **wrong predicted intent**. Message risk cues then caught 6/11; **5 remain**.
+
+| Case | Gold intent | Predicted intent | Category | Primary cause | Caught by cues? |
+| --- | --- | --- | --- | --- | --- |
+| gold_060 | order_quality_issue | return_request | A | wrong_intent + defective | yes |
+| gold_067 | order_quality_issue | delivery_delay | A | wrong_intent + wrong item | yes |
+| gold_085 | other_unclear | delivery_delay | B/D | ambiguous FR delivery | no |
+| gold_088 | package_missing… | delivery_delay | C | wrong_intent (carrier attempts) | no |
+| gold_093 | package_missing… | return_request | B | ambiguous refuse-return | no |
+| gold_097 | package_missing… | return_request | D | thanks/return-label boundary | no |
+| gold_104 | package_missing… | delivery_delay | A | wrong_intent + never received | yes |
+| gold_111 | package_missing… | cancellation_request | A | wrong_intent + didn't arrive | yes |
+| gold_122 | payment_billing | cancellation_request | C | wrong_intent (cancel wording) | no |
+| gold_145 | refund_request | delivery_delay | A | wrong_intent + money back | yes |
+| gold_160 | refund_status | delivery_delay | A | wrong_intent + refund options | yes |
+
+Resolution-aware rerank: **0** end-to-end flips (Decision 20). Hybrid TF-IDF routing: Macro-F1↑ but SAH↓ — not adopted (Decision 21).
+
+
 
 ---
 

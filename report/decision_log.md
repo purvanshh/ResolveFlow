@@ -82,3 +82,25 @@ Real decisions for ResolveFlow (AmazonHelp). Ordered roughly by impact.
 
 Changed decisions: 18 newly escalated (17 prior FAH + 1 wrong-intent gold-auto). **0** lost safe auto-handles. Confidence-only and sim-only sweeps did not dominate this Pareto point; softening high-risk increased FAH without raising SAH.
 **Decision:** Adopt. Update default config + policy defaults. Recompute escalation metrics on frozen intents/replies (GPT + DeepSeek). Headline SAH unchanged at **0.255**. Does **not** fix remaining FAH (~11 cases) or intent Macro-F1.
+
+### Decision 20 — Resolution-aware retrieval experiment (not adopted)
+**Hypothesis:** Topic-similar / resolution-different neighbors cause FAH and block SAH; deterministic intent/resolution reranking over a candidate pool could help.
+**Method:** Offline ablation (`scripts/evaluate_retrieval_rerank.py`) on frozen GPT intents/replies; calibrated escalation policy held fixed. Modes: none (baseline filtered dense), intent, resolution, combined. Ranking uses only query text + predicted intent + historical case fields (no gold).
+**Results:**
+| Variant | R@1 | R@3 | R@5 | SAH | Auto | FAH | Esc F1 | Decision flips |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Current (none) | 0.620 | 0.620 | 0.625 | 0.255 | 0.350 | 0.096 | 0.849 | 0 |
+| Intent rerank | 0.600 | 0.635 | 0.665 | 0.255 | 0.350 | 0.096 | 0.849 | 0 |
+| Resolution rerank | 0.325 | 0.610 | 0.690 | 0.255 | 0.350 | 0.096 | 0.849 | 0 |
+| Combined | 0.605 | 0.645 | 0.690 | 0.255 | 0.350 | 0.096 | 0.849 | 0 |
+
+Global semantic Recall@K (no intent filter) remains 0.310 / 0.565 / 0.670. All **11** remaining FAH cases are **wrong predicted intent**; retrieval mostly reinforces the predicted (wrong) intent. Only **3** gold-auto + correct-intent escalations exist and they are blocked by `unclear_intent` / human-request—not insufficient evidence.
+**Decision:** Do **not** change default retrieval (`rerank_mode: none`). Keep experimental reranker behind config. Next bottleneck is intent/policy on remaining FAH, not resolution rerank.
+Artifact: `artifacts/final/retrieval_rerank_ablation.json`.
+
+### Decision 21 — Adopt message-level risk cues; reject hybrid classifier
+**Hypothesis:** Remaining FAH are wrong intents into non–high-risk classes; either (A) message risk cues or (B) GPT↔TF-IDF hybrid can catch them.
+**Evidence:** All 11 FAH had wrong GPT intent (conf ≥0.8). Conservative cues catch 6/11 with **0** SAH loss. TF-IDF Macro-F1 0.683 > GPT 0.669 but TF-IDF-only SAH falls to 0.165. Hybrid “prefer TF-IDF when it predicts high-risk” raises Macro-F1 to 0.685 and cuts FAH to 0.052 but **drops SAH to 0.240**.
+**Decision:** Adopt `detect_message_risk` in `EscalationPolicy` (additive to existing high-risk intents). Do **not** replace GPT or adopt hybrid routing. SAH stays **0.255**; FAH **0.096→0.043**; Escalation F1 **0.849→0.876**. Remaining 5 FAH lack narrow lexical cues (boundary/ambiguous cases).
+Artifact: `artifacts/final/intent_risk_experiment.json`.
+
