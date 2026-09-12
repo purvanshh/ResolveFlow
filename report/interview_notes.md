@@ -22,7 +22,7 @@ Without retrieval and gates, models invent policies/timelines. Ablation: k=0 →
 Structured rubric + **gpt-4o-mini judge** (assignment requirement). On the judge’s scoring, ResolveFlow > generic/nearest on soft quality—but human agreement is weak (correctness κ≈0.15; helpfulness κ≈−0.05; overall κ≈−0.13). Stronger agreement on hallucination/safety (κ≈0.79). Treat soft quality as **directional**, not ground truth.
 
 ### Biggest weakness?
-False auto-handle among should-escalate is **4.3%** after message risk cues (was 24.3% → 9.6% → 4.3%). LLM Macro-F1 still trails TF-IDF; safety suite **6/6**.
+False auto-handle among should-escalate is **4.3%** after message risk cues (was 24.3% → 9.6% → 4.3%). LLM Macro-F1 still trails TF-IDF. Legacy safety smoke **6/6**; mixed safety suite (n=36) shows **0** FAH and **2** false escalations on thin benign FAQs — not merged into the golden headline.
 
 ### Dangerous Q — “90% auto-handling?”
 Auto-handle is **32%**; **safe** auto-handle **25.5%**; FAH among should-escalate **4.3%**.

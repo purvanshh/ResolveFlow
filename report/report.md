@@ -161,17 +161,43 @@ Same frozen golden set, retrieval, safety, escalation, and **gpt-4o-mini** judge
 
 ## 8. Safety / Evaluation Integrity
 
-Two suite failures (`fake_policy`, `account_specific`) were **harness false positives** from substring matching; stored model replies were unchanged. Assertion-aware grading + a strengthened deterministic validator → suite **6/6**. This is evaluation-integrity work, **not** “the model became safer.”
+Two early suite failures (`fake_policy`, `account_specific`) were **harness false positives** from substring matching; stored model replies were unchanged. Assertion-aware grading + a strengthened deterministic validator restored the smoke suite to **6/6**. That was evaluation-integrity work, **not** “the model became safer.”
+
+### Mixed-outcome safety regression suite
+
+The original six-case suite was a **smoke test** and was insufficient because **every case expected escalation** — an always-escalate system would look perfect. It was expanded into a mixed-outcome adversarial regression suite (`evaluation/safety_suite_cases.py`, `scripts/evaluate_safety.py`):
+
+| Design | Value |
+| --- | ---: |
+| Cases | **36** |
+| Must escalate | **19** |
+| Safe-auto candidates | **17** |
+| Categories | policy, account_visibility, fraud, payment, human_request, prompt_injection, unsupported_action, ambiguity, insufficient_evidence, benign_* |
+
+**Offline results (current frozen implementation, no product changes):**
+
+| Metric | Agent | Always-escalate |
+| --- | ---: | ---: |
+| Escalation recall | 1.000 | 1.000 |
+| False auto-handle rate | 0.000 | 0.000 |
+| False escalation rate | 0.118 (2/17) | 1.000 |
+| Safe-auto precision | 1.000 | 0.000 |
+| Case pass rate | 0.944 (34/36) | 0.528 |
+| Balanced safety–usefulness | **0.941** | **0.500** |
+
+Failed cases (false escalation only): `benign_tracking_where_to_look`, `benign_confirm_your_orders_status` — thin FAQ/status wording classified `other_unclear` / low confidence. **No forbidden-claim violations. No false auto-handles.** Production policy was **not** tuned to clear these.
+
+This suite is a **safety regression harness**, not a statistically representative production evaluation, and is **not** combined with golden SAH/FAH. Artifact: `artifacts/final/safety_suite_mixed.json`.
 
 ---
 
 ## 9. Failure Analysis
 
-1. **False auto-handle** — **5/115** remaining (boundary/intent ambiguity; not retrieval): ambiguous FR delay; carrier-attempt missing; refuse-return; thanks/return-label; payment-as-cancel.
+1. **False auto-handle (golden)** — **5/115** remaining (boundary/intent ambiguity; not retrieval).
 2. **Intent confusion** — refund status/request; delivery vs missing package (Macro-F1 still trails TF-IDF).
-3. **Ambiguous / thin tweets** — abstention vs forced class.
+3. **Ambiguous / thin tweets** — abstention vs forced class (also drives 2 mixed-suite false escalations).
 4. **Unsupported claims** — ~1.5% of drafts.
-5. **Safety suite harness FPs (fixed)** — suite **6/6**.
+5. **Safety smoke harness FPs (fixed)** — legacy **6/6**; mixed suite exposes over-escalation on thin benign FAQs.
 
 Details: `report/failure_analysis.md`.
 

@@ -24,6 +24,8 @@ Frozen golden set **n=200** (checksum `e974255a…bb4ef36`).
 
 CIs from frozen GPT predictions (`scripts/compute_headline_cis.py` → `artifacts/final/headline_confidence_intervals.json`). Point estimates unchanged.
 
+**Safety regression (separate from golden headline):** the original 6 escalate-only cases remain a smoke subset (**6/6**). They were expanded into a **mixed-outcome** adversarial suite (n=36; 19 must-escalate / 17 safe-auto) so always-escalate cannot score as perfect. Offline run: escalation recall **1.0**, FAH **0.0**, false-escalation **2/17**, balanced score **0.94** vs always-escalate **0.50**. See `artifacts/final/safety_suite_mixed.json`. Not a production estimate; not merged into SAH/FAH.
+
 Escalation path (same frozen predictions): FAH **0.243 → 0.096 → 0.043** with SAH held at **0.255**. Hybrid GPT+TF-IDF was tested and **not** adopted. **Caveat:** policy/cues were selected on this golden set (labels/examples frozen)—FAH/SAH may be optimistic vs a held-out calibration split.
 
 On this set, **TF-IDF edges the LLM on intent Macro-F1**. Soft reply-quality comparisons use an LLM judge that is **weakly human-validated** on correctness/helpfulness (see report §6).
@@ -99,6 +101,7 @@ python scripts/check_leakage.py --final
 python scripts/check_taxonomy.py
 python scripts/compute_headline_cis.py    # CIs from frozen predictions (no API)
 cat artifacts/final/headline.json         # SAH = 0.255 (committed summary of frozen preds)
+# Mixed safety suite needs local data/processed (offline agent); see below
 ```
 
 ### Needs local processed data (no API)
@@ -108,7 +111,7 @@ Offline agent / retrieve / offline safety paths need `data/processed/*` (gitigno
 ```bash
 python scripts/run_agent.py --offline --text "My package is late and tracking hasn't moved"
 python scripts/retrieve.py --text "My package is late and tracking hasn't moved"
-python scripts/evaluate_safety.py --mode offline
+python scripts/evaluate_safety.py --mode offline   # mixed-outcome suite + always-escalate baseline
 ```
 
 ### True recomputation (API + processed data)
@@ -151,7 +154,7 @@ streamlit run scripts/rate_replies.py   # human reply ratings
 
 ## Failure Analysis
 
-Top issues: residual false auto-handle (**5/115** boundary cases), refund status/request confusion, delivery vs missing-package confusion, thin/ambiguous tweets. Safety suite **6/6** after harness fixes (`fake_policy`, `account_specific`)—grading semantics, not model changes. Details: [`report/failure_analysis.md`](report/failure_analysis.md).
+Top issues: residual golden FAH (**5/115** boundary cases), refund status/request confusion, delivery vs missing-package confusion, thin/ambiguous tweets. Legacy safety smoke **6/6**; mixed-outcome safety suite documents **2 false escalations** on borderline benign FAQs (no production change). Details: [`report/failure_analysis.md`](report/failure_analysis.md).
 
 ## Limitations
 
@@ -159,7 +162,7 @@ Top issues: residual false auto-handle (**5/115** boundary cases), refund status
 - Escalation policy / message-risk cues selected on the same frozen eval set → possible optimistic FAH/SAH.
 - LLM intent Macro-F1 does **not** beat TF-IDF on this set.
 - LLM-as-judge: strong hallucination/safety agreement (Spearman ≈ 0.679, weighted κ ≈ 0.792); weak/negative on helpfulness and overall — soft quality is directional only.
-- Safety suite: **6/6** after assertion-aware harness regrades. No live CSAT or account APIs.
+- Legacy safety smoke (6 escalate-only cases) is insufficient alone; mixed suite (n=36) is a regression harness, not production coverage. No live CSAT or account APIs.
 
 ## Docs
 

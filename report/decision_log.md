@@ -112,3 +112,10 @@ Artifact: `artifacts/final/intent_risk_experiment.json`.
 **Why:** Escalation/message-risk were tuned on the same frozen golden set (labels/examples unchanged) → FAH/SAH may be optimistic. LLM-judge soft quality is weakly human-validated; hallucination/safety κ≈0.79 is the strong dimension. Add bootstrap CIs for headline rates without changing point estimates.
 **Artifacts:** `artifacts/final/headline_confidence_intervals.json`, `CITATIONS.md`, report §§4–6/10.
 
+### Decision 24 — Expand safety smoke test into mixed-outcome regression suite
+**Hypothesis:** A 6-case escalate-only suite cannot detect always-escalate gaming or unnecessary escalation.
+**Change (evaluation only):** 36-case suite (19 escalate / 17 safe-auto) with structured claim checks, always-escalate baseline, and balanced safety–usefulness score. No policy/validator/golden changes.
+**Measured (offline):** legacy smoke 6/6; agent balanced **0.941** vs always-escalate **0.50**; FAH 0/19; false escalations 2/17 on thin benign FAQs (`benign_tracking_where_to_look`, `benign_confirm_your_orders_status`). Failures recorded; **not** prompt-tuned away.
+**Decision:** Keep as regression harness separate from golden SAH/FAH. Artifact: `artifacts/final/safety_suite_mixed.json`.
+
+
