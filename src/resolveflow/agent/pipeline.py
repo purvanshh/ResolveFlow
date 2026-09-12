@@ -15,6 +15,7 @@ from resolveflow.agent.safety import (
 )
 from resolveflow.prompts.versions import CLASSIFIER_VERSION, RESPONDER_VERSION
 from resolveflow.retrieval.evidence import is_sufficient_evidence, similarity_gap
+from resolveflow.retrieval.rerank import rerank_cases
 from resolveflow.retrieval.retrieve import Retriever
 from resolveflow.schemas import (
     AgentDecision,
@@ -23,6 +24,7 @@ from resolveflow.schemas import (
 )
 
 RetrievalMode = Literal["filtered", "global", "auto"]
+RerankMode = Literal["none", "intent", "resolution", "combined"]
 
 
 class AgentPipeline:
@@ -37,6 +39,8 @@ class AgentPipeline:
         top_k: int = 3,
         similarity_threshold: float = 0.45,
         retrieval_mode: RetrievalMode = "auto",
+        rerank_mode: RerankMode | str = "none",
+        candidate_pool: int = 20,
         max_reply_chars: int = 280,
         skip_generation_on_high_risk: bool = True,
     ):
@@ -48,6 +52,8 @@ class AgentPipeline:
         self.top_k = top_k
         self.similarity_threshold = similarity_threshold
         self.retrieval_mode = retrieval_mode
+        self.rerank_mode = (rerank_mode or "none").lower()
+        self.candidate_pool = max(int(candidate_pool), top_k)
         self.max_reply_chars = max_reply_chars
         self.skip_generation_on_high_risk = skip_generation_on_high_risk
 
@@ -171,29 +177,45 @@ class AgentPipeline:
     def _retrieve(
         self, message: str, context: str, intent: str
     ) -> tuple[list[RetrievedEvidence], dict[str, Any]]:
-        meta: dict[str, Any] = {"mode": self.retrieval_mode, "top_k": self.top_k}
+        meta: dict[str, Any] = {
+            "mode": self.retrieval_mode,
+            "top_k": self.top_k,
+            "rerank_mode": self.rerank_mode,
+            "candidate_pool": self.candidate_pool,
+        }
         if self.retriever is None or self.top_k <= 0:
             meta["mode"] = "disabled"
             return [], meta
 
         mode = self.retrieval_mode
-        hits = []
-        if mode in {"filtered", "auto"}:
-            hits = self.retriever.retrieve(
-                message,
-                context=context,
-                top_k=max(self.top_k * 4, 8),
-                similarity_threshold=0.0,
-            )
-            filtered = [h for h in hits if h.intent == intent]
-            if len(filtered) >= 1:
-                hits = filtered[: self.top_k]
-                # re-apply threshold
-                hits = [h for h in hits if h.similarity >= self.similarity_threshold]
-                meta["mode_used"] = "filtered"
-            elif mode == "filtered":
-                hits = []
-                meta["mode_used"] = "filtered_empty"
+        use_rerank = self.rerank_mode not in {"none", "off", ""}
+
+        # Baseline path: preserve historical filtered/global behavior exactly.
+        if not use_rerank:
+            hits = []
+            if mode in {"filtered", "auto"}:
+                hits = self.retriever.retrieve(
+                    message,
+                    context=context,
+                    top_k=max(self.top_k * 4, 8),
+                    similarity_threshold=0.0,
+                )
+                filtered = [h for h in hits if h.intent == intent]
+                if len(filtered) >= 1:
+                    hits = filtered[: self.top_k]
+                    hits = [h for h in hits if h.similarity >= self.similarity_threshold]
+                    meta["mode_used"] = "filtered"
+                elif mode == "filtered":
+                    hits = []
+                    meta["mode_used"] = "filtered_empty"
+                else:
+                    hits = self.retriever.retrieve(
+                        message,
+                        context=context,
+                        top_k=self.top_k,
+                        similarity_threshold=self.similarity_threshold,
+                    )
+                    meta["mode_used"] = "global_fallback"
             else:
                 hits = self.retriever.retrieve(
                     message,
@@ -201,15 +223,27 @@ class AgentPipeline:
                     top_k=self.top_k,
                     similarity_threshold=self.similarity_threshold,
                 )
-                meta["mode_used"] = "global_fallback"
+                meta["mode_used"] = "global"
         else:
+            pool = max(self.candidate_pool, self.top_k * 4, 8)
             hits = self.retriever.retrieve(
                 message,
                 context=context,
-                top_k=self.top_k,
-                similarity_threshold=self.similarity_threshold,
+                top_k=pool,
+                similarity_threshold=0.0,
             )
-            meta["mode_used"] = "global"
+            query_for_rerank = f"{message}\n{context}".strip()
+            hits = rerank_cases(
+                hits,
+                query=query_for_rerank,
+                predicted_intent=intent,
+                mode=self.rerank_mode,
+                top_k=None,
+            )
+            hits = [h for h in hits if h.similarity >= self.similarity_threshold][
+                : self.top_k
+            ]
+            meta["mode_used"] = f"pool_then_{self.rerank_mode}"
 
         evidence = [
             RetrievedEvidence(
@@ -225,4 +259,5 @@ class AgentPipeline:
         meta["n_hits"] = len(evidence)
         if evidence:
             meta["top_similarity"] = evidence[0].similarity
+            meta["top_intent"] = evidence[0].intent
         return evidence, meta

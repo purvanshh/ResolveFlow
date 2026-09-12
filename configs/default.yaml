@@ -26,6 +26,10 @@ retrieval:
   similarity_threshold: 0.45
   max_cases: 20000
   preprocessing_version: v1
+  # Experimental rerank (default none = baseline intent-filtered dense retrieval).
+  # Modes: none | intent | resolution | combined
+  rerank_mode: none
+  candidate_pool: 20
   embeddings_path: data/processed/embeddings.npy
   index_path: data/processed/retrieval.index.npz
   metadata_path: data/processed/retrieval_metadata.json

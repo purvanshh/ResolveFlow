@@ -153,6 +153,8 @@ def build_agent(
             else agent_cfg.get("similarity_threshold", rcfg.get("similarity_threshold", 0.45))
         ),
         retrieval_mode=(retrieval_mode or agent_cfg.get("retrieval_mode", "auto")),  # type: ignore[arg-type]
+        rerank_mode=str(rcfg.get("rerank_mode") or agent_cfg.get("rerank_mode") or "none"),
+        candidate_pool=int(rcfg.get("candidate_pool") or agent_cfg.get("candidate_pool") or 20),
         max_reply_chars=int(safety_cfg.get("max_reply_characters", 280)),
         skip_generation_on_high_risk=bool(agent_cfg.get("skip_generation_on_high_risk", True)),
     )
