@@ -13,3 +13,4 @@
 | Cost | — | — | — | — |
 
 Notes: Message-level risk cues adopted on top of `order_quality_issue` high-risk. SAH=0.255 unchanged. Hybrid GPT+TF-IDF not adopted.
+Reply correctness/groundedness are **LLM-judge means** (gpt-4o-mini). Human agreement on soft quality is weak (see `judge_human_agreement.json`); treat reply-quality gaps as directional, not validated. DeepSeek API id used: `deepseek-flash` (repo version label `DeepSeek-V4.1-Flash`).

@@ -7,34 +7,34 @@ Classify intent → retrieve historical cases → draft a grounded reply → saf
 ## Results
 
 Frozen golden set **n=200** (checksum `e974255a…bb4ef36`).  
-**Fingerprint:** `gpt-4o-mini` classifier + responder + MiniLM retrieval (k=3) + risk-aware escalation + `gpt-4o-mini` judge.
+**Fingerprint:** `gpt-4o-mini` classifier + responder + MiniLM retrieval (k=3, `rerank_mode=none`) + risk-aware escalation (`order_quality_issue` high-risk + message-level risk cues) + `gpt-4o-mini` judge.
 
-**Safe Auto-Handling Rate** = fraction of golden examples that were auto-handled **and** had correct intent **and** no safety/unsupported-claim flags **and** gold also auto_handle (**51/200 = 0.255**).  
-**Auto-handle rate (0.320)** is only “policy did not escalate”—not the same as safe automation.
+**Safe Auto-Handling Rate** = auto-handled **and** correct intent **and** no safety flags **and** gold also auto_handle (**51/200 = 0.255**).  
+**Auto-handle rate (0.320)** is only “policy did not escalate”—not safe automation.
 
-| Metric | Value |
-| --- | ---: |
-| **Safe Auto-Handling Rate (headline)** | **0.255** |
-| Intent Macro-F1 (ResolveFlow / LLM) | 0.669 (95% CI [0.598, 0.727]) |
-| TF-IDF Macro-F1 (baseline) | **0.683** |
-| Majority Macro-F1 | 0.012 |
-| Auto-handle rate | 0.320 |
-| False auto-handle (among should-escalate) | **0.043** |
-| Escalation F1 | **0.876** |
-| Recall@1 / @3 / @5 | 0.310 / 0.565 / 0.670 |
-| Reply correctness / groundedness (LLM judge) | 4.36 / 4.33 |
-| Unsupported-claim rate (drafts) | 0.015 |
-| Safety suite | **6/6 PASS** |
+| Metric | Point estimate | 95% bootstrap CI |
+| --- | ---: | ---: |
+| **Safe Auto-Handling Rate** | **0.255** (51/200) | [0.195, 0.310] |
+| Auto-handle rate | 0.320 (64/200) | [0.262, 0.385] |
+| False auto-handle (among should-escalate) | **0.043** (5/115) | [0.009, 0.089] |
+| Escalation F1 | **0.876** | [0.831, 0.916] |
+| Intent Macro-F1 (ResolveFlow / LLM) | 0.669 | [0.598, 0.727] |
+| TF-IDF Macro-F1 (baseline) | **0.683** | — |
+| Safety suite | **6/6 PASS** | — |
 
-Escalation: `order_quality_issue` high-risk + conservative **message-level risk cues** (refund/money-back, damaged/defective/wrong item, never-received, fraud). SAH unchanged; FAH 0.096→0.043. Hybrid GPT+TF-IDF was tested and **not** adopted (SAH regression). Retrieval `rerank_mode: none`.
+CIs from frozen GPT predictions (`scripts/compute_headline_cis.py` → `artifacts/final/headline_confidence_intervals.json`). Point estimates unchanged.
 
-On this golden set, **TF-IDF still edges the LLM on intent Macro-F1**; ResolveFlow’s gains show up in **reply quality vs generic/nearest baselines**, calibrated escalation, and safe auto-handle **0.255** (vs offline template 0.165).
+Escalation path (same frozen predictions): FAH **0.243 → 0.096 → 0.043** with SAH held at **0.255**. Hybrid GPT+TF-IDF was tested and **not** adopted. **Caveat:** policy/cues were selected on this golden set (labels/examples frozen)—FAH/SAH may be optimistic vs a held-out calibration split.
 
-Full story: [`report/report.md`](report/report.md). Limits of the headline: report §9.
+On this set, **TF-IDF edges the LLM on intent Macro-F1**. Soft reply-quality comparisons use an LLM judge that is **weakly human-validated** on correctness/helpfulness (see report §6).
+
+Full story: [`report/report.md`](report/report.md). Headline limits: report §10. Sources: [`CITATIONS.md`](CITATIONS.md).
 
 ## LLM Model Comparison
 
-Controlled substitution on the same frozen golden set (n=200), retrieval (k=3), safety, escalation, and **gpt-4o-mini judge**. DeepSeek API model: `deepseek-flash` (version `DeepSeek-V4.1-Flash`).
+Controlled substitution on the same frozen golden set (n=200), retrieval (k=3), safety, escalation, and **gpt-4o-mini judge**.
+
+**DeepSeek:** API model id **`deepseek-flash`**, base URL `https://api.deepseek.com`, repo version label **`DeepSeek-V4.1-Flash`** (aligned with DeepSeek’s current pricing docs for that id). Details: [`CITATIONS.md`](CITATIONS.md).
 
 | Metric | TF-IDF | GPT-4o-mini | DeepSeek Non-thinking | DeepSeek Thinking |
 | --- | ---: | ---: | ---: | ---: |
@@ -43,15 +43,15 @@ Controlled substitution on the same frozen golden set (n=200), retrieval (k=3), 
 | Safe Auto-Handling Rate | — | **0.255** | **0.255** | **0.255** |
 | False Auto-handle (should-escalate) | — | **0.043** | 0.087 | 0.096 |
 | Escalation F1 | — | **0.876** | 0.861 | 0.860 |
-| Reply correctness | — | 4.36 | **4.74** | **4.78** |
-| Reply groundedness | — | 4.33 | **4.74** | **4.77** |
+| Reply correctness (LLM judge) | — | 4.36 | 4.74 | 4.78 |
+| Reply groundedness (LLM judge) | — | 4.33 | 4.74 | 4.77 |
 | Unsupported-claim rate | — | **0.015** | 0.020 | 0.020 |
 | Safety suite | — | **6/6**† | **6/6**† | **6/6**† |
 | Mean latency (s) | — | — | **1.97** | 6.98 |
 
-† Safety harness regrades on stored replies (not model-behavior changes). Escalation metrics include `order_quality_issue` high-risk + message risk cues; intents/replies frozen. Default remains GPT-4o-mini; SAH stays **0.255**.
+† Safety harness regrades on stored replies. Escalation includes message risk cues; intents/replies frozen.
 
-**Selection:** keep **GPT-4o-mini** as the primary ResolveFlow model. Safe auto-handle is tied (0.255); GPT has the lowest FAH and highest escalation F1. DeepSeek non-thinking wins judged reply quality; thinking mode does **not** improve safe automation and is ~3.5× slower.
+**Selection:** keep **GPT-4o-mini** (lowest FAH, highest escalation F1 at tied SAH). On the LLM judge’s scoring, DeepSeek received higher soft reply-quality scores; human agreement for those dimensions was weak (helpfulness Spearman ≈ −0.19, overall κ ≈ −0.13), so treat that as **directional**, not a validated quality win. Thinking mode does **not** improve safe automation and is ~3.5× slower.
 
 Artifacts: `artifacts/final/model_comparison.md`, `artifacts/final/deepseek_v41_flash_{nonthinking,thinking}/`.
 
@@ -78,46 +78,42 @@ Customer → Intent (gpt-4o-mini / classifier_v1)
 
 Code: `src/resolveflow/agent/`, retrieval in `src/resolveflow/retrieval/`, eval in `evaluation/`.
 
-## Quickstart
+## Quickstart — artifact verification vs recomputation
+
+### Artifact verification (no API; under ~15 minutes)
+
+The repository **commits frozen prediction artifacts** used for the reported headline metrics. A fresh clone can **verify the exact calculation** without an API call. `artifacts/final/headline.json` is a **committed summary of those frozen predictions**, not an independently recomputed live eval.
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev,discovery,labeling,llm]"
 
-# Put your key in .env (gitignored)
+# Optional: .env for live calls only (gitignored)
 # OPENAI_API_KEY=sk-...
 # RESOLVEFLOW_LLM_MODEL=gpt-4o-mini
 
-# Works from a fresh clone (committed golden + artifacts/final)
 pytest
 python scripts/check_golden_set.py
 python scripts/check_leakage.py --final
 python scripts/check_taxonomy.py
-cat artifacts/final/headline.json   # Safe Auto-Handling Rate = 0.255
+python scripts/compute_headline_cis.py    # CIs from frozen predictions (no API)
+cat artifacts/final/headline.json         # SAH = 0.255 (committed summary of frozen preds)
+```
 
-# Offline agent / retrieve / safety suite need local data/processed/*
-# (gitignored). Build once from twcs.csv — see Data below — then:
+### Needs local processed data (no API)
+
+Offline agent / retrieve / offline safety paths need `data/processed/*` (gitignored; MiniLM download). Build once from `twcs.csv` — see Data. The raw ~493 MB CSV is **not** committed.
+
+```bash
 python scripts/run_agent.py --offline --text "My package is late and tracking hasn't moved"
 python scripts/retrieve.py --text "My package is late and tracking hasn't moved"
 python scripts/evaluate_safety.py --mode offline
-
-# Live agent (uses .env → gpt-4o-mini; also needs data/processed)
-python scripts/run_agent.py --text "My package is late and tracking hasn't moved"
 ```
 
-### What a fresh clone can verify without rebuilding data
+### True recomputation (API + processed data)
 
-| Check | Needs |
-| --- | --- |
-| `pytest`, golden/leakage/taxonomy | Committed repo only |
-| Headline / comparison tables | `artifacts/final/` (committed) |
-| Offline agent, retrieve, offline safety suite | Local `data/processed/*` (+ MiniLM download) |
-| Full OpenAI eval / GPT safety suite | API key + `data/processed/*` |
-
-## Evaluation
-
-**First OpenAI run** (API cost; writes `artifacts/final/`):
+Re-running the model from scratch requires the processed dataset **and** an OpenAI API key (and matching model config). This is **not** the under-15-minute path.
 
 ```bash
 python scripts/evaluate_agent.py --mode openai
@@ -125,9 +121,16 @@ python scripts/evaluate_safety.py --mode openai
 python -m evaluation.run_all --config configs/default.yaml --mode openai
 ```
 
-**Cached reproduction:** re-run `evaluation.run_all --mode openai` to reuse `artifacts/evaluation/agent_predictions.jsonl` and `artifacts/final/judge_cache.json` unless you pass `--force-agent`.
+**Cached reproduction:** `evaluation.run_all --mode openai` reuses `artifacts/evaluation/agent_predictions.jsonl` and `artifacts/final/judge_cache.json` unless `--force-agent`.
 
-Related:
+| Check | Needs |
+| --- | --- |
+| `pytest`, golden/leakage/taxonomy, headline CI from preds | Committed repo only |
+| Inspect `artifacts/final/*` tables | Committed artifacts |
+| Offline agent / retrieve / offline safety | Local `data/processed/*` |
+| Fresh GPT eval / live GPT safety suite | API key + `data/processed/*` |
+
+## Evaluation extras
 
 ```bash
 python scripts/evaluate_baselines.py
@@ -135,16 +138,16 @@ python scripts/evaluate_retrieval.py
 streamlit run scripts/rate_replies.py   # human reply ratings
 ```
 
-Artifacts: `artifacts/final/` (metrics, comparisons, manifest), `artifacts/figures/escalation_tradeoff.png`.
+### Main comparison (soft reply columns = LLM-judge directional)
 
-### Main comparison
-
-| System | Intent Macro-F1 | Escalation F1 | Auto-Handle | FAH | Reply Correctness | Groundedness |
+| System | Intent Macro-F1 | Escalation F1 | Auto-Handle | FAH | Reply Correctness† | Groundedness† |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | Majority | 0.012 | 0.730 | 0.000 | 0.000 | 3.24 | 2.38 |
 | TF-IDF + LR | 0.683 | 0.592 | 0.375 | 0.383 | — | — |
 | Nearest Case | — | — | — | — | 3.46 | 3.42 |
 | ResolveFlow (gpt-4o-mini) | 0.669 | 0.876 | 0.320 | 0.043 | 4.36 | 4.33 |
+
+† LLM-judge means; human agreement weak on soft quality (correctness κ≈0.15; helpfulness κ≈−0.05). Hallucination/safety agreement is stronger (κ≈0.79).
 
 ## Failure Analysis
 
@@ -153,10 +156,10 @@ Top issues: residual false auto-handle (**5/115** boundary cases), refund status
 ## Limitations
 
 - Golden n=200; stratified Twitter sample; one brand (AmazonHelp).
-- LLM intent Macro-F1 does **not** beat TF-IDF on this set (CI overlaps).
-- LLM-as-judge calibrated lightly (n=40 solo); correctness Spearman ≈ 0.30.
-- Safety suite: **6/6** after assertion-aware harness regrades (`fake_policy`, `account_specific`). No live CSAT or account APIs.
-- Retrieval ablations: k=0 blocks auto-handle; k=1/3/5 similar automation.
+- Escalation policy / message-risk cues selected on the same frozen eval set → possible optimistic FAH/SAH.
+- LLM intent Macro-F1 does **not** beat TF-IDF on this set.
+- LLM-as-judge: strong hallucination/safety agreement (Spearman ≈ 0.679, weighted κ ≈ 0.792); weak/negative on helpfulness and overall — soft quality is directional only.
+- Safety suite: **6/6** after assertion-aware harness regrades. No live CSAT or account APIs.
 
 ## Docs
 
@@ -165,9 +168,14 @@ Top issues: residual false auto-handle (**5/115** boundary cases), refund status
 | Final report | `report/report.md` |
 | Decision log | `report/decision_log.md` |
 | Failure analysis | `report/failure_analysis.md` |
+| Citations / attribution | `CITATIONS.md` |
 | Interview notes | `report/interview_notes.md` |
 | Taxonomy | `report/taxonomy.md` |
 | Methodology | `report/methodology.md` |
+
+## Attribution
+
+External datasets, models, and libraries: [`CITATIONS.md`](CITATIONS.md).
 
 ## Data
 

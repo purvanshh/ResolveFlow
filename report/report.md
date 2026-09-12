@@ -1,91 +1,80 @@
 # ResolveFlow — AI Support Agent for AmazonHelp
 
-## 1. Executive Summary
+## 1. Problem Framing
 
 ResolveFlow is a **conservative** AI support system for **AmazonHelp** tweets: LLM intent classification and grounded reply drafting, plus deterministic safety validation and escalation controls outside the model.
 
-**Headline metric: Safe Auto-Handling Rate = 0.255**  
-**Definition:** fraction of golden examples that were **auto-handled**, with **correct intent**, **no safety / unsupported-claim flags**, and **gold also labeled auto_handle**  
-(= 51 / 200 on the frozen set).
-
-Do **not** read **Auto-handle rate = 0.320** as “32% of queries can safely be automated,” and do **not** read **SAH = 25.5%** as production coverage. Auto-handle is only “policy did not escalate”; SAH is the stricter intersection with intent correctness, safety, and gold agreement on a frozen sample.
-
-Supporting numbers (`gpt-4o-mini` / `classifier_v1` + MiniLM retrieval `rerank_mode=none` + `order_quality_issue` high-risk **and** `detect_message_risk`):
-
-| Metric | Value |
-| --- | ---: |
-| Intent Macro-F1 (LLM) | 0.669 (95% bootstrap CI [0.598, 0.727]) |
-| Intent Macro-F1 (TF-IDF baseline) | **0.683** |
-| Auto-handle rate | 0.320 |
-| False auto-handle rate (among should-escalate) | **0.043** (5/115) |
-| Escalation F1 | **0.876** |
-| Retrieval Recall@3 | 0.565 |
-| Reply correctness / groundedness | 4.36 / 4.33 |
-| Unsupported-claim rate | 0.015 |
-| Safety suite | **6/6 PASS** |
-
-**Central engineering lesson:** the LLM was not assumed best at every task. TF-IDF slightly beats GPT on intent Macro-F1 (0.683 vs 0.669), but TF-IDF-only and hybrid routing did **not** improve the end-to-end safety/automation operating point. The largest operational gain came from conservative escalation controls and message-level risk detection: **FAH fell from 24.3% → 4.3% while SAH remained 25.5%**.
-
-
----
-
-## 2. Problem Framing
-
 Good is **useful automation that refuses unsupported claims and escalates when account-specific or high-risk**. Maximizing auto-handle rate alone is the wrong objective. False auto-handling is treated as the primary safety failure.
-
----
-
-## 3. Scope
-
-**Built:** intent classification, historical retrieval, grounded reply drafting, escalation policy, safety gates, baselines, frozen golden evaluation, LLM judge + human calibration scaffold, failure analysis.
 
 **Not built:** live account access, refunds/CRM actions, production deployment, multi-brand support, real-time Twitter integration.
 
 ---
 
-## 4. Data & Methodology
+## 2. Data & Taxonomy
 
-- Dataset: Customer Support on Twitter (`twcs.csv`); brand **AmazonHelp**.
+- Dataset: Customer Support on Twitter (`twcs.csv`); brand **AmazonHelp** (see [`CITATIONS.md`](../CITATIONS.md)).
 - Taxonomy: 12 intents (`configs/intents.yaml`), including `other_unclear` for abstention.
-- Golden set: **200** frozen examples; checksum `e974255a…bb4ef36`.
+- Golden set: **200** frozen examples; checksum `e974255a…bb4ef36` (**labels and examples unchanged**).
 - Splits: conversation-level; golden excluded from development messages and retrieval corpus.
 - Final leakage audit: conversation / exact / normalized / retrieval overlap = **0** (`STATUS: PASS`).
 - Final eval mode: **openai** (`RESOLVEFLOW_LLM_MODEL=gpt-4o-mini`).
 
 ---
 
-## 5. Architecture
+## 3. Architecture
 
 ```text
 Customer message
    ↓
-Intent (gpt-4o-mini)
+Intent (gpt-4o-mini / classifier_v1)
    ↓
-Retrieve historical cases (MiniLM, k=3)
+Retrieve historical cases (MiniLM, k=3, rerank_mode=none)
    ↓
 Draft response (gpt-4o-mini)
    ↓
-Safety validation
+Deterministic safety validation
    ↓
-Risk-aware escalation policy
+Risk-aware escalation (high-risk intents + detect_message_risk)
    ↓
 Auto-handle  /  Human escalate
 ```
 
 ---
 
-## 6. Evaluation
+## 4. Evaluation Methodology
 
-- Frozen golden set + automated intent/escalation metrics + bootstrap CI.
+- Frozen golden set + automated intent/escalation metrics.
 - Baselines: majority, TF-IDF+LR, always-escalate, confidence threshold, nearest historical reply, generic reply.
-- Reply judge (`judge_v1`) via **gpt-4o-mini**, cached under `artifacts/final/judge_cache.json`.
+- Reply judge (`judge_v1`) via **gpt-4o-mini**, cached under `artifacts/final/judge_cache.json` (assignment requires an LLM-as-judge rubric).
 - Human calibration: 40 examples, solo annotator; Streamlit UI `scripts/rate_replies.py`.
-- Ablations: retrieval k∈{0,1,3,5}; escalation policy comparison.
+- Ablations: retrieval k∈{0,1,3,5}; escalation policy comparison; optional retrieval rerank (not adopted).
 - Safety suite: unsupported refunds, injection, fake policy, account-specific, ambiguous, false action.
+- Headline CIs: percentile bootstrap (n_boot=500, seed=42) on frozen GPT predictions — `scripts/compute_headline_cis.py` → `artifacts/final/headline_confidence_intervals.json`.
+
+**Policy-selection caveat:** escalation policy and message-level risk cues were selected using analysis of this same frozen 200-example evaluation set. Golden **labels and examples were never changed**, and the SAH/FAH metric definitions were not redefined to chase a number—but policy selection on the eval set still risks **overfitting** and can make reported FAH/SAH look optimistic relative to a held-out calibration split.
 
 ---
 
-## 7. Results
+## 5. Baselines & Final Results
+
+**Headline metric: Safe Auto-Handling Rate = 0.255** (= 51/200)  
+**Definition:** auto-handled **and** correct intent **and** no safety flags **and** gold also `auto_handle`.
+
+Do **not** read **Auto-handle = 0.320** as safe automation, and do **not** read **SAH = 25.5%** as production coverage.
+
+| Metric | Point estimate | 95% bootstrap CI |
+| --- | ---: | ---: |
+| Safe Auto-Handling | **25.5%** (51/200) | [19.5%, 31.0%] |
+| Auto-handle | **32.0%** (64/200) | [26.2%, 38.5%] |
+| FAH (among should-escalate) | **4.3%** (5/115) | [0.9%, 8.9%] |
+| Escalation F1 | **0.876** | [0.831, 0.916] |
+| Intent Macro-F1 (LLM) | **0.669** | [0.598, 0.727] |
+| Intent Macro-F1 (TF-IDF) | **0.683** | — |
+| Safety suite | **6/6** | — |
+
+Intervals quantify resampling variability on the frozen set; they do **not** remove policy-selection bias (see §4).
+
+**Central engineering lesson:** TF-IDF slightly beats GPT on intent Macro-F1 (0.683 vs 0.669), but TF-IDF-only and hybrid routing did **not** improve the end-to-end safety/automation operating point. The largest operational gain came from conservative escalation controls and message-level risk detection: **FAH fell from 24.3% → 4.3% while SAH remained 25.5%** (with the policy-selection caveat above).
 
 ### Intent
 
@@ -94,14 +83,6 @@ Auto-handle  /  Human escalate
 | Majority | 0.075 | 0.012 | 0.010 |
 | TF-IDF + LR | 0.695 | **0.683** | 0.676 |
 | ResolveFlow (gpt-4o-mini) | 0.655 | 0.669 | 0.660 |
-
-### Difficulty (accuracy / macro-F1 over intents present)
-
-| Difficulty | n | Accuracy | Macro F1 |
-| --- | ---: | ---: | ---: |
-| Easy | 58 | 0.672 | 0.491 |
-| Medium | 128 | 0.648 | 0.603 |
-| Hard | 14 | 0.643 | 0.557 |
 
 ### Escalation (FAH = false auto / should-escalate)
 
@@ -113,39 +94,51 @@ Auto-handle  /  Human escalate
 | Risk-aware + `order_quality_issue` high-risk | 0.350 | 0.096 | 0.849 |
 | + message-level risk cues (adopted) | **0.320** | **0.043** | **0.876** |
 
-### Replies (gpt-4o-mini judge means)
+Adopted path (frozen predictions, policy recomputed): FAH **24.3% → 9.6% → 4.3%**; SAH **25.5% → 25.5% → 25.5%**; Escalation F1 **0.767 → 0.849 → 0.876**.
+
+### Replies (gpt-4o-mini judge means — directional)
 
 | System | Correctness | Groundedness | Helpfulness | Hallucination safety |
 | --- | ---: | ---: | ---: | ---: |
 | Generic | 3.24 | 2.38 | 2.29 | 4.63 |
 | Nearest case | 3.46 | 3.42 | 3.16 | 4.29 |
-| ResolveFlow | **4.36** | **4.33** | **4.04** | **4.94** |
+| ResolveFlow | 4.36 | 4.33 | 4.04 | 4.94 |
 
-### Retrieval k ablation
+On the LLM judge’s scoring, ResolveFlow received higher soft reply-quality scores than generic/nearest baselines; **human agreement for these soft quality dimensions was weak**, so treat these as **directional**, not validated quality estimates (see Judge validity).
 
-| k | Auto-handle | FAH (among auto) | Unsupported claim |
-| --- | ---: | ---: | ---: |
-| 0 | 0.000 | 0.000 | 0.022 |
-| 1 | 0.445 | 0.326 | 0.005 |
-| 3 | 0.440 | 0.318 | 0.015 |
-| 5 | 0.450 | 0.333 | 0.010 |
+### Main operating-point table
 
-### Main table
-
-| System | Intent Macro-F1 | Escalation F1 | Auto-Handle | FAH | Reply Correctness | Groundedness |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Majority | 0.012 | 0.730 | 0.000 | 0.000 | 3.24 | 2.38 |
-| TF-IDF + LR | 0.683 | 0.592 | 0.375 | 0.383 | — | — |
-| Nearest Case | — | — | — | — | 3.46 | 3.42 |
-| ResolveFlow | 0.669 | 0.876 | 0.320 | 0.043 | 4.36 | 4.33 |
-
-Artifacts: `artifacts/final/`.
+| System | Intent Macro-F1 | Escalation F1 | Auto-Handle | FAH |
+| --- | ---: | ---: | ---: | ---: |
+| Majority | 0.012 | 0.730 | 0.000 | 0.000 |
+| TF-IDF + LR | 0.683 | 0.592 | 0.375 | 0.383 |
+| ResolveFlow | 0.669 | 0.876 | 0.320 | 0.043 |
 
 ---
 
-## 7b. LLM Model Comparison
+## 6. Judge Validity
 
-Same frozen golden set, retrieval, safety, escalation, and **gpt-4o-mini** judge. DeepSeek uses API model `deepseek-flash` (version DeepSeek-V4.1-Flash). Thinking uses `extra_body={"thinking":{"type":"enabled"}}` + `reasoning_effort=high`; non-thinking uses `type=disabled`.
+The LLM judge was calibrated against **40** human-rated examples (`artifacts/final/judge_human_agreement.json`). Agreement:
+
+| Dimension | Spearman | Weighted κ |
+| --- | ---: | ---: |
+| correctness | 0.299 | 0.147 |
+| groundedness | 0.215 | 0.153 |
+| helpfulness | **−0.191** | **−0.051** |
+| overall | **−0.003** | **−0.130** |
+| hallucination_safety | **0.679** | **0.792** |
+
+Correctness / groundedness / helpfulness / overall are **weakly human-validated** (helpfulness and overall are near-zero or negative). Therefore judge scores are **directional evidence** for response-quality comparisons, **not** ground truth. The strongest validated conclusion from the judge is the **hallucination/safety** dimension.
+
+The judge remains useful because: (1) it gives a consistent automated comparison across systems; (2) hallucination/safety showed meaningful human agreement; (3) soft quality dimensions stay exploratory; (4) results must not be read as objective quality rankings.
+
+---
+
+## 7. LLM Model Comparison
+
+Same frozen golden set, retrieval, safety, escalation, and **gpt-4o-mini** judge.
+
+**DeepSeek identifier evidence:** API model string **`deepseek-flash`**, base URL `https://api.deepseek.com`, repo `model_version` label **`DeepSeek-V4.1-Flash`** (matches current DeepSeek pricing docs for that API id). Thinking: `extra_body.thinking.type=enabled` + `reasoning_effort=high`. Artifacts dated **2026-09-10** locally. No per-response immutable snapshot id is stored; see [`CITATIONS.md`](../CITATIONS.md).
 
 | Metric | TF-IDF | GPT-4o-mini | DeepSeek Non-thinking | DeepSeek Thinking |
 | --- | ---: | ---: | ---: | ---: |
@@ -154,72 +147,68 @@ Same frozen golden set, retrieval, safety, escalation, and **gpt-4o-mini** judge
 | Safe Auto-Handling Rate | — | **0.255** | **0.255** | **0.255** |
 | False Auto-handle | — | **0.043** | 0.087 | 0.096 |
 | Escalation F1 | — | **0.876** | 0.861 | 0.860 |
-| Reply correctness | — | 4.36 | **4.74** | **4.78** |
-| Reply groundedness | — | 4.33 | **4.74** | **4.77** |
+| Reply correctness (judge) | — | 4.36 | 4.74 | 4.78 |
+| Reply groundedness (judge) | — | 4.33 | 4.74 | 4.77 |
 | Unsupported-claim rate | — | **0.015** | 0.020 | 0.020 |
 | Safety suite | — | **6/6**† | **6/6**† | **6/6**† |
 | Mean latency (s) | — | — | **1.97** | 6.98 |
 
-† Safety harness regrades on stored replies. Escalation recomputed with `order_quality_issue` high-risk **plus** message-level risk cues; frozen intents/replies. SAH remains **0.255**.
+† Safety harness regrades on stored replies. Escalation includes `order_quality_issue` high-risk + message risk cues; intents/replies frozen. SAH remains **0.255**.
 
-**Interpretation (n=200):** SAH tied. GPT has the lowest FAH and highest escalation F1 after risk-cue adoption. DeepSeek wins judged reply quality. TF-IDF still leads intent Macro-F1.
-
-**Escalation stack:** (1) high-risk intents including `order_quality_issue`; (2) message risk cues for refund/money-back, damaged/defective/wrong item, never-received, fraud. Hybrid GPT+TF-IDF not adopted (SAH regression despite higher Macro-F1). See `artifacts/final/intent_risk_experiment.json`.
-
-**Model selection:** keep **GPT-4o-mini** as the default ResolveFlow LLM.
-
-See `artifacts/final/model_comparison.md` and `artifacts/final/model_failure_comparison.json`.
+**Interpretation:** SAH tied. GPT has the lowest FAH and highest escalation F1 after risk-cue adoption (objective/automated metrics). On the LLM judge’s scoring, DeepSeek received higher soft reply-quality scores; human agreement for those dimensions was weak, so treat that comparison as **directional**, not a validated quality win. TF-IDF still leads intent Macro-F1. Keep **GPT-4o-mini** as default.
 
 ---
 
-## 8. Failure Analysis
+## 8. Safety / Evaluation Integrity
 
-Top modes (see `report/failure_analysis.md` and refreshed rankings):
+Two suite failures (`fake_policy`, `account_specific`) were **harness false positives** from substring matching; stored model replies were unchanged. Assertion-aware grading + a strengthened deterministic validator → suite **6/6**. This is evaluation-integrity work, **not** “the model became safer.”
 
-1. **False auto-handle** — now **~4.3%** of should-escalate after high-risk intents + message risk cues (was 24.3% → 9.6% → 4.3%). Remaining 5 FAH lack narrow lexical cues.
+---
+
+## 9. Failure Analysis
+
+1. **False auto-handle** — **5/115** remaining (boundary/intent ambiguity; not retrieval): ambiguous FR delay; carrier-attempt missing; refuse-return; thanks/return-label; payment-as-cancel.
 2. **Intent confusion** — refund status/request; delivery vs missing package (Macro-F1 still trails TF-IDF).
 3. **Ambiguous / thin tweets** — abstention vs forced class.
 4. **Unsupported claims** — ~1.5% of drafts.
 5. **Safety suite harness FPs (fixed)** — suite **6/6**.
 
+Details: `report/failure_analysis.md`.
+
 ---
 
-## 9. What Is Misleading About My Headline Number?
+## 10. What Is Misleading About My Headline Number?
 
-The 25.5% Safe Auto-Handling Rate is measured on a frozen 200-example golden set sampled from one brand's historical Twitter support data. It is **not** an estimate of production automation coverage—**it does not mean “25.5% of production customer requests can safely be automated.”** The sample may not represent current traffic, and the metric depends on the chosen escalation policy, taxonomy, safety validator, labeling decisions, and evaluation definitions. In particular, a conservative system can improve safety by escalating more cases, so the number should be interpreted together with escalation quality and false-auto-handle rate.
+The 25.5% Safe Auto-Handling Rate is measured on a frozen 200-example golden set. It does **not** mean “25.5% of production customer requests can safely be automated.” It depends on sampling, taxonomy, labels, escalation policy, safety validator, and evaluation definitions.
 
-Also keep these distinctions in view:
+Also:
 
-1. **Auto-handle rate (0.320) ≠ Safe Auto-Handling Rate (0.255).** The former is “policy chose not to escalate”; the latter requires correct intent, clean safety flags, and gold agreement on auto-handle (51/200).
-2. **Golden set size (200)** — CI on Macro-F1 spans ~0.60–0.73.
-3. **Stratified sampling** — not natural production traffic mix.
-4. **One brand (AmazonHelp)** — policies and language differ elsewhere.
-5. **Twitter CS corpus** — not modern in-app chat or authenticated sessions.
-6. **LLM ≠ TF-IDF win** — headline is *not* “GPT beats classical ML on intent.”
-7. **Judge bias / weak calibration** — correctness Spearman ≈ 0.30 vs solo human sample; within-1 overall is high but exact agreement is modest.
-8. **Human calibration (n=40, solo)** — no second rater; Streamlit UI exists for independent ratings.
-9. **Threshold/policy choices** — influenced by development/silver signals.
-10. **No live feedback** — no CSAT, AHT, repeat contact, or true containment.
-11. **No account access** — system cannot verify orders/payments; escalation is often the correct ceiling.
-12. **Safety suite** — currently 6/6 after harness fixes; still not a substitute for live account APIs or production red-teaming.
+1. **Auto-handle (0.320) ≠ SAH (0.255).**
+2. **Policy selection on the golden set** can make FAH/SAH optimistic even though labels/examples stayed frozen.
+3. **Judge soft-quality scores are weakly validated** (see §6); do not equate them with production reply quality.
+4. **One brand, Twitter CS corpus, n=200** — not live authenticated support.
+5. **LLM does not beat TF-IDF on intent Macro-F1** on this set.
+6. **No live CSAT / account APIs.**
 
 Treat the headline as a **conservative containment estimate under this rubric**, not production containment.
 
 ---
 
-## 10. One More Week
+## 11. One More Week
 
 Future experiments only (not implemented):
 
-1. **Intent boundaries for the remaining five FAH cases** — ambiguous FR delay; carrier-attempt missing; refuse-return; thanks/return-label; payment-as-cancel.
-2. **More boundary-focused golden examples** if annotation budget allows (without unfreezing the current checksum mid-study).
-3. **Calibrate confidence** on a larger validation set (GPT self-reported confidence was not useful for hybrid routing).
-4. **Principled ensemble** only if calibrated confidence becomes available—do not adopt Macro-F1-only hybrids.
-5. **Resolution-aware retrieval** on a larger eval set (prior ablation: Recall@K moved, end-to-end SAH/FAH did not).
-6. **Multi-brand generalization** beyond AmazonHelp.
+1. Intent boundaries for the remaining five FAH cases.
+2. More boundary-focused golden examples if annotation budget allows.
+3. Calibrate confidence on a **held-out** validation set (reduce policy-selection bias).
+4. Principled ensemble only if calibrated confidence exists.
+5. Resolution-aware retrieval on a larger eval set.
+6. Multi-brand generalization.
 
 ---
 
-## 11. Conclusion
+## 12. Decision Log
 
-ResolveFlow with **gpt-4o-mini** shows useful automation for AmazonHelp tweets: stronger judged replies than generic/nearest baselines, better escalation F1 than confidence-only policies, and a measurable safe auto-handle rate of **25.5%**. It does **not** overturn TF-IDF on intent Macro-F1 on this frozen set. Trust comes from leakage controls, baselines, ablations, and honest limits—not from a single judge score.
+Engineering decisions (taxonomy size, `other_unclear`, deterministic safety outside the LLM, conservative escalation, rejecting rerank/TF-IDF hybrid, freezing residual FAH, etc.): [`report/decision_log.md`](decision_log.md).
+
+**Conclusion:** ResolveFlow with **gpt-4o-mini** shows a measurable safe auto-handle rate of **25.5%** and strong escalation F1 after conservative controls. It does **not** overturn TF-IDF on intent Macro-F1. Soft reply-quality judge rankings are directional only. Trust comes from leakage controls, baselines, ablations, CIs, and honest limits—not from a single judge score.

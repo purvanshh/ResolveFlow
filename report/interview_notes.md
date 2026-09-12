@@ -19,7 +19,7 @@ Ground replies in historical AmazonHelp resolutions; provide evidence for the ju
 Without retrieval and gates, models invent policies/timelines. Ablation: k=0 → auto-handle rate 0. On this golden set, **TF-IDF Macro-F1 (0.683) still edges gpt-4o-mini (0.669)**—so retrieval + escalation matter more than “just use GPT for intents.”
 
 ### How do you know replies are good?
-Structured rubric + **gpt-4o-mini judge** vs generic/nearest baselines (correctness 4.36 vs 3.24/3.46). Human calibration n=40: correctness Spearman ≈ 0.30—treat judge as noisy.
+Structured rubric + **gpt-4o-mini judge** (assignment requirement). On the judge’s scoring, ResolveFlow > generic/nearest on soft quality—but human agreement is weak (correctness κ≈0.15; helpfulness κ≈−0.05; overall κ≈−0.13). Stronger agreement on hallucination/safety (κ≈0.79). Treat soft quality as **directional**, not ground truth.
 
 ### Biggest weakness?
 False auto-handle among should-escalate is **4.3%** after message risk cues (was 24.3% → 9.6% → 4.3%). LLM Macro-F1 still trails TF-IDF; safety suite **6/6**.
@@ -28,4 +28,4 @@ False auto-handle among should-escalate is **4.3%** after message risk cues (was
 Auto-handle is **32%**; **safe** auto-handle **25.5%**; FAH among should-escalate **4.3%**.
 
 ### Dangerous Q — “Why believe the judge?”
-gpt-4o-mini judge with solo human calibration; modest correctness correlation (~0.30). Prefer Streamlit independent ratings before trusting reply scores alone.
+Keep it: consistent automated comparisons + meaningful hallucination/safety agreement. Do **not** claim it proves one model is objectively better at helpfulness/overall. Prefer more human ratings / held-out calibration before treating soft scores as quality truth.

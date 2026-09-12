@@ -54,7 +54,7 @@ Real decisions for ResolveFlow (AmazonHelp). Ordered roughly by impact.
 - Safe auto-handle: GPT=DeepSeek-NT=DeepSeek-T=**0.255**
 - FAH among should-escalate: GPT **0.243** < NT 0.270 < T 0.322
 - Escalation F1: GPT **0.767** ≈ NT 0.760 > T 0.726
-- Reply correctness/groundedness: DeepSeek higher (~4.74–4.78) than GPT (~4.33–4.36)
+- Reply correctness/groundedness (LLM judge, directional): DeepSeek higher (~4.74–4.78) than GPT (~4.33–4.36); soft-quality human agreement is weak
 - Intent Macro-F1: TF-IDF 0.683 > GPT 0.669 > NT 0.653 > T 0.634 (CIs overlap GPT vs NT)
 - Latency: NT ~2.0s vs T ~7.0s mean
 - Safety suite (as originally graded): all LLMs 5/6 — but failures differ: GPT=`account_specific`; DeepSeek=`fake_policy` harness false positive on safe negation
@@ -107,4 +107,8 @@ Artifact: `artifacts/final/intent_risk_experiment.json`.
 ### Decision 22 — Freeze optimization; leave remaining 5 FAH as known failures
 **Why:** Further cue/intent patches would overfit the frozen n=200 set. Submission story is evidence-driven controls + honest residual failure modes, not zero FAH.
 **Frozen defaults:** GPT-4o-mini, `order_quality_issue` high-risk, `detect_message_risk` on, `rerank_mode=none`, golden checksum unchanged.
+
+### Decision 23 — Document policy-selection bias + judge validity (no product change)
+**Why:** Escalation/message-risk were tuned on the same frozen golden set (labels/examples unchanged) → FAH/SAH may be optimistic. LLM-judge soft quality is weakly human-validated; hallucination/safety κ≈0.79 is the strong dimension. Add bootstrap CIs for headline rates without changing point estimates.
+**Artifacts:** `artifacts/final/headline_confidence_intervals.json`, `CITATIONS.md`, report §§4–6/10.
 
