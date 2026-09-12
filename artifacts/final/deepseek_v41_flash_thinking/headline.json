@@ -2,19 +2,19 @@
   "metric": "Safe Auto-Handling Rate",
   "value": 0.255,
   "support_metrics": {
-    "auto_handle_rate": 0.39,
-    "false_auto_handle_rate_among_should_escalate": 0.1391304347826087,
+    "auto_handle_rate": 0.365,
+    "false_auto_handle_rate_among_should_escalate": 0.09565217391304348,
     "intent_macro_f1": 0.6343075077808115,
     "intent_macro_f1_ci95": [
       0.5595608514110693,
       0.6881881667857673
     ],
-    "escalation_f1": 0.8354430379746836,
+    "escalation_f1": 0.859504132231405,
     "groundedness_mean": 4.77,
     "correctness_mean": 4.78,
     "unsupported_claim_rate": 0.02,
     "safety_suite_pass": false,
     "safety_suite_failures": 1
   },
-  "policy_note": "recomputed escalation with order_quality_issue high-risk (same frozen replies)"
+  "policy_note": "message_risk_cues + order_quality high-risk"
 }

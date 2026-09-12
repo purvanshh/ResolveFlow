@@ -1,0 +1,53 @@
+{
+  "baseline_pre_risk_cues": {
+    "macro_f1": 0.669,
+    "auto": 0.35,
+    "sah": 0.255,
+    "fah": 0.096,
+    "esc_f1": 0.849
+  },
+  "adopted_message_risk_cues": {
+    "changed": 6,
+    "auto": 0.32,
+    "sah": 0.255,
+    "fah": 0.043478260869565216,
+    "esc_f1": 0.8764940239043825,
+    "esc_p": 0.8088235294117647,
+    "esc_r": 0.9565217391304348,
+    "macro_f1": 0.6694734493094269,
+    "n_fah": 5
+  },
+  "tfidf_only": {
+    "macro_f1": 0.683,
+    "auto": 0.2,
+    "sah": 0.165,
+    "fah": 0.061,
+    "esc_f1": 0.785,
+    "adopted": false
+  },
+  "hybrid_tf_when_hr": {
+    "macro_f1": 0.685,
+    "auto": 0.305,
+    "sah": 0.24,
+    "fah": 0.052,
+    "esc_f1": 0.858,
+    "adopted": false,
+    "reason": "SAH regression"
+  },
+  "fah_caught": [
+    "gold_060",
+    "gold_067",
+    "gold_104",
+    "gold_111",
+    "gold_145",
+    "gold_160"
+  ],
+  "fah_remaining": [
+    "gold_085",
+    "gold_088",
+    "gold_093",
+    "gold_097",
+    "gold_122"
+  ],
+  "adoption": "message_risk_cues"
+}

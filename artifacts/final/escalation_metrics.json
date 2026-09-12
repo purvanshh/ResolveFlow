@@ -1,9 +1,9 @@
 {
   "proposed": {
-    "escalate_precision": 0.8,
-    "escalate_recall": 0.9043478260869565,
-    "escalate_f1": 0.8489795918367347,
-    "auto_handle_rate": 0.35,
+    "escalate_precision": 0.8088235294117647,
+    "escalate_recall": 0.9565217391304348,
+    "escalate_f1": 0.8764940239043825,
+    "auto_handle_rate": 0.32,
     "false_auto_handle_rate": 0.3181818181818182,
     "pred_distribution": {
       "escalate": 112,
@@ -46,7 +46,7 @@
   "false_auto_handle_definition": {
     "among_auto_handled": "false_auto / n_auto (legacy in escalation_metrics)",
     "among_should_escalate": "false_auto / n_should_escalate (Phase 5 safety metric)",
-    "proposed_among_should_escalate": 0.09565217391304348,
+    "proposed_among_should_escalate": 0.043478260869565216,
     "confidence_threshold_among_should_escalate": 0.3826086956521739,
     "always_among_should_escalate": 0.0
   },
@@ -64,5 +64,6 @@
     "sah": 0.255,
     "fah_among_should_escalate": 0.09565217391304348,
     "escalate_f1": 0.8489795918367347
-  }
+  },
+  "message_risk_cues": true
 }

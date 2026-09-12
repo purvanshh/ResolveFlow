@@ -1,10 +1,10 @@
 | Metric | TF-IDF | GPT-4o-mini | DeepSeek V4.1 Flash Non-thinking | DeepSeek V4.1 Flash Thinking |
 | --- | ---: | ---: | ---: | ---: |
 | Intent Macro-F1 | 0.683 | 0.669 | 0.653 | 0.634 |
-| Auto-handle rate | — | 0.350 | 0.380 | 0.390 |
+| Auto-handle rate | — | 0.320 | 0.355 | 0.365 |
 | Safe Auto-Handling Rate | — | 0.255 | 0.255 | 0.255 |
-| False Auto-handle | — | 0.096 | 0.130 | 0.139 |
-| Escalation F1 | — | 0.849 | 0.837 | 0.835 |
+| False Auto-handle | — | 0.043 | 0.087 | 0.096 |
+| Escalation F1 | — | 0.876 | 0.861 | 0.860 |
 | Reply correctness | — | 4.36 | 4.74 | 4.78 |
 | Reply groundedness | — | 4.33 | 4.74 | 4.77 |
 | Unsupported-claim rate | — | 0.015 | 0.020 | 0.020 |
@@ -12,4 +12,4 @@
 | Average latency (s) | — | — | 1.968 | 6.980 |
 | Cost | — | — | — | — |
 
-Notes: Escalation metrics use calibrated high-risk set (`+order_quality_issue`), recomputed offline on frozen intents/replies. SAH unchanged at 0.255. Safety 6/6 after prior harness regrades.
+Notes: Message-level risk cues adopted on top of `order_quality_issue` high-risk. SAH=0.255 unchanged. Hybrid GPT+TF-IDF not adopted.
