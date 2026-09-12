@@ -11,6 +11,7 @@ from resolveflow.agent.safety import (
     UNSUPPORTED_POLICY,
     UNSUPPORTED_TIMELINE,
     detect_human_request,
+    detect_message_risk,
 )
 from resolveflow.schemas import EscalationDecision, IntentPrediction, SafetyResult
 
@@ -78,6 +79,14 @@ class EscalationPolicy:
             risk += 3
             triggers.append("explicit_human_request")
 
+        msg_risk = detect_message_risk(message)
+        if msg_risk:
+            risk += 3
+            triggers.append("message_risk_cues")
+            # Keep cue names for auditability without affecting the can_auto gate list below.
+            for cue in msg_risk:
+                triggers.append(f"risk:{cue}")
+
         severe_flags = {
             UNSUPPORTED_MONETARY_CLAIM,
             UNSUPPORTED_TIMELINE,
@@ -100,6 +109,7 @@ class EscalationPolicy:
             & {
                 "high_risk_intent",
                 "explicit_human_request",
+                "message_risk_cues",
                 "safety_flags",
                 "unclear_intent",
                 "insufficient_evidence",
@@ -115,6 +125,7 @@ class EscalationPolicy:
             and evidence_sufficient
             and safety.safe
             and not detect_human_request(message)
+            and not msg_risk
         )
         if can_auto:
             escalate = False
@@ -136,6 +147,11 @@ class EscalationPolicy:
             return "Escalated because the drafted response contained unsupported claims."
         if "explicit_human_request" in triggers:
             return "Escalated because the customer requested a human agent."
+        if "message_risk_cues" in triggers:
+            return (
+                "Escalated because the customer message contains high-risk language "
+                "(refund/money-back, damaged/defective/wrong item, never received, or fraud/account takeover)."
+            )
         if "high_risk_intent" in triggers:
             return "Escalated because this request falls into a high-risk support category."
         if "insufficient_evidence" in triggers or "no_retrieval_hits" in triggers:

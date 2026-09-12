@@ -262,6 +262,54 @@ def detect_human_request(text: str) -> bool:
     )
 
 
+# Conservative message-level risk cues (inference-time customer text only).
+# Intentionally narrow — do NOT match bare "package", "delayed", or "cancel".
+_MESSAGE_RISK_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
+    (
+        "refund_money_request",
+        re.compile(
+            r"(money\s+back|refund\s+options?|\bwant\s+(a\s+)?refund\b|"
+            r"give\s+me\s+(my\s+)?(money|refund))",
+            re.I,
+        ),
+    ),
+    (
+        "defective_or_wrong_item",
+        re.compile(
+            r"\b(defectiv\w*|damaged|broken|counterfeit|fake\s+product|wrong\s+item)\b",
+            re.I,
+        ),
+    ),
+    (
+        "never_received_item",
+        re.compile(
+            r"(empty\s+box|never\s+(got|received|arrived)|"
+            r"didn.?t\s+(get|receive|arrive)|"
+            r"still\s+(haven.?t|have\s+not)\s+(got|received))",
+            re.I,
+        ),
+    ),
+    (
+        "fraud_or_account_takeover",
+        re.compile(
+            r"\b(fraud|unauthorized|stolen\s+card|account\s+(hacked|taken)|takeover)\b",
+            re.I,
+        ),
+    ),
+]
+
+
+def detect_message_risk(text: str) -> list[str]:
+    """
+    Return names of strong customer-message risk cues.
+
+    Used to escalate even when the predicted intent is a non-high-risk class.
+    Does not use gold labels, predicted intent, or historical agent replies.
+    """
+    t = text or ""
+    return [name for name, pat in _MESSAGE_RISK_PATTERNS if pat.search(t)]
+
+
 def detect_prompt_injection(text: str) -> bool:
     return bool(_INJECTION.search(text or ""))
 
